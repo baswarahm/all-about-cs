@@ -10,6 +10,8 @@ One website with revision material for every course this semester. Made by [@bas
 
 `index.html` at the root is the CS Courses home page that links to all three.
 
+Each course navbar has a small **New** button with the latest updates. To add an update, put a new entry at the top of that course's list in [`updates.js`](updates.js).
+
 It is a static site (plain HTML, CSS and JavaScript, no build step).
 
 ## Lecturer material stays private

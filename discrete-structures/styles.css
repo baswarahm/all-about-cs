@@ -528,3 +528,9 @@ th{font-family:var(--mono);font-size:.85rem}
 .ig-credit{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:500}
 .ig-credit:hover{color:var(--brand);text-decoration:underline}
 @media (max-width:1000px){.sitefoot{padding-bottom:96px}}
+/* phone header: let the course name shrink so the buttons stay on one line */
+@media (max-width:1000px){
+  .brandlink{min-width:0;flex:1 1 0}
+  .brandlink .bt{min-width:0}
+  .brandlink .bt b,.brandlink .bt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
