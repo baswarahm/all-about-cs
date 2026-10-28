@@ -229,7 +229,17 @@
   }
 
   // ───────────────────────── quiz ─────────────────────────
-  var MOCK_QUESTIONS = 30, MOCK_MINUTES = 60;
+  var MOCK_QUESTIONS = 30, MOCK_MINUTES = 90;
+  // Like the past Test 1, the mock also has CodeRunner questions mixed in, worth CODE_MARKS each,
+  // with the Moodle quiz penalty regime "10, 20, ... %" (the first Check is free).
+  var MOCK_CODING = 2, CODE_MARKS = 10;
+  function quizPenalty(checkNo) { return Math.min(100, Math.max(0, (checkNo - 1) * 10)); }
+  // one past-Test-1-style problem + one from the step-by-step set / easier bank problems
+  function pickTestCoding() {
+    var past = PROBLEMS.filter(function (p) { return p.set === 'past'; });
+    var rest = PROBLEMS.filter(function (p) { return p.set !== 'past' && (p.set === 'steps' || p.level <= 2); });
+    return shuffle(past).slice(0, 1).concat(shuffle(rest).slice(0, MOCK_CODING - 1)).map(function (p) { return p.id; });
+  }
 
   // Moodle-style marking: each correct option ticked earns 1/k, each wrong option ticked loses 1/k, never below 0.
   function scoreQ(q, sel) {
@@ -256,7 +266,8 @@
       'In multiple-answer questions each correct tick earns part of the mark and each wrong tick takes the same amount off, so don\'t tick everything.</p></header>' +
       '<div class="grid grid-2">' +
         '<div class="card"><h2>Timed mock test</h2>' +
-          '<p>' + MOCK_QUESTIONS + ' random questions from all ' + QUIZ.length + ' · ' + MOCK_MINUTES + ' minutes · review with explanations at the end.</p>' +
+          '<p>' + MOCK_QUESTIONS + ' random questions from all ' + QUIZ.length + ' + ' + MOCK_CODING + ' programming questions (' + CODE_MARKS + ' marks each, compiled with g++, like the past Test 1) · ' +
+            MOCK_MINUTES + ' minutes · review with explanations at the end.</p>' +
           (mock && !mock.finished ? '<p class="pill warn">Attempt in progress</p> ' : '') +
           '<div class="row" style="margin-top:10px">' +
             (mock && !mock.finished ? '<a class="btn primary" href="#/quiz/mock">Continue attempt</a><button class="btn" id="newMock">Start over</button>'
@@ -276,8 +287,11 @@
       '</div>';
     $('#newMock').addEventListener('click', function () {
       if (mock && !mock.finished && !confirm('Discard the attempt in progress?')) return;
-      var qs = shuffle(QUIZ.map(function (_, i) { return i; })).slice(0, MOCK_QUESTIONS);
-      store.set('quiz-mock', { qs: qs, answers: {}, flags: {}, cur: 0, start: Date.now(), end: Date.now() + MOCK_MINUTES * 60000, finished: false });
+      var items = shuffle(QUIZ.map(function (_, i) { return i; })).slice(0, MOCK_QUESTIONS).map(function (i) { return { q: i }; });
+      // put the programming questions at random places in the paper, as in the past Test 1
+      pickTestCoding().forEach(function (id) { items.splice(Math.floor(Math.random() * (items.length + 1)), 0, { c: id }); });
+      store.set('quiz-mock', { items: items, answers: {}, flags: {}, codes: {}, checks: {}, marks: {}, results: {}, checkedCode: {},
+        cur: 0, start: Date.now(), end: Date.now() + MOCK_MINUTES * 60000, finished: false });
       location.hash = '#/quiz/mock';
     });
     $('#startPractice').addEventListener('click', function () {
@@ -315,70 +329,158 @@
   function quizMock() {
     var st = store.get('quiz-mock', null);
     if (!st) { location.hash = '#/quiz'; return; }
+    // attempts saved before programming questions were added only have qs (quiz indexes)
+    if (!st.items) { st.items = st.qs.map(function (i) { return { q: i }; }); st.codes = {}; st.checks = {}; st.marks = {}; st.results = {}; st.checkedCode = {}; }
+    var items = st.items;
     function save() { store.set('quiz-mock', st); }
+    function maxOf(it) { return it.c ? CODE_MARKS : 1; }
+    function scoreOf(it, i) { return it.c ? (st.marks[i] || 0) / 100 * CODE_MARKS : scoreQ(QUIZ[it.q], st.answers[i]); }
+    function answered(it, i) { return it.c ? !!(st.codes[i] || '').trim() : (st.answers[i] || []).length > 0; }
+    var totalMax = items.reduce(function (a, it) { return a + maxOf(it); }, 0);
+
+    // Check a programming answer: every test must pass; the mark is 100% minus the penalty for this check, best mark kept.
+    function checkCode(i) {
+      var p = problemById(items[i].c), code = st.codes[i] || '';
+      st.checks[i] = (st.checks[i] || 0) + 1;
+      var pen = quizPenalty(st.checks[i]);
+      var idxs = p.tests.map(function (_, k) { return k; });
+      return runTests(p, idxs, code).then(function (res) {
+        var passed = res.results.filter(function (r) { return r && r.pass; }).length;
+        var allPass = !res.compileError && passed === idxs.length;
+        var mark = allPass ? 100 - pen : 0;
+        st.marks[i] = Math.max(st.marks[i] || 0, mark);
+        st.checkedCode[i] = code;
+        st.results[i] = (allPass ? '<div class="result-banner ok">Passed all tests! ✓ Mark for this submission: ' + round2(mark / 100 * CODE_MARKS) + ' / ' + CODE_MARKS + '</div>'
+          : '<div class="result-banner bad">' + (res.compileError ? 'Compilation failed.' : 'Passed ' + passed + ' of ' + idxs.length + ' tests.') +
+            ' Your code must pass every test to earn marks.</div>') + renderResults(p, idxs, res, allPass);
+        save();
+        return allPass;
+      });
+    }
+
     function finish() {
       clearTimers();
-      st.finished = true;
-      var total = 0;
-      st.qs.forEach(function (qi, n) { total += scoreQ(QUIZ[qi], st.answers[n]); });
-      st.score = round2(total);
-      var hist = store.get('quiz-history', []);
-      hist.push({ date: Date.now(), score: st.score, total: st.qs.length, pct: Math.round(100 * total / st.qs.length) });
-      store.set('quiz-history', hist);
-      st.cur = 0; save(); render();
+      // answers that were typed but never checked (or changed after the last check) are checked now, like Moodle on "Submit all"
+      var pending = items.map(function (it, i) { return i; }).filter(function (i) {
+        return items[i].c && (st.codes[i] || '').trim() && st.checkedCode[i] !== st.codes[i];
+      });
+      if (pending.length) app.innerHTML = '<div class="result-banner info"><span class="spin"></span> Marking your programming answers with g++…</div>';
+      pending.reduce(function (chain, i) { return chain.then(function () { return checkCode(i); }); }, Promise.resolve())
+        .catch(function () {})
+        .then(function () {
+          st.finished = true;
+          var total = items.reduce(function (a, it, i) { return a + scoreOf(it, i); }, 0);
+          st.score = round2(total); st.total = totalMax;
+          var hist = store.get('quiz-history', []);
+          hist.push({ date: Date.now(), score: st.score, total: totalMax, pct: Math.round(100 * total / totalMax) });
+          store.set('quiz-history', hist);
+          st.cur = 0; save(); render();
+        });
     }
+
+    function codingBody(it, n, done) {
+      var p = problemById(it.c);
+      var examples = p.tests.map(function (_, k) { return k; }).filter(function (k) { return !p.tests[k].hidden; });
+      var checks = st.checks[n] || 0;
+      return '<div class="qtext">' + p.desc +
+          '<p style="margin-top:14px"><b>Given the partial program:</b></p><div class="partial-prog">' + renderPartialProgram(p) + '</div>' +
+          '<p style="margin-top:14px"><b>For example:</b></p><div class="table-scroll"><table class="tests"><tr><th>Input</th><th>Result</th></tr>' +
+          examples.map(function (k) { return '<tr><td>' + testInputCell(p.tests[k]) + '</td><td><pre>' + esc(expectedFor(p, k)) + '</pre></td></tr>'; }).join('') +
+          '</table></div></div>' +
+        (done
+          ? '<p><b>Your answer:</b></p><pre class="plain">' + esc(st.codes[n] || '(no answer)') + '</pre>' + (st.results[n] || '') +
+            '<div class="explain ok"><b>Model answer (one possible solution):</b><pre class="plain">' + esc(p.solution) + '</pre></div>'
+          : '<div class="row"><b>Answer:</b> <span class="penalty">(penalty regime: 10, 20, … %)</span><span class="spacer"></span>' +
+              '<span class="small muted">Checks used: <b>' + checks + '</b> · next check penalty <b>' + quizPenalty(checks + 1) + '%</b></span></div>' +
+            '<div class="editor-wrap" id="editor"></div>' +
+            '<div class="row" style="margin-top:10px"><button class="btn" id="precheck">Precheck</button><button class="btn primary" id="check">Check</button></div>' +
+            '<div id="results">' + (st.results[n] || '') + '</div>');
+    }
+
     function render() {
       clearTimers();
-      var n = st.cur, q = QUIZ[st.qs[n]], sel = st.answers[n] || [], done = st.finished;
-      var s = done ? scoreQ(q, sel) : 0;
+      var n = st.cur, it = items[n], done = st.finished;
+      var q = it.c ? null : QUIZ[it.q], sel = st.answers[n] || [];
+      var s = done ? scoreOf(it, n) : 0, frac = s / maxOf(it);
+      var finalScore = st.score, finalMax = st.total || totalMax;
       app.innerHTML =
         (done ? '<div class="card" style="margin-bottom:16px"><div class="row"><div><div class="muted small">Your score</div>' +
-          '<div class="score-big">' + Math.round(100 * st.score / st.qs.length) + '%</div></div>' +
-          '<div class="muted">' + st.score + ' / ' + st.qs.length + ' marks · review each question below</div><span class="spacer"></span>' +
+          '<div class="score-big">' + Math.round(100 * finalScore / finalMax) + '%</div></div>' +
+          '<div class="muted">' + finalScore + ' / ' + finalMax + ' marks · review each question below</div><span class="spacer"></span>' +
           '<a class="btn" href="#/quiz">Back</a></div></div>' : '') +
         '<div class="quiz-layout">' +
           '<div class="card question">' +
-            '<div class="qhead"><div><b>Question ' + (n + 1) + '</b> <span class="muted small">of ' + st.qs.length + '</span> ' +
-              '<span class="pill">' + esc(topicTitle(q.t)) + '</span></div>' +
-              (done ? '<span class="pill ' + pillClass(s) + '">Mark ' + round2(s) + ' / 1</span>'
+            '<div class="qhead"><div><b>Question ' + (n + 1) + '</b> <span class="muted small">of ' + items.length + '</span> ' +
+              (it.c ? '<span class="pill accent">Programming · ' + CODE_MARKS + ' marks</span>' : '<span class="pill">' + esc(topicTitle(q.t)) + '</span>') + '</div>' +
+              (done ? '<span class="pill ' + pillClass(frac) + '">Mark ' + round2(s) + ' / ' + maxOf(it) + '</span>'
                 : '<label class="small"><input type="checkbox" id="flag"' + (st.flags[n] ? ' checked' : '') + '> Flag question</label>') +
             '</div>' +
-            '<div class="qtext">' + q.q + '</div>' +
-            '<div class="muted small" style="margin-bottom:8px">' + (q.m ? 'Select one or more:' : 'Select one:') + '</div>' +
-            renderOptions(q, sel, 'q' + n, done) +
-            (done ? '<div class="explain ' + pillClass(s).replace('warn', 'partial').replace('bad', 'bad') + '"><b>Correct answer: ' +
-              q.a.map(function (i) { return LETTERS[i]; }).join(', ') + '.</b> ' + q.e + '</div>' : '') +
+            (it.c ? codingBody(it, n, done)
+              : '<div class="qtext">' + q.q + '</div>' +
+                '<div class="muted small" style="margin-bottom:8px">' + (q.m ? 'Select one or more:' : 'Select one:') + '</div>' +
+                renderOptions(q, sel, 'q' + n, done) +
+                (done ? '<div class="explain ' + pillClass(s).replace('warn', 'partial').replace('bad', 'bad') + '"><b>Correct answer: ' +
+                  q.a.map(function (i) { return LETTERS[i]; }).join(', ') + '.</b> ' + q.e + '</div>' : '')) +
             '<div class="row" style="margin-top:16px">' +
               '<button class="btn" id="prev"' + (n === 0 ? ' disabled' : '') + '>← Previous</button>' +
-              (!done && sel.length ? '<button class="btn ghost small" id="clear">Clear my choice</button>' : '') +
+              (!done && !it.c && sel.length ? '<button class="btn ghost small" id="clear">Clear my choice</button>' : '') +
               '<span class="spacer"></span>' +
-              (n < st.qs.length - 1 ? '<button class="btn primary" id="next">Next page →</button>'
+              (n < items.length - 1 ? '<button class="btn primary" id="next">Next page →</button>'
                 : (!done ? '<button class="btn primary" id="finish">Finish attempt…</button>' : '')) +
             '</div>' +
           '</div>' +
           '<aside class="card qnav">' +
             '<b>Quiz navigation</b>' +
             (!done ? '<div class="row" style="margin-top:6px"><span class="muted small">Time left</span><span class="timer" id="timer"></span></div>' : '') +
-            '<div class="qgrid">' + st.qs.map(function (qi, i) {
+            '<div class="qgrid">' + items.map(function (x, i) {
               var c = '';
-              if (done) c = scoreClass(scoreQ(QUIZ[qi], st.answers[i]));
-              else if ((st.answers[i] || []).length) c = 'answered';
+              if (done) c = scoreClass(scoreOf(x, i) / maxOf(x));
+              else if (answered(x, i)) c = 'answered';
               if (i === n) c += ' current';
               if (st.flags[i] && !done) c += ' flag';
-              return '<button data-go="' + i + '" class="' + c + '">' + (i + 1) + '</button>';
+              return '<button data-go="' + i + '" class="' + c + '"' + (x.c ? ' title="Programming question"' : '') + '>' + (i + 1) + (x.c ? '*' : '') + '</button>';
             }).join('') + '</div>' +
+            '<div class="muted small" style="margin:6px 0">* = programming question</div>' +
             (!done ? '<button class="btn small" id="finish2">Finish attempt…</button>' : '') +
           '</aside>' +
         '</div>';
+      if (!done && it.c) {
+        var p = problemById(it.c), busy = false;
+        makeEditor($('#editor'), st.codes[n] || '', function (v) {
+          st.codes[n] = v; save();
+          var b = $('[data-go="' + n + '"]'); if (b) b.classList.toggle('answered', !!v.trim());
+        });
+        var run = function (all) {
+          if (busy) return;
+          if (!(st.codes[n] || '').trim()) { $('#results').innerHTML = '<div class="result-banner bad">The answer box is empty.</div>'; return; }
+          busy = true;
+          $('#precheck').disabled = $('#check').disabled = true;
+          $('#results').innerHTML = '<div class="result-banner info"><span class="spin"></span> Compiling with g++ and running the tests…</div>';
+          var done2 = function () { busy = false; if (st.cur === n && !st.finished) render(); };
+          if (all) { checkCode(n).then(done2, function (e) { busy = false; $('#results').innerHTML = '<div class="result-banner bad">Could not run your code: ' + esc(e.message || e) + '</div>'; }); return; }
+          var ex = p.tests.map(function (_, k) { return k; }).filter(function (k) { return !p.tests[k].hidden; });
+          runTests(p, ex, st.codes[n]).then(function (res) {
+            busy = false;
+            $('#precheck').disabled = $('#check').disabled = false;
+            var passed = res.results.filter(function (r) { return r && r.pass; }).length;
+            $('#results').innerHTML = (!res.compileError && passed === ex.length
+              ? '<div class="result-banner ok">Precheck: the example tests pass. Press Check to run the hidden tests too.</div>'
+              : '<div class="result-banner bad">Precheck: ' + (res.compileError ? 'compilation failed.' : passed + ' of ' + ex.length + ' example tests pass.') + '</div>') +
+              renderResults(p, ex, res);
+          }, function (e) { busy = false; $('#precheck').disabled = $('#check').disabled = false; $('#results').innerHTML = '<div class="result-banner bad">Could not run your code: ' + esc(e.message || e) + '</div>'; });
+        };
+        $('#precheck').addEventListener('click', function () { run(false); });
+        $('#check').addEventListener('click', function () { run(true); });
+      }
       if (!done) {
-        bindOptions(function (picked) {
+        if (!it.c) bindOptions(function (picked) {
           st.answers[n] = picked; save();
           var b = $('[data-go="' + n + '"]'); if (b) b.classList.toggle('answered', picked.length > 0);
         });
         $('#flag').addEventListener('change', function (e) { st.flags[n] = e.target.checked; save(); render(); });
         if ($('#clear')) $('#clear').addEventListener('click', function () { st.answers[n] = []; save(); render(); });
         var ask = function () {
-          var unanswered = st.qs.filter(function (_, i) { return !(st.answers[i] || []).length; }).length;
+          var unanswered = items.filter(function (x, i) { return !answered(x, i); }).length;
           if (confirm('Submit all and finish?' + (unanswered ? '\n' + unanswered + ' question(s) not answered.' : ''))) finish();
         };
         if ($('#finish')) $('#finish').addEventListener('click', ask);
