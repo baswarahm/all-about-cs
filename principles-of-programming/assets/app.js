@@ -229,16 +229,24 @@
   }
 
   // ───────────────────────── quiz ─────────────────────────
-  var MOCK_QUESTIONS = 30, MOCK_MINUTES = 90;
-  // Like the past Test 1, the mock also has CodeRunner questions mixed in, worth CODE_MARKS each,
+  var MOCK_QUESTIONS = 30;
+  // Like the past Test 1, the mock also has 2–5 CodeRunner questions mixed in (default 4), worth CODE_MARKS each,
   // with the Moodle quiz penalty regime "10, 20, ... %" (the first Check is free).
-  var MOCK_CODING = 2, CODE_MARKS = 10;
+  var CODING_CHOICES = [2, 3, 4, 5], CODING_DEFAULT = 4, CODE_MARKS = 10;
+  // 60 minutes for the multiple-choice part + 15 minutes per programming question
+  function mockMinutes(coding) { return 60 + 15 * coding; }
   function quizPenalty(checkNo) { return Math.min(100, Math.max(0, (checkNo - 1) * 10)); }
-  // one past-Test-1-style problem + one from the step-by-step set / easier bank problems
-  function pickTestCoding() {
-    var past = PROBLEMS.filter(function (p) { return p.set === 'past'; });
-    var rest = PROBLEMS.filter(function (p) { return p.set !== 'past' && (p.set === 'steps' || p.level <= 2); });
-    return shuffle(past).slice(0, 1).concat(shuffle(rest).slice(0, MOCK_CODING - 1)).map(function (p) { return p.id; });
+  // about half from the past-Test-1-style set, the rest from the step-by-step set / easier bank problems
+  function pickTestCoding(count, avoid) {
+    avoid = avoid || [];
+    var ok = function (p) { return avoid.indexOf(p.id) < 0; };
+    var past = PROBLEMS.filter(function (p) { return p.set === 'past' && ok(p); });
+    var rest = PROBLEMS.filter(function (p) { return p.set !== 'past' && (p.set === 'steps' || p.level <= 2) && ok(p); });
+    var fromPast = shuffle(past).slice(0, Math.ceil(count / 2));
+    return fromPast.concat(shuffle(rest).slice(0, count - fromPast.length)).map(function (p) { return p.id; });
+  }
+  function addCoding(items, ids) {
+    ids.forEach(function (id) { items.splice(Math.floor(Math.random() * (items.length + 1)), 0, { c: id }); });
   }
 
   // Moodle-style marking: each correct option ticked earns 1/k, each wrong option ticked loses 1/k, never below 0.
@@ -266,9 +274,13 @@
       'In multiple-answer questions each correct tick earns part of the mark and each wrong tick takes the same amount off, so don\'t tick everything.</p></header>' +
       '<div class="grid grid-2">' +
         '<div class="card"><h2>Timed mock test</h2>' +
-          '<p>' + MOCK_QUESTIONS + ' random questions from all ' + QUIZ.length + ' + ' + MOCK_CODING + ' programming questions (' + CODE_MARKS + ' marks each, compiled with g++, like the past Test 1) · ' +
-            MOCK_MINUTES + ' minutes · review with explanations at the end.</p>' +
+          '<p>' + MOCK_QUESTIONS + ' random questions from all ' + QUIZ.length + ' + programming (CodeRunner) questions, ' + CODE_MARKS +
+            ' marks each, compiled with g++ like the past Test 1. Review with explanations at the end.</p>' +
           (mock && !mock.finished ? '<p class="pill warn">Attempt in progress</p> ' : '') +
+          '<label class="small muted">Programming questions <select id="codeCount" class="select">' + CODING_CHOICES.map(function (n) {
+            return '<option value="' + n + '"' + (n === store.get('mock-coding', CODING_DEFAULT) ? ' selected' : '') + '>' + n + ' (' +
+              (MOCK_QUESTIONS + n * CODE_MARKS) + ' marks, ' + mockMinutes(n) + ' min)</option>';
+          }).join('') + '</select></label>' +
           '<div class="row" style="margin-top:10px">' +
             (mock && !mock.finished ? '<a class="btn primary" href="#/quiz/mock">Continue attempt</a><button class="btn" id="newMock">Start over</button>'
               : '<button class="btn primary" id="newMock">Start mock test</button>') +
@@ -287,11 +299,13 @@
       '</div>';
     $('#newMock').addEventListener('click', function () {
       if (mock && !mock.finished && !confirm('Discard the attempt in progress?')) return;
+      var coding = +$('#codeCount').value || CODING_DEFAULT;
+      store.set('mock-coding', coding);
       var items = shuffle(QUIZ.map(function (_, i) { return i; })).slice(0, MOCK_QUESTIONS).map(function (i) { return { q: i }; });
       // put the programming questions at random places in the paper, as in the past Test 1
-      pickTestCoding().forEach(function (id) { items.splice(Math.floor(Math.random() * (items.length + 1)), 0, { c: id }); });
+      addCoding(items, pickTestCoding(coding));
       store.set('quiz-mock', { items: items, answers: {}, flags: {}, codes: {}, checks: {}, marks: {}, results: {}, checkedCode: {},
-        cur: 0, start: Date.now(), end: Date.now() + MOCK_MINUTES * 60000, finished: false });
+        cur: 0, start: Date.now(), end: Date.now() + mockMinutes(coding) * 60000, finished: false });
       location.hash = '#/quiz/mock';
     });
     $('#startPractice').addEventListener('click', function () {
@@ -331,6 +345,14 @@
     if (!st) { location.hash = '#/quiz'; return; }
     // attempts saved before programming questions were added only have qs (quiz indexes)
     if (!st.items) { st.items = st.qs.map(function (i) { return { q: i }; }); st.codes = {}; st.checks = {}; st.marks = {}; st.results = {}; st.checkedCode = {}; }
+    // an unfinished attempt started before programming questions existed gets them now (and the extra time)
+    if (!st.finished && !st.items.some(function (x) { return x.c; })) {
+      var add = store.get('mock-coding', CODING_DEFAULT);
+      // answers are stored by position, so only append at the end to keep them on the right questions
+      pickTestCoding(add).forEach(function (id) { st.items.push({ c: id }); });
+      st.end += 15 * add * 60000;
+      store.set('quiz-mock', st);
+    }
     var items = st.items;
     function save() { store.set('quiz-mock', st); }
     function maxOf(it) { return it.c ? CODE_MARKS : 1; }

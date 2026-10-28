@@ -6,7 +6,7 @@
   var UPDATES = {
     'computer-organisation': { at: '2026-10-28T19:42+08:00', text: 'Lecture slides and tutorial sheets are now kept private.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
-    'principles-of-programming': { at: '2026-10-28T21:54+08:00', text: 'The Test 1 mock now has 2 programming questions, plus 180 new Test 1 questions.' },
+    'principles-of-programming': { at: '2026-10-28T22:40+08:00', text: 'The Test 1 mock now has 2–5 programming questions (you choose; 4 by default), like the past Test 1.' },
   };
 
   var me = document.currentScript;
