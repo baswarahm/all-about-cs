@@ -41,6 +41,7 @@
   var GROUPS = ['Sequence', 'Selection', 'Repetition'];
   var STEPS = 'Step by step';   // the easy-to-hard set in data/problems-new.js
   var PAST = 'Past Test 1 style';   // data/problems-past.js
+  var HARD = 'Hard';   // data/problems-hard.js
   function groupOf(p) { return GROUPS.filter(function (g) { return p.topic.indexOf(g) === 0; })[0] || 'Other'; }
   PROBLEMS.sort(function (a, b) {
     return GROUPS.indexOf(groupOf(a)) - GROUPS.indexOf(groupOf(b)) || a.level - b.level;
@@ -90,6 +91,7 @@
 
   // Plain-English hints for the most common g++ errors.
   var ERROR_HINTS = [
+    [/unused variable '(\w+)'|variable '(\w+)' set but not used/, function (m) { var v = esc(m[1] || m[2]); return '<code>' + v + '</code> is declared but never used. Like the real CodeRunner, an unused variable is an <b>error</b> here: use it, or delete the declaration. Every computer-generated variable must be used in your answer.'; }],
     [/redeclaration of|conflicting declaration|previously declared/, 'You declared a variable that already exists. The computer-generated variables are already declared, so use them directly (write <code>x = 5;</code>, not <code>int x = 5;</code>).'],
     [/'(\w+)' was not declared in this scope/, function (m) { return '<code>' + esc(m[1]) + '</code> is used before it is declared. Check the spelling and capital letters, or declare it first (e.g. <code>int ' + esc(m[1]) + ' = 0;</code>). Variables declared inside <code>{ }</code> only exist inside that block.'; }],
     [/expected ';'/, 'A semicolon <code>;</code> is missing, usually at the end of the line <i>before</i> the one the error points to.'],
@@ -565,8 +567,8 @@
   var FREE_CHECKS = 20;
   function penaltyFor(checkNo) { return checkNo <= FREE_CHECKS ? 0 : Math.min(100, (checkNo - FREE_CHECKS) * 5); }
   var PENALTY_TEXT = 'penalty regime: ' + FREE_CHECKS + ' free checks, then 5, 10, 15, … 100 %';
-  // the real Programming Assessment: 2–4 programming questions in 1 hour
-  var PA_MINUTES = 60, PA_COUNTS = [2, 3, 4], PA_DEFAULT = 3;
+  // the mock ProgrAss: 5 questions (2 easy, 1 medium, 2 hard) in 1 hour, a little harder than the real one (2–4 questions in 1 hour)
+  var PA_MINUTES = 60, PA_SHAPE = [1, 1, 2, 3, 3];
 
   function progState(id) { return store.get('prog-' + id, { code: '', checks: 0, best: 0 }); }
   function saveProg(id, s) { store.set('prog-' + id, s); }
@@ -574,30 +576,28 @@
   function activeMock() { var m = store.get('pa-mock', null); return m && !m.finished ? m : null; }
 
   // generated mock: one selection/sequence question, then repetition, with a nested-loop question near the end
-  function pickGeneratedMock(count) {
-    var fams = Generator.families;
-    var sel = shuffle(fams.filter(function (f) { return f.group !== 'Repetition'; }));
-    var repf = shuffle(fams.filter(function (f) { return f.group === 'Repetition' && f.key !== 'pattern'; }));
-    var keys = [sel[0].key, repf[0].key, 'pattern'];
-    var pool = shuffle(sel.slice(1).concat(repf.slice(1)));
-    while (keys.length < count && pool.length) keys.splice(keys.length - 1, 0, pool.shift().key);
-    return keys.slice(0, count).map(function (k) { return 'gen~' + k + '~' + Generator.randomSeed(); });
-  }
-
-  function pickMockProblems(count) {
+  // One question per slot of PA_SHAPE (difficulty 1, 1, 2, 3, 3), from the bank, the generator, or a mix.
+  // The generator's only hard type is the nested-loop pattern, so in generator mode one hard question comes from the bank.
+  function pickPaMock(src) {
     var taken = {};
-    function take(list) {
-      var p = shuffle(list).filter(function (x) { return !taken[x.id]; })[0];
-      if (p) taken[p.id] = true;
-      return p;
+    function fromBank(level) {
+      var pool = PROBLEMS.filter(function (p) { return p.level === level && !taken[p.id]; });
+      if (level === 3) {   // prefer the long assessment-style hard questions
+        var hard = pool.filter(function (p) { return p.set === 'hard'; });
+        if (hard.length && Math.random() < 0.7) pool = hard;
+      }
+      var p = shuffle(pool)[0]; taken[p.id] = true; return p.id;
     }
-    var picks = [
-      take(PROBLEMS.filter(function (p) { return groupOf(p) !== 'Repetition' && p.level >= 2; })),
-      take(PROBLEMS.filter(function (p) { return groupOf(p) === 'Repetition' && p.level === 2; })),
-      take(PROBLEMS.filter(function (p) { return p.level === 3; })),
-    ];
-    while (picks.length < count) picks.push(take(PROBLEMS.filter(function (p) { return p.level >= 2 || picks.length > 4; })));
-    return picks.slice(0, count).filter(Boolean).sort(function (a, b) { return a.level - b.level; }).map(function (p) { return p.id; });
+    function fromGen(level) {
+      var fams = shuffle(Generator.families.filter(function (f) { return f.level === level && !taken[f.key]; }));
+      if (!fams.length) return null;
+      taken[fams[0].key] = true;
+      return 'gen~' + fams[0].key + '~' + Generator.randomSeed();
+    }
+    return PA_SHAPE.map(function (level, i) {
+      var useGen = src === 'gen' || (src === 'mix' && i % 2 === 0);
+      return (useGen && fromGen(level)) || fromBank(level);
+    });
   }
 
   function viewProgass(args) {
@@ -606,10 +606,7 @@
     var mock = store.get('pa-mock', null);
     var filter = store.get('pa-filter', 'All');
     var solved = PROBLEMS.filter(function (p) { return progState(p.id).best > 0; }).length;
-    var countPicker = '<label class="small muted">Questions <select id="mockCount" class="select">' + PA_COUNTS.map(function (n) {
-      return '<option value="' + n + '"' + (n === store.get('pa-count', PA_DEFAULT) ? ' selected' : '') + '>' + n + '</option>';
-    }).join('') + '</select></label>' +
-      '<label class="small muted">From <select id="mockSrc" class="select">' +
+    var countPicker = '<label class="small muted">From <select id="mockSrc" class="select">' +
       [['gen', 'generator (new every time)'], ['bank', 'question bank'], ['mix', 'mix of both']].map(function (o) {
         return '<option value="' + o[0] + '"' + (store.get('mock-src', 'gen') === o[0] ? ' selected' : '') + '>' + o[1] + '</option>';
       }).join('') + '</select></label>';
@@ -619,17 +616,17 @@
       'Type only your part. <b>Precheck</b> runs the example tests for free. <b>Check</b> runs every test including the hidden ones, and counts towards the penalty regime. ' +
       'Your code is compiled with real <b>g++</b>, just like the assessment. Finished them all? The <a href="#/generator">question generator</a> makes endless new ones.</p></header>' +
       '<div class="card mock-card"><div class="row"><div><h2 style="margin:0">Mock ProgrAss</h2>' +
-        '<div class="muted small">' + PA_COUNTS[0] + '–' + PA_COUNTS[PA_COUNTS.length - 1] + ' random questions in ' + PA_MINUTES + ' minutes, like the real assessment. Model answers stay locked until you finish.</div></div><span class="spacer"></span>' +
+        '<div class="muted small">' + PA_SHAPE.length + ' random questions in ' + PA_MINUTES + ' minutes: 2 easy ★, 1 medium ★★ and 2 hard ★★★. The real assessment has 2–4 questions in 1 hour. Model answers stay locked until you finish.</div></div><span class="spacer"></span>' +
         (activeMock()
           ? '<a class="btn primary" href="#/progass/' + activeMock().ids[0] + '">Continue mock</a>' + countPicker + '<button class="btn" id="mockStart">Start over</button>'
           : countPicker + '<button class="btn primary" id="mockStart">Start mock</button>' +
             (mock && mock.finished ? '<a class="btn" href="#/progass/mock">Last result</a>' : '')) +
       '</div></div>' +
-      '<div class="row" style="margin:20px 0 10px"><div class="chips" id="chips">' + ['All'].concat(GROUPS, [STEPS, PAST]).map(function (g) {
+      '<div class="row" style="margin:20px 0 10px"><div class="chips" id="chips">' + ['All'].concat(GROUPS, [STEPS, PAST, HARD]).map(function (g) {
         return '<button class="chip' + (g === filter ? ' on' : '') + '" data-f="' + g + '">' + g + '</button>';
       }).join('') + '</div><span class="spacer"></span><span class="muted small">' + solved + ' / ' + PROBLEMS.length + ' solved</span>' +
         '<div class="bar" style="width:140px"><span style="width:' + Math.round(100 * solved / PROBLEMS.length) + '%"></span></div></div>' +
-      '<div class="plist">' + PROBLEMS.filter(function (p) { return filter === 'All' || groupOf(p) === filter || (filter === STEPS && p.set === 'steps') || (filter === PAST && p.set === 'past'); }).map(function (p) {
+      '<div class="plist">' + PROBLEMS.filter(function (p) { return filter === 'All' || groupOf(p) === filter || (filter === STEPS && p.set === 'steps') || (filter === PAST && p.set === 'past') || (filter === HARD && p.set === 'hard'); }).map(function (p) {
         var s = progState(p.id);
         var status = s.best > 0 ? '<span class="pill ok">✓ ' + s.best + '%</span>' : s.checks ? '<span class="pill warn">attempted</span>' : '';
         return '<a class="pitem" href="#/progass/' + p.id + '"><span class="pnum">' + (PROBLEMS.indexOf(p) + 1) + '</span><div><div class="ptitle">' + esc(p.title) + '</div>' +
@@ -641,16 +638,9 @@
     });
     $('#mockStart').addEventListener('click', function () {
       if (activeMock() && !confirm('Discard the current mock attempt?')) return;
-      var count = +$('#mockCount').value, src = $('#mockSrc').value;
-      store.set('pa-count', count);
+      var src = $('#mockSrc').value;
       store.set('mock-src', src);
-      var ids;
-      if (src === 'bank') ids = pickMockProblems(count);
-      else if (src === 'gen') ids = pickGeneratedMock(count);
-      else {
-        var g = pickGeneratedMock(count), b = pickMockProblems(count);
-        ids = g.map(function (x, i) { return i % 2 ? b[i] || x : x; });
-      }
+      var ids = pickPaMock(src);
       store.set('pa-mock', { ids: ids, start: Date.now(), end: Date.now() + PA_MINUTES * 60000, finished: false, codes: {}, checks: {}, best: {} });
       location.hash = '#/progass/' + ids[0];
     });

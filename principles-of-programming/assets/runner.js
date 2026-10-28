@@ -19,7 +19,8 @@
     var body = {
       source: source,
       options: {
-        userArguments: '-std=c++17 -O0 -fdiagnostics-color=never',
+        // like the course's CodeRunner, a variable that is declared but never used is a compile error
+        userArguments: '-std=c++17 -O0 -fdiagnostics-color=never -Wall -Werror=unused-variable -Werror=unused-but-set-variable',
         executeParameters: { args: [], stdin: stdin || '' },
         compilerOptions: { executorRequest: true },
         filters: { execute: true },

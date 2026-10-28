@@ -252,7 +252,7 @@
         pyramid: { title: 'Pyramid', text: 'a centred pyramid of <code>n</code> rows; row i has (n − i) spaces then (2i − 1) characters',
           js: function (n) { var o = []; for (var i = 1; i <= n; i++) o.push(rep(' ', n - i) + rep(ch, 2 * i - 1)); return o; },
           cpp: 'for (int i = 1; i <= n; i++) {\n    for (int s = 1; s <= n - i; s++) cout << " ";\n    for (int j = 1; j <= 2 * i - 1; j++) cout << ch;\n    cout << endl;\n}' },
-        numbers: { title: 'Number Triangle', text: 'a number triangle of <code>n</code> rows (n ≤ 9); row i prints the digits 1 to i with no spaces. (<code>ch</code> is not used.)',
+        numbers: { title: 'Number Triangle', text: 'a number triangle of <code>n</code> rows (n ≤ 9); row i prints the digits 1 to i with no spaces.',
           js: function (n) { var o = []; for (var i = 1; i <= n; i++) { var s = ''; for (var j = 1; j <= i; j++) s += j; o.push(s); } return o; },
           cpp: 'for (int i = 1; i <= n; i++) {\n    for (int j = 1; j <= i; j++) cout << j;\n    cout << endl;\n}' },
         hollowRect: { title: 'Hollow Rectangle', text: 'a hollow rectangle with <code>n</code> rows and <code>m</code> columns; only the border uses <code>ch</code>, the inside is spaces',
@@ -268,7 +268,8 @@
       sizes = fillTo(uniq(sizes), function () { return R.int(0, shape === 'numbers' ? 9 : 10); });
       var tests = mkTests(sizes.map(function (n) {
         var m = S.two ? R.int(Math.max(n, 2), n + 6) : 0;
-        var vars = '    int n = ' + n + ';' + (S.two ? '\n    int m = ' + m + ';' : '') + "\n    char ch = '" + ch + "';" + (S.second ? "\n    char ch2 = '" + ch2 + "';" : '');
+        // the number triangle does not use ch, and an unused variable is a compile error, so it is not declared there
+        var vars = '    int n = ' + n + ';' + (S.two ? '\n    int m = ' + m + ';' : '') + (shape === 'numbers' ? '' : "\n    char ch = '" + ch + "';") + (S.second ? "\n    char ch2 = '" + ch2 + "';" : '');
         var rows = S.js(n, m);
         return { vars: vars, expected: rows.length ? lines(rows) : '' };
       }), 2);
