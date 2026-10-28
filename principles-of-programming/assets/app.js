@@ -233,8 +233,9 @@
   // Like the past Test 1, the mock also has 2–5 CodeRunner questions mixed in (default 4), worth CODE_MARKS each,
   // with the Moodle quiz penalty regime "10, 20, ... %" (the first Check is free).
   var CODING_CHOICES = [2, 3, 4, 5], CODING_DEFAULT = 4, CODE_MARKS = 10;
-  // 60 minutes for the multiple-choice part + 15 minutes per programming question
-  function mockMinutes(coding) { return 60 + 15 * coding; }
+  // the real Test 1 is 2 hours, whatever the number of programming questions
+  var TEST1_MINUTES = 120;
+  function mockMinutes() { return TEST1_MINUTES; }
   function quizPenalty(checkNo) { return Math.min(100, Math.max(0, (checkNo - 1) * 10)); }
   // about half from the past-Test-1-style set, the rest from the step-by-step set / easier bank problems
   function pickTestCoding(count, avoid) {
@@ -275,11 +276,11 @@
       '<div class="grid grid-2">' +
         '<div class="card"><h2>Timed mock test</h2>' +
           '<p>' + MOCK_QUESTIONS + ' random questions from all ' + QUIZ.length + ' + programming (CodeRunner) questions, ' + CODE_MARKS +
-            ' marks each, compiled with g++ like the past Test 1. Review with explanations at the end.</p>' +
+            ' marks each, compiled with g++ like the past Test 1. ' + TEST1_MINUTES / 60 + ' hours, like the real Test 1. Review with explanations at the end.</p>' +
           (mock && !mock.finished ? '<p class="pill warn">Attempt in progress</p> ' : '') +
           '<label class="small muted">Programming questions <select id="codeCount" class="select">' + CODING_CHOICES.map(function (n) {
             return '<option value="' + n + '"' + (n === store.get('mock-coding', CODING_DEFAULT) ? ' selected' : '') + '>' + n + ' (' +
-              (MOCK_QUESTIONS + n * CODE_MARKS) + ' marks, ' + mockMinutes(n) + ' min)</option>';
+              (MOCK_QUESTIONS + n * CODE_MARKS) + ' marks)</option>';
           }).join('') + '</select></label>' +
           '<div class="row" style="margin-top:10px">' +
             (mock && !mock.finished ? '<a class="btn primary" href="#/quiz/mock">Continue attempt</a><button class="btn" id="newMock">Start over</button>'
@@ -305,7 +306,7 @@
       // put the programming questions at random places in the paper, as in the past Test 1
       addCoding(items, pickTestCoding(coding));
       store.set('quiz-mock', { items: items, answers: {}, flags: {}, codes: {}, checks: {}, marks: {}, results: {}, checkedCode: {},
-        cur: 0, start: Date.now(), end: Date.now() + mockMinutes(coding) * 60000, finished: false });
+        cur: 0, start: Date.now(), end: Date.now() + mockMinutes() * 60000, finished: false });
       location.hash = '#/quiz/mock';
     });
     $('#startPractice').addEventListener('click', function () {
@@ -350,7 +351,7 @@
       var add = store.get('mock-coding', CODING_DEFAULT);
       // answers are stored by position, so only append at the end to keep them on the right questions
       pickTestCoding(add).forEach(function (id) { st.items.push({ c: id }); });
-      st.end += 15 * add * 60000;
+      st.end = Math.max(st.end, st.start + mockMinutes() * 60000);
       store.set('quiz-mock', st);
     }
     var items = st.items;
@@ -564,7 +565,8 @@
   var FREE_CHECKS = 20;
   function penaltyFor(checkNo) { return checkNo <= FREE_CHECKS ? 0 : Math.min(100, (checkNo - FREE_CHECKS) * 5); }
   var PENALTY_TEXT = 'penalty regime: ' + FREE_CHECKS + ' free checks, then 5, 10, 15, … 100 %';
-  var MINUTES_PER_QUESTION = 40;
+  // the real Programming Assessment: 2–4 programming questions in 1 hour
+  var PA_MINUTES = 60, PA_COUNTS = [2, 3, 4], PA_DEFAULT = 3;
 
   function progState(id) { return store.get('prog-' + id, { code: '', checks: 0, best: 0 }); }
   function saveProg(id, s) { store.set('prog-' + id, s); }
@@ -579,7 +581,7 @@
     var keys = [sel[0].key, repf[0].key, 'pattern'];
     var pool = shuffle(sel.slice(1).concat(repf.slice(1)));
     while (keys.length < count && pool.length) keys.splice(keys.length - 1, 0, pool.shift().key);
-    return keys.map(function (k) { return 'gen~' + k + '~' + Generator.randomSeed(); });
+    return keys.slice(0, count).map(function (k) { return 'gen~' + k + '~' + Generator.randomSeed(); });
   }
 
   function pickMockProblems(count) {
@@ -595,7 +597,7 @@
       take(PROBLEMS.filter(function (p) { return p.level === 3; })),
     ];
     while (picks.length < count) picks.push(take(PROBLEMS.filter(function (p) { return p.level >= 2 || picks.length > 4; })));
-    return picks.filter(Boolean).sort(function (a, b) { return a.level - b.level; }).map(function (p) { return p.id; });
+    return picks.slice(0, count).filter(Boolean).sort(function (a, b) { return a.level - b.level; }).map(function (p) { return p.id; });
   }
 
   function viewProgass(args) {
@@ -604,8 +606,8 @@
     var mock = store.get('pa-mock', null);
     var filter = store.get('pa-filter', 'All');
     var solved = PROBLEMS.filter(function (p) { return progState(p.id).best > 0; }).length;
-    var countPicker = '<label class="small muted">Questions <select id="mockCount" class="select">' + [3, 4, 5, 6].map(function (n) {
-      return '<option value="' + n + '">' + n + ' (' + String(n * MINUTES_PER_QUESTION / 60).replace(/(\.\d)\d+/, '$1') + ' h)</option>';
+    var countPicker = '<label class="small muted">Questions <select id="mockCount" class="select">' + PA_COUNTS.map(function (n) {
+      return '<option value="' + n + '"' + (n === store.get('pa-count', PA_DEFAULT) ? ' selected' : '') + '>' + n + '</option>';
     }).join('') + '</select></label>' +
       '<label class="small muted">From <select id="mockSrc" class="select">' +
       [['gen', 'generator (new every time)'], ['bank', 'question bank'], ['mix', 'mix of both']].map(function (o) {
@@ -617,7 +619,7 @@
       'Type only your part. <b>Precheck</b> runs the example tests for free. <b>Check</b> runs every test including the hidden ones, and counts towards the penalty regime. ' +
       'Your code is compiled with real <b>g++</b>, just like the assessment. Finished them all? The <a href="#/generator">question generator</a> makes endless new ones.</p></header>' +
       '<div class="card mock-card"><div class="row"><div><h2 style="margin:0">Mock ProgrAss</h2>' +
-        '<div class="muted small">Random questions, ' + MINUTES_PER_QUESTION + ' minutes per question, model answers locked until you finish. The real one had 3 questions in 2 hours.</div></div><span class="spacer"></span>' +
+        '<div class="muted small">' + PA_COUNTS[0] + '–' + PA_COUNTS[PA_COUNTS.length - 1] + ' random questions in ' + PA_MINUTES + ' minutes, like the real assessment. Model answers stay locked until you finish.</div></div><span class="spacer"></span>' +
         (activeMock()
           ? '<a class="btn primary" href="#/progass/' + activeMock().ids[0] + '">Continue mock</a>' + countPicker + '<button class="btn" id="mockStart">Start over</button>'
           : countPicker + '<button class="btn primary" id="mockStart">Start mock</button>' +
@@ -640,6 +642,7 @@
     $('#mockStart').addEventListener('click', function () {
       if (activeMock() && !confirm('Discard the current mock attempt?')) return;
       var count = +$('#mockCount').value, src = $('#mockSrc').value;
+      store.set('pa-count', count);
       store.set('mock-src', src);
       var ids;
       if (src === 'bank') ids = pickMockProblems(count);
@@ -648,7 +651,7 @@
         var g = pickGeneratedMock(count), b = pickMockProblems(count);
         ids = g.map(function (x, i) { return i % 2 ? b[i] || x : x; });
       }
-      store.set('pa-mock', { ids: ids, start: Date.now(), end: Date.now() + ids.length * MINUTES_PER_QUESTION * 60000, finished: false, codes: {}, checks: {}, best: {} });
+      store.set('pa-mock', { ids: ids, start: Date.now(), end: Date.now() + PA_MINUTES * 60000, finished: false, codes: {}, checks: {}, best: {} });
       location.hash = '#/progass/' + ids[0];
     });
   }

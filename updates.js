@@ -6,7 +6,7 @@
   var UPDATES = {
     'computer-organisation': { at: '2026-10-28T22:52+08:00', text: 'New Random Test 1 (a fresh 50-question paper every time) and a question bank for each topic.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
-    'principles-of-programming': { at: '2026-10-28T22:40+08:00', text: 'The Test 1 mock now has 2–5 programming questions (you choose; 4 by default), like the past Test 1.' },
+    'principles-of-programming': { at: '2026-10-28T22:56+08:00', text: 'Mocks now match the real timing: Test 1 is 2 hours; the ProgrAss mock is 2–4 questions in 1 hour.' },
   };
 
   var me = document.currentScript;
