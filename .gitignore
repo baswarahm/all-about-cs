@@ -1,0 +1,6 @@
+# Lecturer slides, tutorials, labs and other course files.
+# Kept on this computer only, never pushed to GitHub.
+private/
+
+# Local tool settings
+.claude/

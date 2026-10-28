@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CCA101 Principles of Programming</title>
+<meta name="description" content="Notes, a Test 1 mock quiz, CodeRunner-style C++ practice and a random question generator for CCA101/CPT111 Principles of Programming.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231b1b1b'/%3E%3Crect x='4' y='24' width='24' height='3' fill='%23b3261e'/%3E%3Ctext x='16' y='19' font-family='monospace' font-size='13' font-weight='700' fill='%23f3efe6' text-anchor='middle'%3E101%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#/"><span class="logo">CCA101</span><span class="brand-text">Principles of Programming</span></a>
+  <nav class="nav" id="nav">
+    <a href="#/material" data-nav="material"><i>1</i>Notes</a>
+    <a href="#/quiz" data-nav="quiz"><i>2</i>Test 1</a>
+    <a href="#/progass" data-nav="progass"><i>3</i>ProgrAss</a>
+    <a href="#/generator" data-nav="generator"><i>4</i>Generator</a>
+    <a href="#/playground" data-nav="playground"><i>5</i>Scratchpad</a>
+  </nav>
+  <div class="top-actions">
+    <span class="status-chip" title="Your code is compiled and run with real g++ 13 (Compiler Explorer)"><span class="engine-dot"></span>g++ 13</span>
+    <a class="courses-btn" href="../" title="Back to all CS courses">&larr; CS courses</a>
+    <button class="icon-btn" id="themeBtn" title="Switch between paper and chalkboard" aria-label="Toggle dark mode">◑</button>
+  </div>
+</header>
+
+<main id="app" class="app"></main>
+
+<footer class="foot">
+  <span>CCA101 / CPT111 Principles of Programming · unofficial study aid</span>
+  <span>Code compiled with g++ on <a href="https://godbolt.org" target="_blank" rel="noopener">Compiler Explorer</a></span>
+  <a class="ig-credit" href="https://www.instagram.com/baswara.hm/" target="_blank" rel="noopener"><svg class="ig-ic" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg> Made by @baswara.hm</a>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+<script src="vendor/jscpp.bundle.js" defer></script>
+<script src="data/material.js"></script>
+<script src="data/quiz.js"></script>
+<script src="data/quiz-more.js"></script>
+<script src="data/problems.js"></script>
+<script src="data/problems-more.js"></script>
+<script src="data/expected.js"></script>
+<script src="data/problems-new.js"></script>
+<script src="assets/build-source.js"></script>
+<script src="assets/runner.js"></script>
+<script src="assets/generator.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+// More Test 1 questions (same format as quiz.js).
+window.QUIZ.push(
+// ───────── Computational thinking / problem solving ─────────
+{ t: 'ct', q: 'Using variables in place of specific numbers in an algorithm so it works for similar problems is mainly an example of:',
+  o: ['Abstraction', 'Decomposition', 'Evaluation', 'Debugging'], a: [0], e: 'Abstraction represents the idea in general terms (variables) so it can be reused.' },
+{ t: 'ct', m: true, q: 'Which are among the <b>six concepts</b> of computational thinking taught in this course?',
+  o: ['Decomposition', 'Patterns', 'Compilation', 'Logical reasoning', 'Evaluation', 'Encryption'], a: [0, 1, 3, 4],
+  e: 'The six: decomposition, patterns, abstraction, algorithms, logical reasoning, evaluation.' },
+{ t: 'ct', q: 'In the cake example, "modify the recipe for a different flavour such as carrot or chocolate" maps to:',
+  o: ['Abstraction', 'Evaluation', 'Logical reasoning', 'Decomposition'], a: [0],
+  e: 'Keeping the basic recipe general and swapping the specifics is abstraction / generalisation.' },
+{ t: 'psm', q: 'Which question belongs to the <b>problem analysis</b> stage?',
+  o: ['Which loop should I write first?', 'What are the input and output?', 'How do I write the user manual?', 'Did the program pass all test cases?'], a: [1], e: 'Analysis asks: what is the problem, input/output, process, formula, constraints.' },
+{ t: 'psm', q: 'In the sales tax example, "if the item price is over 100,000 then calculate luxury tax, otherwise luxury tax is 0" is which control structure?',
+  o: ['Sequence', 'Selection', 'Repetition', 'Documentation'], a: [1], e: 'A decision between two paths is selection.' },
+{ t: 'psm', q: 'A program compiles and runs but always prints the wrong total because <code>+</code> was typed instead of <code>*</code>. This is a:',
+  o: ['Syntax error', 'Runtime error', 'Logic (design) error', 'Linker error'], a: [2], e: 'It runs, but gives wrong results: a logic error.' },
+{ t: 'psm', q: 'A flowchart diamond symbol represents:',
+  o: ['Start / end', 'Input / output', 'A decision', 'A process'], a: [2], e: 'Oval: start/end, parallelogram: I/O, rectangle: process, diamond: decision.' },
+
+// ───────── Computers ─────────
+{ t: 'computers', q: 'The <b>ALU</b> is responsible for:', o: ['decoding instructions', 'arithmetic and true/false comparisons', 'storing files permanently', 'connecting peripherals'], a: [1], e: 'Arithmetic & Logic Unit.' },
+{ t: 'computers', q: 'Pipelining means the processor:',
+  o: ['uses liquid cooling', 'begins fetching the next instruction before finishing the current one', 'has more than one core', 'stores data in cache'], a: [1], e: 'It overlaps the machine cycles of instructions.' },
+{ t: 'computers', q: 'Which memory chip can be erased electronically and rewritten, and keeps data without power?', o: ['DRAM', 'Flash memory', 'SRAM', 'Registers'], a: [1], e: 'Flash memory is non-volatile and rewritable.' },
+{ t: 'computers', q: 'Each byte in main memory is identified by a unique number called its:', o: ['bit', 'address', 'register', 'port'], a: [1], e: 'Bytes have addresses.' },
+{ t: 'computers', m: true, q: 'Which are examples of <b>secondary storage</b>?', o: ['Solid-state drive', 'Hard disk', 'DVD', 'L2 cache', 'USB flash drive'], a: [0, 1, 2, 4], e: 'Cache is volatile primary memory.' },
+{ t: 'computers', q: 'Word size refers to:', o: ['the number of bits the processor can interpret and execute at a given time', 'the size of a text file', 'the length of a variable name', 'the size of a USB port'], a: [0], e: 'From the system unit reading.' },
+{ t: 'computers', q: 'An IDE is:', o: ['a type of RAM', 'one application that combines editor, compiler and debugger', 'a machine language', 'a linker error'], a: [1], e: 'e.g. Dev-C++, Visual C++.' },
+{ t: 'computers', q: 'Machine language instructions are:', o: ['English words', 'binary numbers such as 1011010000000101', 'C++ statements', 'flowcharts'], a: [1], e: 'The computer only executes binary machine code.' },
+
+// ───────── Intro C++ / expressions (tracing) ─────────
+{ t: 'cpp-intro', q: 'What is printed? <pre>cout &lt;&lt; "A" &lt;&lt; endl &lt;&lt; "B";\ncout &lt;&lt; "C\\n";</pre>', o: ['A B C', 'A then BC on the next line', 'ABC', 'A, B and C on three lines'], a: [1], e: 'endl breaks after A; "B" and "C" are on the same line.' },
+{ t: 'cpp-intro', q: 'What is the output? <pre>int a = 17, b = 5;\ncout &lt;&lt; a / b &lt;&lt; " " &lt;&lt; a % b;</pre>', o: ['3.4 2', '3 2', '3 3', '4 2'], a: [1], e: '17 / 5 = 3 remainder 2.' },
+{ t: 'cpp-intro', q: 'Which is a C++ <b>key word</b>?', o: ['main', 'cout', 'return', 'endl'], a: [2], e: 'main, cout and endl are identifiers, not reserved key words.' },
+{ t: 'cpp-intro', q: 'What does this print? <pre>char ch = \'A\';\nch = ch + 2;\ncout &lt;&lt; ch;</pre>', o: ['A2', '67', 'C', 'Compile error'], a: [2], e: '65 + 2 = 67, which is the code of \'C\'; ch is a char so it prints as a letter.' },
+{ t: 'cpp-intro', q: 'What does this print? <pre>char ch = \'A\';\ncout &lt;&lt; ch + 2;</pre>', o: ['C', '67', 'A2', '65'], a: [1], e: 'ch + 2 is promoted to int, so the number 67 is printed.' },
+{ t: 'expressions', q: 'What is printed? <pre>double x = 5 / 2;\ncout &lt;&lt; x;</pre>', o: ['2.5', '2', '3', '2.0'], a: [1], e: '5 / 2 is integer division (2) before conversion. cout prints a whole double without a decimal point.' },
+{ t: 'expressions', q: 'What is printed? <pre>int total = 7;\ndouble avg = static_cast&lt;double&gt;(total) / 2;\ncout &lt;&lt; avg;</pre>', o: ['3', '3.5', '4', '3.0'], a: [1], e: 'total is converted to 7.0 before dividing.' },
+{ t: 'expressions', q: 'What is printed? <pre>cout &lt;&lt; fixed &lt;&lt; setprecision(1) &lt;&lt; 2.0 / 3;</pre>', o: ['0.6', '0.7', '0.66', '1'], a: [1], e: '0.666… rounded to 1 decimal is 0.7.' },
+{ t: 'expressions', q: 'What is printed? <pre>cout &lt;&lt; setw(5) &lt;&lt; 12 &lt;&lt; setw(3) &lt;&lt; 7 &lt;&lt; "|";</pre>',
+  o: ['<code>12 7|</code>', '<code>   12  7|</code>', '<code>12   7  |</code>', '<code>   127|</code>'], a: [1], e: '12 right-aligned in width 5 = "   12"; 7 in width 3 = "  7".' },
+{ t: 'expressions', q: 'Given <code>int x = 5;</code> what is the value of x after <code>x += x * 2;</code>?', o: ['10', '15', '20', '12'], a: [1], e: 'x = 5 + 10.' },
+{ t: 'expressions', q: 'What is the value of <code>-3 + 10 % 4 * 2</code>?', o: ['1', '4', '-1', '5'], a: [0], e: '10 % 4 = 2, 2 * 2 = 4, -3 + 4 = 1.' },
+{ t: 'expressions', q: 'Which statement reads a whole line with spaces into <code>string city</code> after a previous <code>cin &gt;&gt; age;</code>?',
+  o: ['<code>getline(cin, city);</code> only', '<code>cin.ignore();</code> then <code>getline(cin, city);</code>', '<code>cin &gt;&gt; city;</code>', '<code>cin.get(city);</code>'], a: [1],
+  e: 'cin >> leaves the newline in the buffer; ignore() skips it so getline does not read an empty line.' },
+{ t: 'expressions', q: 'Which header is needed for <code>sqrt</code> and <code>pow</code>?', o: ['&lt;iostream&gt;', '&lt;iomanip&gt;', '&lt;cmath&gt;', '&lt;string&gt;'], a: [2], e: 'cmath.' },
+
+// ───────── Selection (tracing) ─────────
+{ t: 'selection', q: 'What is printed? <pre>int a = 4, b = 9;\nif (a &gt; b)\n    cout &lt;&lt; "X";\n    cout &lt;&lt; "Y";</pre>', o: ['X', 'Y', 'XY', 'Nothing'], a: [1],
+  e: 'Without braces only the first statement belongs to the if. "Y" always prints despite the indentation.' },
+{ t: 'selection', q: 'What is printed? <pre>int n = 15;\nif (n % 3 == 0 &amp;&amp; n % 5 == 0) cout &lt;&lt; "FizzBuzz";\nelse if (n % 3 == 0) cout &lt;&lt; "Fizz";\nelse if (n % 5 == 0) cout &lt;&lt; "Buzz";\nelse cout &lt;&lt; n;</pre>', o: ['Fizz', 'Buzz', 'FizzBuzz', '15'], a: [2], e: '15 is divisible by both 3 and 5.' },
+{ t: 'selection', q: 'What is printed? <pre>char g = \'b\';\nswitch (g) {\n  case \'A\': case \'a\': cout &lt;&lt; "Excellent"; break;\n  case \'B\': case \'b\': cout &lt;&lt; "Good";\n  case \'C\': cout &lt;&lt; "Fair"; break;\n  default: cout &lt;&lt; "?";\n}</pre>', o: ['Good', 'GoodFair', 'Fair', 'GoodFair?'], a: [1], e: 'No break after "Good", so it falls through to "Fair" then breaks.' },
+{ t: 'selection', q: 'What is the value of <code>result</code>? <pre>int x = 8;\nint result = (x % 2 == 0) ? x / 2 : x * 3 + 1;</pre>', o: ['4', '25', '8', '2'], a: [0], e: '8 is even, so x / 2.' },
+{ t: 'selection', q: 'Which condition is true <b>only</b> when <code>age</code> is <b>outside</b> 18 to 60?', o: ['<code>age &lt; 18 &amp;&amp; age &gt; 60</code>', '<code>age &lt; 18 || age &gt; 60</code>', '<code>!(age &lt; 18 || age &gt; 60)</code>', '<code>age &gt;= 18 &amp;&amp; age &lt;= 60</code>'], a: [1], e: 'A value cannot be both below 18 and above 60, so use ||.' },
+{ t: 'selection', q: 'Given <code>bool a = true, b = false;</code> what is <code>!a || b &amp;&amp; !b</code>?', o: ['true', 'false', 'Compile error', 'Depends on the compiler'], a: [1], e: '! first: false || (false && true) = false || false = false.' },
+{ t: 'selection', m: true, q: 'Which values of <code>x</code> make <code>if (x)</code> true?', o: ['0', '1', '-5', '0.5', 'false'], a: [1, 2, 3], e: '0 (and false) is false; any other value is true.' },
+
+// ───────── Loops (tracing) ─────────
+{ t: 'loops', q: 'How many times does this loop print "Hi"? <pre>for (int i = 0; i &lt; 10; i += 2)\n    cout &lt;&lt; "Hi";</pre>', o: ['4', '5', '6', '10'], a: [1], e: 'i = 0, 2, 4, 6, 8.' },
+{ t: 'loops', q: 'What is printed? <pre>int i = 5;\nwhile (i &gt; 0) {\n    i -= 2;\n    cout &lt;&lt; i &lt;&lt; " ";\n}</pre>', o: ['5 3 1', '3 1 -1', '3 1', '5 3 1 -1'], a: [1], e: 'i becomes 3, 1, then -1 (printed before the test fails).' },
+{ t: 'loops', q: 'What is printed? <pre>int n = 0;\ndo {\n    n++;\n} while (n &lt; 0);\ncout &lt;&lt; n;</pre>', o: ['0', '1', 'infinite loop', '-1'], a: [1], e: 'do-while runs once before testing.' },
+{ t: 'loops', q: 'What is printed? <pre>for (int r = 1; r &lt;= 3; r++) {\n    for (int c = 1; c &lt;= r; c++)\n        cout &lt;&lt; c;\n    cout &lt;&lt; " ";\n}</pre>', o: ['1 12 123', '123 123 123', '1 22 333', '111 22 3'], a: [0], e: 'Row r prints 1 up to r.' },
+{ t: 'loops', q: 'What is printed? <pre>int total = 0;\nfor (int i = 1; i &lt;= 10; i++) {\n    if (i % 2 == 0) continue;\n    total += i;\n}\ncout &lt;&lt; total;</pre>', o: ['55', '30', '25', '5'], a: [2], e: 'Only odd numbers: 1 + 3 + 5 + 7 + 9 = 25.' },
+{ t: 'loops', q: 'What is printed? <pre>int x = 1;\nwhile (x &lt; 100)\n    x *= 3;\ncout &lt;&lt; x;</pre>', o: ['81', '99', '243', '100'], a: [2], e: '1, 3, 9, 27, 81, 243 (stops when x >= 100).' },
+{ t: 'loops', q: 'What is the value of <code>count</code>? <pre>int count = 0;\nfor (int i = 1; i &lt;= 4; i++)\n    for (int j = 1; j &lt;= 3; j++)\n        count++;</pre>', o: ['7', '12', '4', '3'], a: [1], e: '4 × 3 = 12.' },
+{ t: 'loops', q: 'Which loop prints <code>10 8 6 4 2</code>?', o: ['<code>for (int i = 10; i &gt; 0; i--) cout &lt;&lt; i &lt;&lt; " ";</code>', '<code>for (int i = 10; i &gt;= 2; i -= 2) cout &lt;&lt; i &lt;&lt; " ";</code>', '<code>for (int i = 2; i &lt;= 10; i += 2) cout &lt;&lt; i &lt;&lt; " ";</code>', '<code>for (int i = 10; i &gt; 2; i -= 2) cout &lt;&lt; i &lt;&lt; " ";</code>'], a: [1], e: 'Option d stops before printing 2; option c counts up.' },
+{ t: 'loops', q: 'What is printed? <pre>int a = 3;\ncout &lt;&lt; a++ + ++a;</pre>', o: ['7', '8', '6', 'Undefined / unspecified: avoid code like this'], a: [3],
+  e: 'Modifying the same variable twice in one expression is undefined behaviour in C++. Exam questions avoid it; you should too.' },
+{ t: 'loops', m: true, q: 'Which statements about <b>sentinels</b> are correct?', o: ['A sentinel marks the end of the data', 'It must be a value that cannot be confused with valid data', 'A sentinel loop knows the number of values in advance', 'A while loop is a natural choice for sentinel-controlled input'], a: [0, 1, 3], e: 'Sentinels are used precisely when the number of values is NOT known in advance.' },
+{ t: 'loops', q: 'In this code, which variable is the <b>accumulator</b>? <pre>int n = 1, sum = 0;\nwhile (n &lt;= 10) { sum += n; n++; }</pre>', o: ['n', 'sum', 'both', 'neither'], a: [1], e: 'sum holds the running total; n is the counter / loop control variable.' }
+);

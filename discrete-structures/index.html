@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CKC111 Discrete Structures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&family=Noto+Sans+Math&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brandlink" href="#w0-top" data-open-week="0" aria-label="CKC111 Discrete Structures, go to home"><span class="mark" aria-hidden="true">Σ</span><span class="bt"><b>CKC111</b><span>Discrete Structures</span></span></a>
+    <nav class="wtabs" role="tablist" aria-label="Weeks">
+      <button type="button" role="tab" class="wtab nobar" id="tab0" data-weekbtn="0" aria-selected="true" tabindex="0"><b>Home</b><span>Overview</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab1" data-weekbtn="1" aria-selected="false" tabindex="-1"><b>Week 1</b><span>Logic I</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab2" data-weekbtn="2" aria-selected="false" tabindex="-1"><b>Week 2</b><span>Equivalences</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab3" data-weekbtn="3" aria-selected="false" tabindex="-1"><b>Week 3</b><span>Algorithms</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab4" data-weekbtn="4" aria-selected="false" tabindex="-1"><b>Week 4</b><span>Relations I</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab5" data-weekbtn="5" aria-selected="false" tabindex="-1"><b>Week 5</b><span>Relations II</span><i></i></button>
+      <button type="button" role="tab" class="wtab exam" id="tab6" data-weekbtn="6" aria-selected="false" tabindex="-1"><b>Exam Lab</b><span>Practice</span><i></i></button>
+      <button type="button" role="tab" class="wtab exam" id="tab7" data-weekbtn="7" aria-selected="false" tabindex="-1"><b>Test 1</b><span>Mock paper</span><i></i></button>
+    </nav>
+    <a class="coursesbtn" href="../" title="Back to all CS courses"><span aria-hidden="true">&larr;</span> CS courses</a>
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch between light and dark theme" title="Switch light or dark"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<div class="shell">
+
+<aside class="rail" id="nav" aria-label="Sections in this week">
+  <div class="rail-title" id="rail-title">On this page</div>
+  <div class="navgroup" data-week="0">
+    <a href="#w0-top">Welcome</a>
+    <a href="#w0-weeks">Your weeks</a>
+    <a href="#w0-how">How to study</a>
+  </div>
+  <div class="navgroup" data-week="1">
+    <a href="#w1-top">Start here</a>
+    <a href="#w1-props">Propositions</a>
+    <a href="#w1-connectives">Connectives</a>
+    <a href="#w1-implication">Implication</a>
+    <a href="#w1-converse">Converse and contrapositive</a>
+    <a href="#w1-lab">Truth-table lab</a>
+    <a href="#w1-translate">Precedence and translation</a>
+    
+    <a href="#w1-mistakes">Common mistakes</a>
+    <a href="#w1-recall">Active recall</a>
+    <a href="#w1-practice">Practice set</a>
+    <a href="#w1-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w1-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w1-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="2" hidden>
+    <a href="#w2-top">Start here</a>
+    <a href="#w2-taut">Tautologies</a>
+    <a href="#w2-equiv">Logical equivalence</a>
+    <a href="#w2-demorgan">De Morgan's Laws</a>
+    <a href="#w2-laws">Key equivalences</a>
+    <a href="#w2-construct">Proofs with laws</a>
+    <a href="#w2-mistakes">Common mistakes</a>
+    <a href="#w2-recall">Active recall</a>
+    <a href="#w2-practice">Practice set</a>
+    <a href="#w2-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w2-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w2-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="3">
+    <a href="#w3-top">Start here</a>
+    <a href="#w3-what">What is an algorithm</a>
+    <a href="#w3-pseudo">Reading pseudocode</a>
+    <a href="#w3-max">Worked example: max</a>
+    <a href="#w3-props">Properties</a>
+    <a href="#w3-kinds">Three kinds of problem</a>
+    <a href="#w3-search">Searching</a>
+    <a href="#w3-sort">Sorting</a>
+    <a href="#w3-greedy">Greedy algorithms</a>
+    <a href="#w3-mistakes">Common mistakes</a>
+    <a href="#w3-recall">Active recall</a>
+    <a href="#w3-practice">Practice set</a>
+    <a href="#w3-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w3-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w3-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="4" hidden>
+    <a href="#w4-top">Start here</a>
+    <a href="#w4-what">What is a relation</a>
+    <a href="#w4-reflexive">Reflexive</a>
+    <a href="#w4-symmetric">Symmetric and antisymmetric</a>
+    <a href="#w4-transitive">Transitive</a>
+    <a href="#w4-combine">Combining and composing</a>
+    <a href="#w4-mistakes">Common mistakes</a>
+    <a href="#w4-recall">Active recall</a>
+    <a href="#w4-practice">Practice set</a>
+    <a href="#w4-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w4-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w4-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="5" hidden>
+    <a href="#w5-top">Start here</a>
+    <a href="#w5-matrix">Matrices</a>
+    <a href="#w5-digraph">Digraphs</a>
+    <a href="#w5-equiv">Equivalence relations</a>
+    <a href="#w5-mistakes">Common mistakes</a>
+    <a href="#w5-recall">Active recall</a>
+    <a href="#w5-practice">Practice set</a>
+    <a href="#w5-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w5-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w5-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="6" hidden>
+    <a href="#w6-top">Start here</a>
+    <a href="#w6-patterns">Question methods</a>
+    <a href="#w6-graphs">Graph basics and tools</a>
+    <a href="#w6-mock">Mock exam</a>
+    <a href="#w6-sheet">Cheat sheet</a>
+    <a href="#w6-progress">My progress</a>
+    <div class="prog"><span id="w6-prog-txt">Answered: 0</span><div class="bar"><i id="w6-prog-bar"></i></div></div>
+  </div>
+<div class="navgroup" data-week="7" hidden>
+    <a href="#w7-top">Start here</a>
+    <a href="#w7-paperwrap">The paper</a>
+    <div class="prog"><span id="w7-prog-txt">Mock paper: not tried yet</span><div class="bar"><i id="w7-prog-bar"></i></div></div>
+  </div>
+  </aside>
+<button class="fab" id="fab" type="button" aria-expanded="false" aria-controls="nav"><span aria-hidden="true">☰</span> Sections</button>
+<div class="backdrop" id="backdrop" hidden></div>
+
+<main id="main">
+<div class="week w0" data-week="0" id="week0" role="tabpanel">
+<section class="hero" id="w0-top">
+  <h1>Study CKC111 one week at a time.</h1>
+  <p class="lead">Your lectures and tutorials, turned into short lessons, interactive tools, and practice questions that check your answers straight away.</p>
+  <div class="togrow">
+    <button class="btn primary big" type="button" id="w0-continue">Start Week 1</button>
+    <button class="btn big" type="button" data-open-week="6">Go to the Exam Lab</button>
+    <button type="button" class="wcard exam" data-open-week="7"><span class="wnum">Test 1</span><b>Mock test paper</b><span class="wdesc">A timed 60-minute paper on Chapters 1 to 3, with a full marking scheme so you can mark yourself.</span><span class="wtools">Try: a full timed attempt</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+  </div>
+</section>
+
+<section id="w0-weeks">
+  <h2>Your weeks</h2>
+  <p>Pick a week to open it. The bar on each card shows how many of its practice questions you have tried.</p>
+  <div class="homegrid">
+    <button type="button" class="wcard" data-open-week="1"><span class="wnum">Week 1</span><b>Propositional Logic</b><span class="wdesc">Propositions, connectives, implication, truth tables and translating English into logic.</span><span class="wtools">Try: the promise demo and the truth-table lab</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="2"><span class="wnum">Week 2</span><b>Logical Equivalences</b><span class="wdesc">Tautologies, logical equivalence, De Morgan's Laws and proofs with named laws.</span><span class="wtools">Try: the equivalence checker</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="3"><span class="wnum">Week 3</span><b>Basic Algorithms</b><span class="wdesc">Pseudocode, searching, sorting and greedy methods.</span><span class="wtools">Try: step-through players for each algorithm</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="4"><span class="wnum">Week 4</span><b>Relations I</b><span class="wdesc">Reflexive, symmetric, antisymmetric and transitive relations; combining and composing.</span><span class="wtools">Try: the relation explorer</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="5"><span class="wnum">Week 5</span><b>Relations II</b><span class="wdesc">Matrices, digraphs, equivalence relations, classes and partitions.</span><span class="wtools">Try: one relation in three pictures</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard exam" data-open-week="6"><span class="wnum">Exam Lab</span><b>Practice for the exam</b><span class="wdesc">Fresh exam-style questions with instant checking, a mock exam, graph tools and a cheat sheet.</span><span class="wtools">Try: a mock exam on all four topics</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+  </div>
+</section>
+
+<section id="w0-how">
+  <h2>How to study with this guide</h2>
+  <ol class="steps3">
+    <li><b>Read and play.</b> Each week starts with a short lesson. Use the interactive tools to test your understanding before moving on.</li>
+    <li><b>Recall, then practise.</b> Answer the recall questions from memory, then try the practice set. Hints come one at a time, and a solution unlocks only after you have tried.</li>
+    <li><b>Drill before the exam.</b> Use the Exam Lab for unlimited new questions, then take a timed mock exam. The cheat sheet collects everything on one page.</li>
+  </ol>
+  <div class="tip"><b>Tip.</b> On a phone, use the Sections button at the bottom right to jump around inside a week. On a computer, the list on the left does the same.</div>
+</section>
+
+</div>
+
+<div class="week w1" data-week="1" id="week1" role="tabpanel">
+
+<section class="hero" id="w1-top">
+  <h1>Learn to read logic like a contract.</h1>
+  <p class="lead">Your slides cover propositions, connectives, truth tables and translation. Week 2 continues with logical equivalence. This page teaches them in that order. Where I add something that is not on your slides, I label it "Beyond the slides".</p>
+  <p><b>Objectives.</b> By the end you can: decide if a sentence is a proposition; use ¬ ∧ ∨ ⊕ → ↔ and build truth tables; translate English into logic; write the converse, inverse and contrapositive; and use precedence and brackets correctly.</p>
+
+  <div class="card" aria-live="polite">
+    <p class="small" style="margin-bottom:6px">Try it. The promise is: "If you get 100% on the final, then you get an A." That is <span class="sym">p → q</span>.</p>
+    <div class="promise">
+      <div>
+        <div class="togrow">
+          <button class="tog" id="w1-h-p" type="button" aria-pressed="true">p: you got 100% <b>T</b></button>
+          <button class="tog" id="w1-h-q" type="button" aria-pressed="true">q: you got an A <b>T</b></button>
+        </div>
+        <p class="msg" id="w1-h-msg"></p>
+      </div>
+      <div>
+        <div class="big" id="w1-h-big"></div>
+        <div class="res" id="w1-h-res"></div>
+      </div>
+    </div>
+  </div>
+  <p>Flip the switches. Only one combination breaks the promise. That is the whole idea behind implication, and the rest of the chapter builds on it.</p>
+</section>
+
+<section id="w1-props">
+  <h2>1. Propositions</h2>
+  <p>A <b>proposition</b> is a declarative sentence that is either true or false. It does not have to be true. It only has to have a truth value.</p>
+  <p>Tap each sentence to see the verdict.</p>
+  <div class="sorter" id="w1-sorter"></div>
+  <p>Propositional variables are <span class="sym">p, q, r, …</span> The proposition that is always true is <b>T</b>, and the one that is always false is <b>F</b>.</p>
+</section>
+
+<section id="w1-connectives">
+  <h2>2. The connectives</h2>
+  <p>A <b>compound proposition</b> is built from smaller propositions with connectives. Choose a connective, flip <span class="sym">p</span> and <span class="sym">q</span>, and watch which row of the table you are in.</p>
+  <div class="card">
+    <div class="tabs" role="tablist" id="w1-ctabs"></div>
+    <div class="togrow">
+      <button class="tog" id="w1-c-p" type="button" aria-pressed="true">p <b>T</b></button>
+      <button class="tog" id="w1-c-q" type="button" aria-pressed="true">q <b>T</b></button>
+    </div>
+    <div class="scroll"><table id="w1-ctable"></table></div>
+    <p id="w1-cmean" style="margin-bottom:0"></p>
+  </div>
+  <div class="beyond">Beyond the slides: a quick memory trick. ∧ is picky (needs everything true). ∨ is easygoing (needs one true). ⊕ is the "one or the other, not both" version of ∨.</div>
+  <p><b>Inclusive vs exclusive or.</b> "Students who have taken CS202 or Math120 may take this class" allows both, so it is ∨. "Soup or salad comes with this entrée" allows only one, so it is ⊕.</p>
+</section>
+
+<section id="w1-implication">
+  <h2>3. Implication</h2>
+  <p><span class="sym">p → q</span> is read "if p, then q". Here p is the <b>hypothesis</b> and q is the <b>conclusion</b>. Using the promise from the top of the page:</p>
+  <ul>
+    <li>Got 100% and got an A: promise kept.</li>
+    <li>Got 100% and no A: promise <b>broken</b>. This is the only way to break it.</li>
+    <li>Did not get 100%: the promise says nothing about this case, so it cannot be broken. The implication is true. We call this <b>vacuously true</b>.</li>
+  </ul>
+  <p>So <span class="sym">p → q</span> is false in exactly one row: p true and q false. This is why a sentence like "If 1 + 1 = 3, then your grandma wears combat boots" counts as true in logic.</p>
+
+  <h3>Different ways to say p → q</h3>
+  <div class="scroll"><table>
+    <tr><th class="l">English</th><th class="l">Meaning</th></tr>
+    <tr><td class="l">if p, then q · q if p · q whenever p · p implies q</td><td class="l sym">p → q</td></tr>
+    <tr><td class="l">p is sufficient for q</td><td class="l sym">p → q</td></tr>
+    <tr><td class="l">q is necessary for p</td><td class="l sym">p → q</td></tr>
+    <tr><td class="l">p only if q</td><td class="l sym">p → q</td></tr>
+    <tr><td class="l">q unless ¬p</td><td class="l sym">p → q</td></tr>
+  </table></div>
+  <div class="trap"><b>Biggest trap.</b> "p only if q" means <span class="sym">p → q</span>, not <span class="sym">q → p</span>. "I pass only if I study" means that passing forces studying: pass → study.</div>
+
+  <h3>Biconditional</h3>
+  <p><span class="sym">p ↔ q</span> ("p if and only if q") is true when p and q have the <b>same</b> truth value. Try it in the connectives table above. It means the same as <span class="sym">(p → q) ∧ (q → p)</span>.</p>
+</section>
+
+<section id="w1-converse">
+  <h2>4. Converse, inverse, contrapositive</h2>
+  <p>Start from <span class="sym">p → q</span>. You can form three related statements.</p>
+  <div class="scroll"><table id="w1-cvtable"></table></div>
+  <p>Look at the columns. The contrapositive matches the original in every row. The converse and inverse do not, although they match each other.</p>
+  <p><b>Example.</b> "If it rains, the ground is wet." The converse is "if the ground is wet, it rained", which can be false because a sprinkler might be on. The contrapositive, "if the ground is not wet, it did not rain", is always valid.</p>
+  <p><b>Slide example.</b> "It raining is a sufficient condition for my not going to town" is <span class="sym">r → ¬t</span>. Converse: if I do not go to town, then it is raining. Inverse: if it is not raining, then I will go to town. Contrapositive: if I go to town, then it is not raining.</p>
+</section>
+
+<section id="w1-lab">
+  <h2>5. Truth-table lab</h2>
+  <p>With <b>n</b> variables you need <b>2<sup>n</sup></b> rows, and one column for every sub-expression. The lab does that for you. Type an expression, or use the symbol buttons. Single lowercase letters are variables, and T and F are constants.</p>
+  <div class="card lab">
+    <label for="w1-expr1">Expression</label>
+    <input type="text" id="w1-expr1" value="(p ∨ q) → ¬r" autocomplete="off" spellcheck="false">
+    <div class="keys" data-target="expr1"></div>
+    <div id="w1-out1"></div>
+  </div>
+  <p class="small">The lab also names each result as a tautology, a contradiction or a contingency. Week 2 explains those names and how to compare two statements.</p>
+</section>
+
+<section id="w1-translate">
+  <h2>6. Precedence and translation</h2>
+  <h3>Precedence</h3>
+  <p>From highest to lowest: <span class="sym">¬, ∧, ∨, →, ↔</span>. So <span class="sym">p ∨ q → ¬r</span> means <span class="sym">(p ∨ q) → ¬r</span>. If you want <span class="sym">p ∨ (q → ¬r)</span>, you must write the brackets. The lab above shows you the fully bracketed form of whatever you type.</p>
+
+  <h3>Translating English</h3>
+  <p>Two steps from your slides: (1) identify the atomic propositions and give each a variable, (2) choose the connectives.</p>
+  <div class="card">
+    <p><b>"If I go to Harry's or to the country, I will not go shopping."</b></p>
+    <p style="margin-bottom:0">p: I go to Harry's. q: I go to the country. r: I go shopping.<br><span class="sym" style="font-size:1.2rem">(p ∨ q) → ¬r</span></p>
+  </div>
+  <div class="card">
+    <p><b>"You can access the Internet from campus only if you are a computer science major or you are not a freshman."</b></p>
+    <p style="margin-bottom:0">a: you can access the Internet from campus. c: you are a CS major. f: you are a freshman.<br><span class="sym" style="font-size:1.2rem">a → (c ∨ ¬f)</span></p>
+  </div>
+  <div class="card">
+    <p><b>"The automated reply cannot be sent when the file system is full."</b></p>
+    <p style="margin-bottom:0">p: the automated reply can be sent. q: the file system is full.<br><span class="sym" style="font-size:1.2rem">q → ¬p</span></p>
+  </div>
+  <div class="beyond">Beyond the slides: find the "if / only if / unless" word first. It splits the sentence into hypothesis and conclusion. Then translate each side.</div>
+
+</section>
+
+<section id="w1-mistakes">
+  <h2>7. Common mistakes</h2>
+  <ul>
+    <li>Thinking <span class="sym">p → q</span> is false when p is false. It is <b>true</b>.</li>
+    <li>Reading "p only if q" as <span class="sym">q → p</span>.</li>
+    <li>Claiming the converse or inverse is equivalent to the original. Only the contrapositive is.</li>
+    <li>Forgetting that ∨ is inclusive unless ⊕ is stated.</li>
+    <li>Leaving out brackets when precedence changes the meaning.</li>
+    <li>Skipping rows. Always list all 2<sup>n</sup> rows systematically.</li>
+  </ul>
+  <p><b>Where this goes next.</b> Week 2 turns to logical equivalence: tautologies, De Morgan's Laws and proofs with named laws. Everything you learned here, especially the truth tables and p → q, is the machinery for it.</p>
+</section>
+
+<section id="w1-recall">
+  <h2>8. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w1-recall-list"></div>
+</section>
+
+<section id="w1-practice">
+  <h2>9. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Write your attempt first. Hints come in three levels, and the full solution unlocks only after you have written an attempt. Use the truth-table lab to check your tables, but do the reasoning yourself.</p>
+  <div id="w1-practice-list"></div>
+</section>
+
+<section id="w1-checkpoint">
+  <h2>10. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w1-objs"></div>
+    <button class="btn primary" type="button" id="w1-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w1-cp-reset">Clear all my work</button>
+    <div id="w1-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+</div>
+
+<div class="week w2" data-week="2" id="week2" role="tabpanel" hidden>
+<section class="hero" id="w2-top">
+  <h1>Two statements, one truth table: are they the same?</h1>
+  <p class="lead">Week 2 uses the second half of your Chapter 1 slides: tautologies, logical equivalence, De Morgan's Laws and the key equivalences, then proofs by laws. It builds directly on the connectives from Week 1. Anything I add that is not on your slides is labelled "Beyond the slides".</p>
+  <p>Start with the equivalence checker. Type two statements, or press an example. It builds the truth table and tells you whether they always agree, and if not, the first row where they differ.</p>
+
+  <div class="card lab">
+    <label for="w2-ea">Statement A</label>
+    <input type="text" id="w2-ea" value="p → q" autocomplete="off" spellcheck="false">
+    <label for="w2-eb">Statement B</label>
+    <input type="text" id="w2-eb" value="¬p ∨ q" autocomplete="off" spellcheck="false">
+    <div class="keys" data-target="eq"></div>
+    <div class="togrow" role="group" aria-label="Example pairs">
+      <button class="btn" type="button" data-w2ex="p → q|¬p ∨ q">p → q vs ¬p ∨ q</button>
+      <button class="btn" type="button" data-w2ex="p → q|¬q → ¬p">vs contrapositive</button>
+      <button class="btn" type="button" data-w2ex="p → q|q → p">vs converse</button>
+      <button class="btn" type="button" data-w2ex="p → q|¬p → ¬q">vs inverse</button>
+      <button class="btn" type="button" data-w2ex="¬(p ∧ q)|¬p ∨ ¬q">De Morgan 1</button>
+      <button class="btn" type="button" data-w2ex="¬(p ∨ q)|¬p ∧ ¬q">De Morgan 2</button>
+    </div>
+    <div id="w2-eout"></div>
+    <p class="small">Tip: the symbol buttons type into whichever box you used last. You can also type ASCII: ~ or ! for ¬, &amp; for ∧, | for ∨, -&gt; for →, &lt;-&gt; for ↔, xor for ⊕. Single lowercase letters are variables; T and F are constants.</p>
+  </div>
+
+  <p><b>Objectives.</b> By the end you can: classify a statement as a tautology, contradiction or contingency; show two statements are equivalent (or not) with a truth table; state De Morgan's Laws and name the key equivalences; prove an equivalence with a chain of named laws; and rewrite conditionals as p → q ≡ ¬p ∨ q ≡ ¬q → ¬p.</p>
+</section>
+
+<section id="w2-taut">
+  <h2>1. Tautologies, contradictions, contingencies</h2>
+  <p>Once you can build truth tables, look at the <i>final column</i>. Its pattern gives the statement a name.</p>
+  <ul>
+    <li>A <b>tautology</b> is always true, like <span class="sym">p ∨ ¬p</span>. Every row of the final column is T.</li>
+    <li>A <b>contradiction</b> is always false, like <span class="sym">p ∧ ¬p</span>. Every row is F.</li>
+    <li>A <b>contingency</b> is neither: sometimes true, sometimes false, like <span class="sym">p</span>.</li>
+  </ul>
+  <p>Your slide's table for p: when p is T, ¬p is F, so <span class="sym">p ∨ ¬p</span> is T and <span class="sym">p ∧ ¬p</span> is F; the same happens when p is F. "Either it is raining or it is not" can never be false, so it is a tautology.</p>
+  <h3>Classifier</h3>
+  <p>Type any statement. The lab shows its truth table and names it.</p>
+  <div class="card lab">
+    <label for="w2-ta">Statement</label>
+    <input type="text" id="w2-ta" value="p ∨ ¬p" autocomplete="off" spellcheck="false">
+    <div class="keys" data-target="w2-ta"></div>
+    <div id="w2-tout"></div>
+  </div>
+</section>
+
+<section id="w2-equiv">
+  <h2>2. Logical equivalence</h2>
+  <p><b>Idea.</b> Two statements that look different can say exactly the same thing. If they are always true together and false together, they are <b>logically equivalent</b>.</p>
+  <div class="idea"><b>Definition (from your slides).</b> Two compound propositions are <b>logically equivalent</b> if <span class="e">p ↔ q</span> is a tautology. We write <span class="e">p ⇔ q</span> or <span class="e">p ≡ q</span>. Equivalently: their columns in a truth table agree in every row.</div>
+  <p><b>Slide example.</b> <span class="e">¬p ∨ q</span> is equivalent to <span class="e">p → q</span>:</p>
+  <div class="scroll"><table>
+    <tr><th>p</th><th>q</th><th>¬p</th><th class="final">¬p ∨ q</th><th class="final">p → q</th></tr>
+    <tr><td class="v-T">T</td><td class="v-T">T</td><td class="v-F">F</td><td class="v-T final">T</td><td class="v-T final">T</td></tr>
+    <tr><td class="v-T">T</td><td class="v-F">F</td><td class="v-F">F</td><td class="v-F final">F</td><td class="v-F final">F</td></tr>
+    <tr><td class="v-F">F</td><td class="v-T">T</td><td class="v-T">T</td><td class="v-T final">T</td><td class="v-T final">T</td></tr>
+    <tr><td class="v-F">F</td><td class="v-F">F</td><td class="v-T">T</td><td class="v-T final">T</td><td class="v-T final">T</td></tr>
+  </table></div>
+  <p>The two highlighted columns match in all four rows, so the statements are equivalent.</p>
+  <h3>Showing that statements are NOT equivalent</h3>
+  <p>Your slides show that the <b>converse</b> and the <b>inverse</b> of p → q are not equivalent to p → q, while the <b>contrapositive</b> is. You only need <b>one row</b> where the columns differ to prove non-equivalence. Press the "vs converse" and "vs inverse" buttons in the checker at the top: the first differing row is highlighted.</p>
+  <div class="tip"><b>Compare.</b> To prove two statements equivalent with a truth table you need <i>all</i> rows to agree. To prove them <i>not</i> equivalent, one disagreeing row is enough.</div>
+  <div class="beyond">Beyond the slides: the checker's "Same?" column is the biconditional from Week 1 in action: a row is "yes" exactly when A ↔ B is true in that row.</div>
+</section>
+
+<section id="w2-demorgan">
+  <h2>3. De Morgan's Laws</h2>
+  <p>Named after Augustus De Morgan (1806 to 1871). They tell you how to push a negation inside brackets.</p>
+  <div class="idea">
+    <span class="e">¬(p ∧ q) ≡ ¬p ∨ ¬q</span><br>
+    <span class="e">¬(p ∨ q) ≡ ¬p ∧ ¬q</span>
+  </div>
+  <p><b>Easy way to remember.</b> When the ¬ moves inside the brackets, the connective <b>flips</b>: ∧ becomes ∨, and ∨ becomes ∧. Each part gets its own ¬.</p>
+  <p><b>In words (beyond the slides).</b> "It is not true that I have both a pen and a ruler" means I am missing the pen <i>or</i> I am missing the ruler. "It is not true that I have a pen or a ruler" means I have <i>neither</i>: no pen <i>and</i> no ruler.</p>
+  <p>Your slide shows the second law in a truth table:</p>
+  <div class="scroll"><table>
+    <tr><th>p</th><th>q</th><th>¬p</th><th>¬q</th><th>p ∨ q</th><th class="final">¬(p ∨ q)</th><th class="final">¬p ∧ ¬q</th></tr>
+    <tr><td class="v-T">T</td><td class="v-T">T</td><td class="v-F">F</td><td class="v-F">F</td><td class="v-T">T</td><td class="v-F final">F</td><td class="v-F final">F</td></tr>
+    <tr><td class="v-T">T</td><td class="v-F">F</td><td class="v-F">F</td><td class="v-T">T</td><td class="v-T">T</td><td class="v-F final">F</td><td class="v-F final">F</td></tr>
+    <tr><td class="v-F">F</td><td class="v-T">T</td><td class="v-T">T</td><td class="v-F">F</td><td class="v-T">T</td><td class="v-F final">F</td><td class="v-F final">F</td></tr>
+    <tr><td class="v-F">F</td><td class="v-F">F</td><td class="v-T">T</td><td class="v-T">T</td><td class="v-F">F</td><td class="v-T final">T</td><td class="v-T final">T</td></tr>
+  </table></div>
+  <div class="trap"><b>Trap.</b> ¬(p ∧ q) is <b>not</b> ¬p ∧ ¬q. Forgetting to flip the connective is the most common De Morgan mistake. Test it in the checker: type ¬(p ∧ q) and ¬p ∧ ¬q.</div>
+</section>
+
+<section id="w2-laws">
+  <h2>4. The key equivalences</h2>
+  <p>These are the building blocks for proofs. A variable in any law can be replaced by an arbitrarily complex proposition. The right-hand column is a plain-words reading of each law (my wording, not from the slides).</p>
+  <div class="scroll"><table>
+    <tr><th class="l">Law</th><th class="l">Statement</th><th class="l">In plain words</th></tr>
+    <tr><td class="l"><b>Identity</b></td><td class="l sym">p ∧ T ≡ p<br>p ∨ F ≡ p</td><td class="l">Adding something always true to an "and", or always false to an "or", changes nothing.</td></tr>
+    <tr><td class="l"><b>Domination</b></td><td class="l sym">p ∨ T ≡ T<br>p ∧ F ≡ F</td><td class="l">One always-true option makes an "or" always true. One always-false requirement makes an "and" always false.</td></tr>
+    <tr><td class="l"><b>Idempotent</b></td><td class="l sym">p ∨ p ≡ p<br>p ∧ p ≡ p</td><td class="l">Saying it twice is the same as saying it once.</td></tr>
+    <tr><td class="l"><b>Double negation</b></td><td class="l sym">¬(¬p) ≡ p</td><td class="l">Two negatives cancel.</td></tr>
+    <tr><td class="l"><b>Negation</b></td><td class="l sym">p ∨ ¬p ≡ T<br>p ∧ ¬p ≡ F</td><td class="l">Either it is or it is not. It is never both.</td></tr>
+    <tr><td class="l"><b>Commutative</b></td><td class="l sym">p ∨ q ≡ q ∨ p<br>p ∧ q ≡ q ∧ p</td><td class="l">The order of an "and" or an "or" does not matter.</td></tr>
+    <tr><td class="l"><b>Associative</b></td><td class="l sym">(p ∧ q) ∧ r ≡ p ∧ (q ∧ r)<br>(p ∨ q) ∨ r ≡ p ∨ (q ∨ r)</td><td class="l">In a chain of all ∧ or all ∨, the grouping does not matter.</td></tr>
+    <tr><td class="l"><b>Distributive</b></td><td class="l sym">p ∨ (q ∧ r) ≡ (p ∨ q) ∧ (p ∨ r)<br>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r)</td><td class="l">Like multiplying out brackets. Unlike ordinary algebra, it works in both directions: ∨ over ∧ as well as ∧ over ∨.</td></tr>
+    <tr><td class="l"><b>Absorption</b></td><td class="l sym">p ∨ (p ∧ q) ≡ p<br>p ∧ (p ∨ q) ≡ p</td><td class="l">The extra part is "absorbed" because p already decides the result.</td></tr>
+    <tr><td class="l"><b>De Morgan</b></td><td class="l sym">¬(p ∧ q) ≡ ¬p ∨ ¬q<br>¬(p ∨ q) ≡ ¬p ∧ ¬q</td><td class="l">Push ¬ inside and flip the connective.</td></tr>
+  </table></div>
+
+  <h3>Conditional statements (Table 7)</h3>
+  <div class="scroll"><table>
+    <tr><th class="l">Equivalence</th></tr>
+    <tr><td class="l sym">p → q ≡ ¬p ∨ q</td></tr>
+    <tr><td class="l sym">p → q ≡ ¬q → ¬p</td></tr>
+    <tr><td class="l sym">p ∨ q ≡ ¬p → q</td></tr>
+    <tr><td class="l sym">p ∧ q ≡ ¬(p → ¬q)</td></tr>
+    <tr><td class="l sym">¬(p → q) ≡ p ∧ ¬q</td></tr>
+    <tr><td class="l sym">(p → q) ∧ (p → r) ≡ p → (q ∧ r)</td></tr>
+    <tr><td class="l sym">(p → r) ∧ (q → r) ≡ (p ∨ q) → r</td></tr>
+    <tr><td class="l sym">(p → q) ∨ (p → r) ≡ p → (q ∨ r)</td></tr>
+    <tr><td class="l sym">(p → r) ∨ (q → r) ≡ (p ∧ q) → r</td></tr>
+  </table></div>
+  <h3>Biconditional statements (Table 8)</h3>
+  <div class="scroll"><table>
+    <tr><th class="l">Equivalence</th></tr>
+    <tr><td class="l sym">p ↔ q ≡ (p → q) ∧ (q → p)</td></tr>
+    <tr><td class="l sym">p ↔ q ≡ ¬p ↔ ¬q</td></tr>
+    <tr><td class="l sym">p ↔ q ≡ (p ∧ q) ∨ (¬p ∧ ¬q)</td></tr>
+    <tr><td class="l sym">¬(p ↔ q) ≡ p ↔ ¬q</td></tr>
+  </table></div>
+  <div class="tip"><b>You do not have to memorise by staring.</b> Pick any equivalence from these tables and type its two sides into the checker at the top. Seeing the columns agree makes it stick far better than reading it.</div>
+  <div class="beyond">Beyond the slides: the most useful single law in the whole chapter is <span class="e">p → q ≡ ¬p ∨ q</span>. It lets you get rid of → and work only with ¬, ∧ and ∨.</div>
+</section>
+
+<section id="w2-construct">
+  <h2>5. Proving equivalences with laws</h2>
+  <p>Truth tables get huge (10 variables means 1,024 rows). Instead, show <b>A ≡ B</b> by writing a chain A ≡ A<sub>1</sub> ≡ … ≡ A<sub>n</sub> ≡ B, where each step uses one named law.</p>
+  <div class="beyond">Beyond the slides: a strategy for choosing steps. (1) Rewrite → and ↔ using ¬ and ∨. (2) Push negations inward with De Morgan. (3) Regroup so that pairs like p and ¬p sit together. (4) Finish with the negation, identity and domination laws.</div>
+
+  <div class="card">
+    <p><b>Worked example 1 (from your slides).</b> Show that <span class="sym">¬(p ∨ (¬p ∧ q))</span> is logically equivalent to <span class="sym">¬p ∧ ¬q</span>.</p>
+    <ol class="proof">
+      <li><span class="e">¬(p ∨ (¬p ∧ q))</span><span class="why">start</span></li>
+      <li><span class="e">¬p ∧ ¬(¬p ∧ q)</span><span class="why">second De Morgan law</span></li>
+      <li><span class="e">¬p ∧ (¬(¬p) ∨ ¬q)</span><span class="why">first De Morgan law</span></li>
+      <li><span class="e">¬p ∧ (p ∨ ¬q)</span><span class="why">double negation law</span></li>
+      <li><span class="e">(¬p ∧ p) ∨ (¬p ∧ ¬q)</span><span class="why">second distributive law</span></li>
+      <li><span class="e">F ∨ (¬p ∧ ¬q)</span><span class="why">negation law (¬p ∧ p ≡ F)</span></li>
+      <li><span class="e">(¬p ∧ ¬q) ∨ F</span><span class="why">commutative law for ∨</span></li>
+      <li><span class="e">¬p ∧ ¬q</span><span class="why">identity law for F</span></li>
+    </ol>
+    <button class="btn" type="button" id="w2-load1">Check it in the equivalence checker</button>
+  </div>
+
+  <div class="card">
+    <p><b>Worked example 2 (from your slides).</b> Show that <span class="sym">(p ∧ q) → (p ∨ q)</span> is a tautology.</p>
+    <ol class="proof">
+      <li><span class="e">(p ∧ q) → (p ∨ q)</span><span class="why">start</span></li>
+      <li><span class="e">¬(p ∧ q) ∨ (p ∨ q)</span><span class="why">p → q ≡ ¬p ∨ q (the slide says "by truth table for →")</span></li>
+      <li><span class="e">(¬p ∨ ¬q) ∨ (p ∨ q)</span><span class="why">first De Morgan law</span></li>
+      <li><span class="e">(¬p ∨ p) ∨ (¬q ∨ q)</span><span class="why">associative and commutative laws</span></li>
+      <li><span class="e">T ∨ T</span><span class="why">negation law</span></li>
+      <li><span class="e">T</span><span class="why">domination law (or idempotent law)</span></li>
+    </ol>
+    <button class="btn" type="button" id="w2-load2">Check it in the classifier</button>
+  </div>
+  <p><b>Reading a proof.</b> At every step ask: <i>which law turned the line above into this line?</i> If you cannot name it, you have not understood the step yet.</p>
+</section>
+
+<section id="w2-mistakes">
+  <h2>6. Common mistakes</h2>
+  <ul>
+    <li>Pushing ¬ inside brackets without flipping ∧ and ∨.</li>
+    <li>Claiming the converse or inverse is equivalent to p → q. Only the contrapositive is.</li>
+    <li>Concluding "equivalent" after checking only some rows of a truth table.</li>
+    <li>Using a law in a step without being able to name it.</li>
+    <li>Applying a law to only part of a line and forgetting the rest of it.</li>
+    <li>Writing ≡ between statements that are merely <i>similar</i>. Equivalent means equal in every row.</li>
+    <li>Forgetting that T and F are propositions too: p ∧ T ≡ p, but p ∧ F ≡ F.</li>
+  </ul>
+  <p><b>Where this goes next.</b> The Chapter 1 summary slide lists predicate logic (the language of quantifiers) and proofs (rules of inference, proof methods, proof strategy). Rules of inference are tautologies written as arguments, so everything in this week is the machinery for them. I do not have those slides yet.</p>
+</section>
+
+<section id="w2-recall">
+  <h2>7. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w2-recall-list"></div>
+</section>
+
+<section id="w2-practice">
+  <h2>8. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Write your attempt first. Hints come in three levels, and the solution unlocks only after you have written an attempt. Use the checker and classifier above to <i>verify</i> an answer, but do the reasoning yourself.</p>
+  <div id="w2-practice-list"></div>
+</section>
+
+<section id="w2-checkpoint">
+  <h2>9. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w2-objs"></div>
+    <button class="btn primary" type="button" id="w2-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w2-cp-reset">Clear all my work</button>
+    <div id="w2-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+</div>
+
+<div class="week w3" data-week="3" id="week3" role="tabpanel" hidden>
+
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="w3-top">
+  <h1>Watch an algorithm run, one step at a time.</h1>
+  <p class="lead">This page follows your Chapter 2 slides (Section 2.1). You will learn what an algorithm is, how to read pseudocode, then searching, sorting and greedy methods. Anything I add that is not on your slides is labelled "Beyond the slides".</p>
+  <p>Start with the player below. It finds the largest number in a list. Press <b>Next step</b> and watch the highlighted line, the variables and the explanation change together.</p>
+
+  <div data-algo="max"></div>
+
+  <p><b>Objectives.</b> By the end you can: define an algorithm and list its properties; read and write pseudocode with <span class="e">for</span>, <span class="e">while</span> and <span class="e">if</span>; trace max, linear search and binary search; trace bubble sort and insertion sort; run the greedy change algorithm and explain when greedy can fail.</p>
+</section>
+
+<!-- ============ WHAT IS AN ALGORITHM ============ -->
+<section id="w3-what">
+  <h2>1. What is an algorithm?</h2>
+  <p>Every algorithm begins with a clearly stated problem: <b>a valid input goes in, and the desired output comes out</b>. The first job is to state the problem precisely: what the input is, and what the output must be.</p>
+  <p>Example: the input is a finite list of integers, and the output is the largest integer in it.</p>
+  <div class="idea"><b>Definition (from your slides).</b> An <b>algorithm</b> is a <b>finite set of precise instructions</b> for performing a computation or for solving a problem.</div>
+  <p><b>Easy way to think about it (beyond the slides):</b> an algorithm is like a recipe written so carefully that someone who cannot think, only obey, still gets the right dish. "Add salt to taste" is not precise enough. "Add 1 teaspoon of salt" is.</p>
+
+  <h3>Three ways to write an algorithm down</h3>
+  <ul>
+    <li><b>Structured English:</b> numbered steps in plain sentences.</li>
+    <li><b>Pseudocode:</b> code-like steps that are not tied to any programming language. This is what we use most.</li>
+    <li><b>Flowchart:</b> boxes and arrows.</li>
+  </ul>
+</section>
+
+<!-- ============ PSEUDOCODE ============ -->
+<section id="w3-pseudo">
+  <h2>2. Reading pseudocode</h2>
+  <p>Your pseudocode needs only three ideas: <b>assignments</b>, <b>conditional statements</b> and <b>loops</b>, all wrapped in a <b>procedure</b>.</p>
+  <div class="scroll"><table>
+    <tr><th class="l">Idea</th><th class="l">Example</th><th class="l">Plain meaning</th></tr>
+    <tr><td class="l">Assignment</td><td class="l num">a := 10<br>i := i + 1</td><td class="l">Put a value into a variable. <span class="e">:=</span> means "becomes". The second line adds 1 to the old value of i.</td></tr>
+    <tr><td class="l">if…then</td><td class="l num">if a = 1 then count := count + 1</td><td class="l">Do the action only when the test is true. Here <span class="e">=</span> is a <i>test</i>, not an assignment.</td></tr>
+    <tr><td class="l">if…then…else</td><td class="l num">if a &gt; 0 then pc := pc + 1<br>else nc := nc + 1</td><td class="l">Do one action or the other.</td></tr>
+    <tr><td class="l">for loop</td><td class="l num">for i := 1 to n<br>&nbsp;&nbsp;sum := sum + i</td><td class="l">Repeat for i = 1, 2, …, n. The loop counts for you.</td></tr>
+    <tr><td class="l">while loop</td><td class="l num">i := 1<br>while i ≤ n<br>&nbsp;&nbsp;i := i + 1</td><td class="l">Repeat as long as the test is true. You must change i yourself.</td></tr>
+    <tr><td class="l">procedure</td><td class="l num">procedure max(a1, …, an: integers)<br>…<br>return max</td><td class="l">A named algorithm with its inputs, a body, and a returned answer.</td></tr>
+  </table></div>
+  <div class="trap"><b>Trap.</b> <span class="e">a := 10</span> puts 10 into a. <span class="e">a = 10</span> asks "is a equal to 10?". Mixing these up is the most common pseudocode mistake.</div>
+  <div class="tip"><b>for vs while.</b> A <span class="e">for</span> loop updates its counter automatically. A <span class="e">while</span> loop does not: if you forget <span class="e">i := i + 1</span>, the loop never ends. Both can do the same job, as the max example shows next.</div>
+</section>
+
+<!-- ============ MAX ============ -->
+<section id="w3-max">
+  <h2>3. Worked example: the maximum of a list</h2>
+  <p><b>Idea.</b> Keep a "champion so far". Start with the first number. Look at the next number. If it is bigger, it becomes the new champion. Repeat until the list ends.</p>
+  <h3>Structured English</h3>
+  <ol>
+    <li>Set the temporary maximum equal to the first integer in the sequence.</li>
+    <li>Compare the next integer with the temporary maximum. If it is larger, set the temporary maximum equal to this integer.</li>
+    <li>Repeat the previous step if there are more integers. If not, stop.</li>
+    <li>When the algorithm stops, the temporary maximum is the largest integer.</li>
+  </ol>
+  <h3>Pseudocode, with a for loop and with a while loop</h3>
+<pre class="code"><b>procedure</b> max(a1, a2, …, an: integers)       <b>procedure</b> max(a1, a2, …, an: integers)
+max := a1                                      max := a1
+<b>for</b> i := 2 <b>to</b> n                                i := 2
+    <b>if</b> max &lt; ai <b>then</b> max := ai                <b>while</b> i ≤ n
+<b>return</b> max {max is the largest element}              <b>if</b> max &lt; ai <b>then</b> max := ai
+                                                   i := i + 1
+                                               <b>return</b> max {max is the largest element}</pre>
+  <h3>The trace from your slide: (10, 6, 8, 20, 2)</h3>
+  <div class="scroll"><table>
+    <tr><th>i</th><th>Test</th><th>Result</th><th>max afterwards</th></tr>
+    <tr><td>(start)</td><td></td><td></td><td>10</td></tr>
+    <tr><td>2</td><td>10 &lt; 6</td><td class="v-F">false</td><td>10</td></tr>
+    <tr><td>3</td><td>10 &lt; 8</td><td class="v-F">false</td><td>10</td></tr>
+    <tr><td>4</td><td>10 &lt; 20</td><td class="v-T">true</td><td>20</td></tr>
+    <tr><td>5</td><td>20 &lt; 2</td><td class="v-F">false</td><td>20</td></tr>
+    <tr><td>6</td><td colspan="2">i ≤ n is false, loop ends</td><td>return 20</td></tr>
+  </table></div>
+  <p><b>Try it.</b> In the player at the top of the page, type a new list and <i>predict each step before you press Next</i>. That is the fastest way to learn tracing.</p>
+  <div class="beyond">Beyond the slides: the <b>min</b> algorithm is the same procedure with the comparison flipped. You will write it yourself in the practice set. The slides also show <b>AddUp</b>, which finds a sum: <span class="e">sum := a1</span>, then <span class="e">for i := 2 to n, sum := sum + ai</span>, then <span class="e">return sum</span>.</div>
+</section>
+
+<!-- ============ PROPERTIES ============ -->
+<section id="w3-props">
+  <h2>4. Properties of algorithms</h2>
+  <p>A procedure only counts as an algorithm if it has these properties.</p>
+  <div class="scroll"><table>
+    <tr><th class="l">Property</th><th class="l">In plain words</th><th class="l">For the max procedure</th></tr>
+    <tr><td class="l"><b>Input</b></td><td class="l">It takes values from a specified set.</td><td class="l">A sequence of integers.</td></tr>
+    <tr><td class="l"><b>Output</b></td><td class="l">It produces values from a specified set. These are the solution.</td><td class="l">The largest integer in the sequence.</td></tr>
+    <tr><td class="l"><b>Correctness</b></td><td class="l">It gives the right output for every valid input.</td><td class="l">When it stops, max equals the maximum of all the terms.</td></tr>
+    <tr><td class="l"><b>Finiteness</b></td><td class="l">It stops after a finite number of steps, for any input.</td><td class="l">It stops once every integer has been examined.</td></tr>
+    <tr><td class="l"><b>Effectiveness</b></td><td class="l">Each step can really be carried out, in finite time.</td><td class="l">Every step is a comparison or an assignment, and each takes finite time.</td></tr>
+    <tr><td class="l"><b>Generality</b></td><td class="l">It works for all problems of the desired form.</td><td class="l">It works for any finite sequence of integers.</td></tr>
+  </table></div>
+  <p><b>Definiteness</b> also appears in your slide's max example and answers: each step must be <i>precisely defined</i>. For max, this holds because only assignments, a finite loop and conditional statements occur.</p>
+
+  <h3>Property detective (from your slides)</h3>
+  <p>Each procedure below is broken. Decide which property it lacks. If you get one wrong, I will ask you a smaller question first.</p>
+  <div id="w3-det-list"></div>
+</section>
+
+<!-- ============ KINDS ============ -->
+<section id="w3-kinds">
+  <h2>5. Three kinds of problem</h2>
+  <ul>
+    <li><b>Searching:</b> find the position of a particular element in a list.</li>
+    <li><b>Sorting:</b> put the elements of a list into increasing order.</li>
+    <li><b>Optimization:</b> find the best (maximum or minimum) value of some quantity over all possible inputs.</li>
+  </ul>
+  <p>The rest of this page takes them in order.</p>
+</section>
+
+<!-- ============ SEARCHING ============ -->
+<section id="w3-search">
+  <h2>6. Searching</h2>
+  <p><b>The problem.</b> Locate an element <span class="e">x</span> in a list of distinct elements <span class="e">a<sub>1</sub>, a<sub>2</sub>, …, a<sub>n</sub></span>, or decide that it is not there. The answer is the <b>location</b> <span class="e">i</span> where <span class="e">x = a<sub>i</sub></span>, or <b>0</b> if x is not in the list. Positions start at 1, so 0 can never be a real position, which is why it safely means "not found".</p>
+  <p>Our focus is two methods: linear search and binary search.</p>
+
+  <h3>Linear search</h3>
+  <p><b>Idea.</b> Look at the first element, then the second, then the third, until you find x or run out of list. It is like scanning a class attendance list from the top to find one name.</p>
+<pre class="code"><b>procedure</b> linear search(x: integer, a1, a2, …, an: distinct integers)
+i := 1
+<b>while</b> (i ≤ n <b>and</b> x ≠ ai)
+    i := i + 1
+<b>if</b> i ≤ n <b>then</b> location := i
+<b>else</b> location := 0
+<b>return</b> location {location is the subscript of the term that equals x, or 0 if x is not found}</pre>
+  <p>From your slide: x = 30 in (10, 50, 30, 70) gives location 3. x = 40 in the same list gives location 0. Run both:</p>
+  <div data-algo="linear"></div>
+  <div class="trap"><b>Trap.</b> The loop stops for two different reasons: x was found, or i went past n. The <span class="e">if i ≤ n</span> afterwards tells you which one happened.</div>
+
+  <h3>Binary search</h3>
+  <p><b>Idea.</b> This needs a list already in <b>increasing order</b>. Look at the middle element. If x is bigger, it can only be in the right half. Otherwise it is at the middle or in the left half. Keep halving. It is the "guess my number" game: guessing 50 out of 100 and being told higher or lower.</p>
+<pre class="code"><b>procedure</b> binary search(x: integer, a1, a2, …, an: increasing integers)
+i := 1 {i is the left endpoint of the interval}
+j := n {j is the right endpoint of the interval}
+<b>while</b> i &lt; j
+    m := ⌊(i + j)/2⌋
+    <b>if</b> x &gt; am <b>then</b> i := m + 1
+    <b>else</b> j := m
+<b>if</b> x = ai <b>then</b> location := i
+<b>else</b> location := 0
+<b>return</b> location</pre>
+  <p>The symbol <span class="e">⌊ ⌋</span> is the <b>floor</b>: round down to a whole number. For example ⌊(1 + 16)/2⌋ = ⌊8.5⌋ = 8.</p>
+  <p>Your slide searches for 19 in a 16-element list. Step through it, and watch the grey cells (outside the interval) fade out.</p>
+  <div data-algo="binary"></div>
+  <div class="tip"><b>Why it is fast.</b> Each round throws away about half the remaining elements. That is why the 16-element list took only 4 rounds, and a 1,000-element list would need about 10. Linear search might check all 1,000.</div>
+  <div class="trap"><b>Trap.</b> Binary search gives wrong answers on an unsorted list. The player refuses to run until the list is increasing.</div>
+</section>
+
+<!-- ============ SORTING ============ -->
+<section id="w3-sort">
+  <h2>7. Sorting</h2>
+  <p>To <b>sort</b> a list is to put its elements in increasing order. There are many sorting algorithms (binary, insertion, bubble, selection, merge, quick, tournament). Your slides work through two: <b>bubble sort</b> and <b>insertion sort</b>.</p>
+
+  <h3>Bubble sort</h3>
+  <p><b>Idea.</b> Make several passes through the list. Whenever two neighbours are in the wrong order, swap them. Big values "bubble" to the right, so after pass 1 the largest is at the end, after pass 2 the two largest are at the end, and so on.</p>
+<pre class="code"><b>procedure</b> bubblesort(a1, …, an: real numbers with n ≥ 2)
+<b>for</b> i := 1 <b>to</b> n − 1
+    <b>for</b> j := 1 <b>to</b> n − i
+        <b>if</b> aj &gt; aj+1 <b>then</b> interchange aj and aj+1
+{a1, …, an is now in increasing order}</pre>
+  <p>Why does the inner loop stop at <span class="e">n − i</span>? After i − 1 passes the last i − 1 elements are already in place, so there is no need to compare them again. Try the slide example (3, 2, 4, 1, 5):</p>
+  <div data-algo="bubble"></div>
+
+  <h3>Insertion sort</h3>
+  <p><b>Idea.</b> Sort a hand of playing cards: pick up the next card and slide it into the right place among the cards you already hold. Your sorted section starts as just the first element and grows by one each round. Your slide notes that insertion sort uses a <b>linear search</b> to find the correct position.</p>
+<pre class="code"><b>procedure</b> insertion sort(a1, …, an: real numbers with n ≥ 2)
+<b>for</b> j := 2 <b>to</b> n
+    i := 1
+    <b>while</b> aj &gt; ai
+        i := i + 1
+    m := aj
+    <b>for</b> k := 0 <b>to</b> j − i − 1
+        aj−k := aj−k−1
+    ai := m
+{Now a1, …, an is in increasing order}</pre>
+  <p>Read it in three parts: (1) the <span class="e">while</span> finds the position i, (2) <span class="e">m := aj</span> saves the new element, (3) the inner <span class="e">for</span> shifts elements right to make a gap, then <span class="e">ai := m</span> drops the saved value into the gap.</p>
+  <div data-algo="insertion"></div>
+  <div class="tip"><b>Compare.</b> Bubble sort fixes the <i>right end</i> first. Insertion sort builds a sorted section on the <i>left</i>.</div>
+</section>
+
+<!-- ============ GREEDY ============ -->
+<section id="w3-greedy">
+  <h2>8. Greedy algorithms</h2>
+  <p>An <b>optimization problem</b> asks you to minimize or maximize something over all possible inputs. Examples from your slides: find the route between two cities with the smallest total mileage; encode messages using the fewest bits; connect network nodes using the least fibre.</p>
+  <p>A <b>greedy algorithm</b> solves such a problem by making the <b>best-looking choice at each step</b>. That does not always produce an optimal solution overall, but often it does. So after you pick a greedy rule, you either <b>prove</b> it is always optimal, or find a <b>counterexample</b>.</p>
+
+  <h3>Making change</h3>
+  <p><b>Problem.</b> Make change for n cents with quarters (25), dimes (10), nickels (5) and pennies (1), using the <b>fewest</b> coins. <b>Greedy rule:</b> at each step take the largest coin that does not exceed what is left.</p>
+  <p>Slide example, n = 67: quarter (left 42), quarter (left 17), dime (left 7), nickel (left 2), penny (left 1), penny (left 0). That is 6 coins.</p>
+<pre class="code"><b>procedure</b> change(c1, c2, …, cr: values of coins, where c1 &gt; c2 &gt; … &gt; cr; n: a positive integer)
+<b>for</b> i := 1 <b>to</b> r
+    di := 0 {di counts the coins of denomination ci}
+    <b>while</b> n ≥ ci
+        di := di + 1 {add a coin of denomination ci}
+        n := n − ci
+{di counts the coins ci}</pre>
+
+  <h3>Greedy lab</h3>
+  <p>Type any coin values and an amount. The lab runs the greedy algorithm and also searches for the true minimum.</p>
+  <div class="card lab">
+    <label for="w3-g-coins">Coin values (comma separated)</label>
+    <input type="text" id="w3-g-coins" value="25, 10, 5, 1" autocomplete="off" spellcheck="false">
+    <label for="w3-g-n">Amount n</label>
+    <input type="text" id="w3-g-n" value="67" autocomplete="off" spellcheck="false">
+    <div class="togrow">
+      <button class="btn primary" type="button" id="w3-g-run">Run greedy</button>
+      <button class="btn" type="button" data-gpreset="25, 10, 5, 1|67">Slide example: 67</button>
+      <button class="btn" type="button" data-gpreset="50, 20, 10, 5|85">Malaysian sen coins: 85</button>
+      <button class="btn" type="button" data-gpreset="25, 10, 1|30">Counterexample A</button>
+      <button class="btn" type="button" data-gpreset="4, 3, 1|6">Counterexample B</button>
+    </div>
+    <div id="w3-g-out"></div>
+  </div>
+  <div class="beyond">Beyond the slides: Counterexample A (coins 25, 10, 1; amount 30) shows greedy using 25 + five 1s = 6 coins, when three 10s would need only 3. Counterexample B is the same idea with coins 4, 3, 1. So the greedy change algorithm is optimal for US coins, but not for every set of coins. The word "greedy" never means "always right".</div>
+</section>
+
+<!-- ============ MISTAKES ============ -->
+<section id="w3-mistakes">
+  <h2>9. Common mistakes</h2>
+  <ul>
+    <li>Mixing up <span class="e">:=</span> (assign) and <span class="e">=</span> (test).</li>
+    <li>Starting the loop at the wrong place. In max, <span class="e">max := a1</span> and the loop starts at <span class="e">i := 2</span>.</li>
+    <li>Forgetting <span class="e">i := i + 1</span> inside a while loop, so it never ends.</li>
+    <li>Running binary search on a list that is not sorted.</li>
+    <li>Forgetting to round the midpoint down: m := ⌊(i + j)/2⌋.</li>
+    <li>In bubble sort, running the inner loop to n instead of n − i.</li>
+    <li>In linear search, forgetting that "not found" returns 0.</li>
+    <li>Believing a greedy algorithm is always optimal.</li>
+    <li>Tracing too fast. Write down the variables after every step.</li>
+  </ul>
+  <p><b>Connection to Week 1.</b> Every <span class="e">if</span> test and every loop condition is a proposition that is true or false. Reading <span class="e">i ≤ n and x ≠ ai</span> uses ∧ and ¬ exactly as you learned in propositional logic.</p>
+</section>
+
+<!-- ============ RECALL ============ -->
+<section id="w3-recall">
+  <h2>10. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w3-recall-list"></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section id="w3-practice">
+  <h2>11. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Write your attempt first. Hints come in three levels, and the solution unlocks only after you have written an attempt. You can use the players above to <i>check</i> a trace, but do the tracing yourself first.</p>
+  <div id="w3-practice-list"></div>
+</section>
+
+<!-- ============ CHECKPOINT ============ -->
+<section id="w3-checkpoint">
+  <h2>12. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w3-objs"></div>
+    <button class="btn primary" type="button" id="w3-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w3-cp-reset">Clear all my work</button>
+    <div id="w3-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+
+</div>
+
+<div class="week w4" data-week="4" id="week4" role="tabpanel" hidden>
+<section class="hero" id="w4-top">
+  <h1>A relation is a set of pairs. Build one and see what it is.</h1>
+  <p class="lead">This week follows Section 1 of your Chapter 3 slides: relations and their properties (reflexive, symmetric, antisymmetric, transitive), then combining and composing relations. Anything I add that is not on your slides is labelled "Beyond the slides".</p>
+  <p>Start with the explorer below. Click cells to add or remove pairs. The four properties update instantly, and when one fails, it shows the exact pair that breaks it.</p>
+
+  <div class="card explorer">
+    <div class="togrow" role="group" aria-label="Set size">
+      <span class="small" style="align-self:center">Set A =</span>
+      <button class="btn" type="button" data-w4n="3">{1,2,3}</button>
+      <button class="btn" type="button" data-w4n="4">{1,2,3,4}</button>
+      <button class="btn" type="button" data-w4n="5">{1,2,3,4,5}</button>
+    </div>
+    <div class="togrow" role="group" aria-label="Example relations">
+      <span class="small" style="align-self:center">Try:</span>
+      <button class="btn" type="button" data-w4preset="divides">a divides b</button>
+      <button class="btn" type="button" data-w4preset="leq">a ≤ b</button>
+      <button class="btn" type="button" data-w4preset="lt">a &lt; b</button>
+      <button class="btn" type="button" data-w4preset="eq">a = b</button>
+      <button class="btn" type="button" data-w4preset="symm">Slide symmetric example</button>
+      <button class="btn" type="button" data-w4preset="empty">Clear</button>
+    </div>
+    <div class="ex-body">
+      <div>
+        <div class="scroll"><table class="egrid" id="w4-ex-grid"></table></div>
+        <p class="small">Row = first element, column = second element. The shaded diagonal holds the pairs (a, a).</p>
+      </div>
+      <div>
+        <p><b>R =</b> <span class="mono-pairs" id="w4-ex-pairs"></span></p>
+        <div id="w4-ex-props"></div>
+      </div>
+    </div>
+  </div>
+
+  <p><b>Objectives.</b> By the end you can: define a binary relation and list its pairs; test a relation for reflexive, symmetric, antisymmetric and transitive; combine relations with ∪, ∩ and −; and compute the composition R<sub>2</sub> ∘ R<sub>1</sub>.</p>
+</section>
+
+<section id="w4-what">
+  <h2>1. What is a relation?</h2>
+  <p><b>Big picture.</b> A relation says which things are connected to which. "Student s is enrolled in course c", "x divides y" and "x ≤ y" are all relations. In maths we store the connection as a set of <b>ordered pairs</b>.</p>
+  <p>An ordered pair <span class="e">(a, b)</span> has an order: <span class="e">(1, 2)</span> is not the same pair as <span class="e">(2, 1)</span>. The set of <i>all possible</i> pairs from A to B is <span class="e">A × B</span>. A relation just picks <i>some</i> of them.</p>
+  <div class="idea"><b>Definition (from your slides).</b> A <b>binary relation R from a set A to a set B</b> is a subset <span class="e">R ⊆ A × B</span>.</div>
+  <p><b>Slide example.</b> Let A = {0, 1, 2} and B = {a, b}. Then R = {(0, a), (0, b), (1, a), (2, b)} is a relation from A to B. As a table, a × means "related":</p>
+  <div class="scroll"><table>
+    <tr><th>R</th><th>a</th><th>b</th></tr>
+    <tr><th>0</th><td>×</td><td>×</td></tr>
+    <tr><th>1</th><td>×</td><td></td></tr>
+    <tr><th>2</th><td></td><td>×</td></tr>
+  </table></div>
+  <h3>Relations on a set</h3>
+  <p>When A = B we say <b>R is a relation on A</b>: a subset of A × A. All four properties in this chapter are about relations on a set.</p>
+  <p><b>Slide example.</b> Let A = {1, 2, 3, 4} and R = {(a, b) | a divides b}. The pairs are (1,1), (1,2), (1,3), (1,4), (2,2), (2,4), (3,3), (4,4). Press <i>a divides b</i> in the explorer to see this exact relation.</p>
+  <div class="beyond">Beyond the slides: the notation <span class="e">a R b</span> is a common shorthand for <span class="e">(a, b) ∈ R</span>. Notice that "(a, b) ∈ R" is a proposition, either true or false, exactly as in Week 1.</div>
+</section>
+
+<section id="w4-reflexive">
+  <h2>2. Reflexive</h2>
+  <p><b>Idea.</b> Everything is related to itself. Think of "has the same age as": you are always the same age as yourself.</p>
+  <div class="idea"><b>Definition.</b> R is <b>reflexive</b> iff <span class="e">(a, a) ∈ R</span> for every element <span class="e">a ∈ A</span>. Symbolically: <span class="e">∀x [x ∈ U → (x, x) ∈ R]</span>.</div>
+  <p><b>How to check.</b> In the grid, the whole diagonal must be filled. Write down every pair (a, a) for the set, then tick each one off. One missing pair is enough to fail.</p>
+  <p><b>Slide example.</b> R = {(a, a), (b, b)} on X = {a, b} is reflexive.</p>
+  <div class="trap"><b>Trap.</b> Reflexive depends on the whole set A. R = {(1,1), (2,2)} is reflexive on {1, 2}, but not on {1, 2, 3}, because (3, 3) is missing. Extra pairs never hurt reflexivity.</div>
+</section>
+
+<section id="w4-symmetric">
+  <h2>3. Symmetric and antisymmetric</h2>
+  <h3>Symmetric: a two-way street</h3>
+  <p><b>Idea.</b> If a is related to b, then b is related to a. "Is a classmate of" works that way.</p>
+  <div class="idea"><b>Definition.</b> R is <b>symmetric</b> iff <span class="e">(b, a) ∈ R</span> whenever <span class="e">(a, b) ∈ R</span>. Symbolically: <span class="e">∀x∀y [(x, y) ∈ R → (y, x) ∈ R]</span>.</div>
+  <p><b>How to check.</b> For every pair (x, y), look for its reverse (y, x). In the grid, the picture must be a mirror image across the diagonal. A loop (a, a) is its own reverse, so loops never break symmetry.</p>
+  <p><b>Slide example.</b> R = {(1,2), (2,1), (3,2), (2,3)} on {1, 2, 3} is symmetric. (The explorer has a button for it.)</p>
+
+  <h3>Antisymmetric: no two-way streets between different elements</h3>
+  <p><b>Idea.</b> Two <i>different</i> elements are never related in both directions. "Is at most as tall as" works that way: if you are at most as tall as me and I am at most as tall as you, we must be the same height.</p>
+  <div class="idea"><b>Definition.</b> R is <b>antisymmetric</b> iff for all a, b ∈ A, if <span class="e">(a, b) ∈ R</span> and <span class="e">(b, a) ∈ R</span> then <span class="e">a = b</span>. Symbolically: <span class="e">∀x∀y [((x, y) ∈ R ∧ (y, x) ∈ R) → x = y]</span>.</div>
+  <p><b>How to check.</b> Ignore the loops. For every pair (x, y) with x ≠ y, the reverse (y, x) must <i>not</i> be in R.</p>
+  <p><b>Slide example.</b> R = {(x, y) ∈ N | x ≤ y} is antisymmetric, because x ≤ y and y ≤ x imply x = y.</p>
+
+  <div class="trap"><b>Trap.</b> Antisymmetric does <b>not</b> mean "not symmetric". They are separate properties, and a relation can have both, either, or neither:</div>
+  <div class="scroll"><table>
+    <tr><th class="l">On {1, 2, 3}</th><th class="l">Example</th><th>Symmetric?</th><th>Antisymmetric?</th></tr>
+    <tr><td class="l">Symmetric only</td><td class="l sym">{(1,2), (2,1)}</td><td class="v-T">yes</td><td class="v-F">no</td></tr>
+    <tr><td class="l">Antisymmetric only</td><td class="l sym">{(1,2)}</td><td class="v-F">no</td><td class="v-T">yes</td></tr>
+    <tr><td class="l">Both</td><td class="l sym">{(1,1), (2,2)}</td><td class="v-T">yes</td><td class="v-T">yes</td></tr>
+    <tr><td class="l">Neither</td><td class="l sym">{(1,2), (2,1), (1,3)}</td><td class="v-F">no</td><td class="v-F">no</td></tr>
+  </table></div>
+  <p class="small">These four examples are mine, not from your slides. Type each into the explorer to check.</p>
+</section>
+
+<section id="w4-transitive">
+  <h2>4. Transitive</h2>
+  <p><b>Idea.</b> "A friend of a friend is a friend": if you can get from a to b and from b to c, you can get from a to c <i>directly</i>. "Is taller than" works that way.</p>
+  <div class="idea"><b>Definition.</b> R is <b>transitive</b> if whenever <span class="e">(a, b) ∈ R</span> and <span class="e">(b, c) ∈ R</span> then <span class="e">(a, c) ∈ R</span>, for all a, b, c ∈ A. Symbolically: <span class="e">∀x∀y∀z [((x, y) ∈ R ∧ (y, z) ∈ R) → (x, z) ∈ R]</span>.</div>
+  <p><b>How to check, step by step.</b></p>
+  <ol>
+    <li>Take a pair (a, b) in R.</li>
+    <li>Find every pair that <i>starts</i> with b, say (b, c).</li>
+    <li>For each one, the shortcut (a, c) must be in R. If it is missing, R is not transitive.</li>
+    <li>Repeat for every pair in R.</li>
+  </ol>
+  <p><b>Slide example.</b> R = {(1,2), (2,3), (1,3)} on {1, 2, 3} is transitive. The only chain is (1,2),(2,3), and its shortcut (1,3) is there.</p>
+  <div class="trap"><b>Trap: no chains means transitive.</b> R = {(1,2)} is transitive, because there is no chain to break. So is the empty relation. This is the same idea as Week 1: <span class="e">p → q</span> is true whenever p is false.</div>
+  <div class="beyond">Beyond the slides: checking a property is an algorithm, as in Week 3. For example:
+<pre class="code"><b>procedure</b> is symmetric(R: a set of pairs)
+<b>for</b> each pair (a, b) in R
+    <b>if</b> (b, a) is not in R <b>then return</b> false
+<b>return</b> true</pre></div>
+</section>
+
+<section id="w4-combine">
+  <h2>5. Combining and composing relations</h2>
+  <h3>Combining</h3>
+  <p>A relation is a set, so you can combine two relations with set operations: <span class="e">R<sub>1</sub> ∪ R<sub>2</sub></span> (in either), <span class="e">R<sub>1</sub> ∩ R<sub>2</sub></span> (in both), <span class="e">R<sub>1</sub> − R<sub>2</sub></span> (in R<sub>1</sub> but not R<sub>2</sub>) and <span class="e">R<sub>2</sub> − R<sub>1</sub></span>.</p>
+  <p><b>Slide example.</b> R<sub>1</sub> = {(1,1), (2,2), (3,3)} and R<sub>2</sub> = {(1,1), (1,2), (1,3), (1,4)} give:</p>
+  <div class="card lab">
+    <label for="w4-c1">R<sub>1</sub></label>
+    <input type="text" id="w4-c1" value="(1,1), (2,2), (3,3)" autocomplete="off" spellcheck="false">
+    <label for="w4-c2">R<sub>2</sub></label>
+    <input type="text" id="w4-c2" value="(1,1), (1,2), (1,3), (1,4)" autocomplete="off" spellcheck="false">
+    <div id="w4-combine-out"></div>
+  </div>
+  <p class="small">Edit the boxes to try your own. Write pairs like (1,2), (2,3).</p>
+
+  <h3>Composition</h3>
+  <p><b>Idea.</b> Composition chains two relations into a <i>two-step journey</i>. First take a step with R<sub>1</sub>, then a step with R<sub>2</sub>. Whenever that journey is possible from x to z, the pair (x, z) is in the composite.</p>
+  <div class="idea"><b>Definition (from your slides).</b> Let R<sub>1</sub> be a relation from A to B, and R<sub>2</sub> a relation from B to C. The <b>composition</b> <span class="e">R<sub>2</sub> ∘ R<sub>1</sub></span> is a relation from A to C: if <span class="e">(x, y) ∈ R<sub>1</sub></span> and <span class="e">(y, z) ∈ R<sub>2</sub></span>, then <span class="e">(x, z) ∈ R<sub>2</sub> ∘ R<sub>1</sub></span>.</div>
+  <p><b>Reading order.</b> R<sub>2</sub> ∘ R<sub>1</sub> is read right to left: R<sub>1</sub> acts first. (The slide's figure labels the answer R<sub>2</sub> ∘ R<sub>1</sub> = {(b, x), (b, z)}, while the slide's text layer shows R<sub>1</sub> ∘ R<sub>2</sub>. Follow the figure and the definition: first R<sub>1</sub>, then R<sub>2</sub>.)</p>
+  <p><b>How to compute.</b> For each pair (x, y) in R<sub>1</sub>, find every pair in R<sub>2</sub> that starts with that same y, say (y, z). Each match gives (x, z). The middle element y is used up and does not appear in the answer.</p>
+  <div class="card lab">
+    <label for="w4-k1">R<sub>1</sub> (from A to B)</label>
+    <input type="text" id="w4-k1" value="(1,a), (1,b), (2,b)" autocomplete="off" spellcheck="false">
+    <label for="w4-k2">R<sub>2</sub> (from B to C)</label>
+    <input type="text" id="w4-k2" value="(a,x), (b,y), (b,z)" autocomplete="off" spellcheck="false">
+    <div id="w4-compose-out"></div>
+  </div>
+  <div class="trap"><b>Trap.</b> Do not mix up the order. R<sub>2</sub> ∘ R<sub>1</sub> means R<sub>1</sub> first. Also, the matching element must be the <i>second</i> entry of the R<sub>1</sub> pair and the <i>first</i> entry of the R<sub>2</sub> pair.</div>
+</section>
+
+<section id="w4-mistakes">
+  <h2>6. Common mistakes</h2>
+  <ul>
+    <li>Calling a relation reflexive when it has loops only for the elements that appear. Check <i>every</i> element of A.</li>
+    <li>Thinking antisymmetric means "not symmetric". They are different questions.</li>
+    <li>Saying (a, a) breaks antisymmetry. It does not: a = a.</li>
+    <li>Checking only some chains for transitivity. Check every pair against every pair that starts where it ends.</li>
+    <li>Treating (a, b) and (b, a) as the same pair. They are different.</li>
+    <li>Forgetting vacuous truth: with no chains, a relation is transitive.</li>
+    <li>Reading R<sub>2</sub> ∘ R<sub>1</sub> left to right.</li>
+  </ul>
+  <p><b>Connections.</b> Every definition above is an implication (Week 1). Antisymmetry has the form (p ∧ q) → r, and its contrapositive says: if x ≠ y then not both (x, y) and (y, x) are in R. Checking a property is an algorithm (Week 3), and next week you will see these properties in matrices and graphs.</p>
+</section>
+
+<section id="w4-recall">
+  <h2>7. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w4-recall-list"></div>
+</section>
+
+<section id="w4-practice">
+  <h2>8. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Many come straight from your slide exercises. Write your attempt first. Hints come in three levels, and the solution unlocks only after you have written an attempt. You can use the explorer and calculators above to <i>check</i> an answer, but work it out yourself first.</p>
+  <div id="w4-practice-list"></div>
+</section>
+
+<section id="w4-checkpoint">
+  <h2>9. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w4-objs"></div>
+    <button class="btn primary" type="button" id="w4-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w4-cp-reset">Clear all my work</button>
+    <div id="w4-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+</div>
+
+<div class="week w5" data-week="5" id="week5" role="tabpanel" hidden>
+<section class="hero" id="w5-top">
+  <h1>One relation, three pictures.</h1>
+  <p class="lead">This week covers Sections 2 and 3 of your Chapter 3 slides: representing relations with matrices and digraphs, then equivalence relations, equivalence classes and partitions. Anything I add that is not on your slides is labelled "Beyond the slides".</p>
+  <p>The tool below takes one relation (a list of pairs) and shows it as a <b>zero-one matrix</b>, a <b>digraph</b> and a list of <b>properties</b>. Edit the pairs, or press a preset.</p>
+
+  <div class="card lab">
+    <label for="w5-tv-set">Set A (the elements)</label>
+    <input type="text" id="w5-tv-set" value="a, b, c, d" autocomplete="off" spellcheck="false">
+    <label for="w5-tv-pairs">Relation R on A (pairs)</label>
+    <input type="text" id="w5-tv-pairs" value="(a,b), (a,d), (b,b), (b,d), (c,a), (c,b), (d,b)" autocomplete="off" spellcheck="false">
+    <div class="togrow" role="group" aria-label="Preset relations">
+      <button class="btn" type="button" data-w5preset="slide1">Slide digraph example 1</button>
+      <button class="btn" type="button" data-w5preset="slide2">Slide digraph example 2</button>
+      <button class="btn" type="button" data-w5preset="slide3">Slide matrix example 3</button>
+      <button class="btn" type="button" data-w5preset="mod3">Same remainder mod 3</button>
+      <button class="btn" type="button" data-w5preset="divides">a divides b on {1,2,3,4}</button>
+    </div>
+    <div id="w5-tv-err" class="err" role="alert"></div>
+    <div class="tv-body">
+      <div><h3 class="tv-h">Matrix M<sub>R</sub></h3><div id="w5-tv-matrix" class="scroll"></div></div>
+      <div><h3 class="tv-h">Digraph</h3><div id="w5-tv-graph"></div></div>
+    </div>
+    <h3 class="tv-h">Properties</h3>
+    <div id="w5-tv-props"></div>
+    <div id="w5-tv-equiv"></div>
+  </div>
+
+  <p><b>Objectives.</b> By the end you can: build the zero-one matrix of a relation and read a relation back from a matrix; draw and read a digraph; spot reflexive, symmetric and antisymmetric relations from a matrix or digraph; define an equivalence relation and find its equivalence classes; and decide whether a collection of sets is a partition.</p>
+</section>
+
+<section id="w5-matrix">
+  <h2>1. Representing relations with matrices</h2>
+  <p><b>Big picture.</b> A table of 1s and 0s can hold a whole relation. A 1 means "related", a 0 means "not related". It is the grid from Week 4, written as numbers.</p>
+  <div class="idea"><b>Definition (from your slides).</b> Let R be a relation from A = {a<sub>1</sub>, …, a<sub>m</sub>} to B = {b<sub>1</sub>, …, b<sub>n</sub>}. R is represented by the matrix <span class="e">M<sub>R</sub> = [m<sub>ij</sub>]</span>, where <span class="e">m<sub>ij</sub> = 1</span> if <span class="e">(a<sub>i</sub>, b<sub>j</sub>) ∈ R</span> and <span class="e">m<sub>ij</sub> = 0</span> if <span class="e">(a<sub>i</sub>, b<sub>j</sub>) ∉ R</span>.</div>
+  <p><b>Reading it.</b> Row i is the first element, column j is the second element. The entry in row i, column j answers: is a<sub>i</sub> related to b<sub>j</sub>? The elements can be listed in any order, but when A = B use the same order for rows and columns.</p>
+  <p><b>Slide example 1.</b> A = {1, 2, 3}, B = {1, 2}, and R holds (a, b) when a &gt; b. Then R = {(2,1), (3,1), (3,2)} and:</p>
+  <div class="scroll"><table class="mx">
+    <tr><th>M<sub>R</sub></th><th>1</th><th>2</th></tr>
+    <tr><th>1</th><td>0</td><td>0</td></tr>
+    <tr><th>2</th><td>1</td><td>0</td></tr>
+    <tr><th>3</th><td>1</td><td>1</td></tr>
+  </table></div>
+  <h3>Going the other way: matrix to pairs</h3>
+  <p>Slide example 2 gives a matrix and asks for the pairs. The tool below does that. Rows are separated by new lines, entries by spaces.</p>
+  <div class="card lab">
+    <label for="w5-mx-a">Elements of A (rows)</label>
+    <input type="text" id="w5-mx-a" value="a1, a2, a3" autocomplete="off" spellcheck="false">
+    <label for="w5-mx-b">Elements of B (columns)</label>
+    <input type="text" id="w5-mx-b" value="b1, b2, b3, b4, b5" autocomplete="off" spellcheck="false">
+    <label for="w5-mx-text">Matrix</label>
+    <textarea id="w5-mx-text" class="mxarea" rows="3" spellcheck="false">0 1 0 0 0
+1 0 1 1 0
+1 0 1 0 1</textarea>
+    <div id="w5-mx-out"></div>
+  </div>
+
+  <h3>Properties straight from the matrix</h3>
+  <p>For a relation on a set (a square matrix), your slides give three quick tests:</p>
+  <ul>
+    <li><b>Reflexive</b> if all entries on the main diagonal are 1.</li>
+    <li><b>Symmetric</b> if and only if m<sub>ij</sub> = 1 whenever m<sub>ji</sub> = 1. Picture: the matrix is a mirror image across the diagonal.</li>
+    <li><b>Antisymmetric</b> if and only if m<sub>ij</sub> = 0 or m<sub>ji</sub> = 0 whenever i ≠ j. Picture: no pair of 1s in mirror positions off the diagonal.</li>
+  </ul>
+  <p><b>Slide example 3.</b> M<sub>R</sub> = [[1,1,0],[1,1,1],[0,1,1]]. The diagonal is all 1, so R is reflexive. The matrix equals its mirror image, so R is symmetric. And m<sub>12</sub> and m<sub>21</sub> are both 1, so R is <i>not</i> antisymmetric. (Press "Slide matrix example 3" in the tool at the top.)</p>
+  <div class="beyond">Beyond the slides: "m<sub>ij</sub> = 0 or m<sub>ji</sub> = 0" is ¬(p ∧ q), which by De Morgan's law (Week 1) is ¬p ∨ ¬q. It is the same antisymmetry rule as last week, written for matrices. Transitivity is harder to see in a matrix, so use the pairs or the digraph.</div>
+</section>
+
+<section id="w5-digraph">
+  <h2>2. Representing relations with digraphs</h2>
+  <p><b>Big picture.</b> Draw each element as a dot and each pair (a, b) as an arrow from a to b. It is the most visual way to see a relation.</p>
+  <div class="idea"><b>Definition (from your slides).</b> A <b>directed graph</b>, or <b>digraph</b>, consists of a set V of <b>vertices</b> (nodes) together with a set E of ordered pairs of elements of V called <b>edges</b> (arcs). For the edge (a, b), the vertex a is the <b>initial vertex</b> and b is the <b>terminal vertex</b>. An edge of the form (a, a) is called a <b>loop</b>.</div>
+  <p><b>Slide example 1.</b> The digraph with vertices a, b, c, d and edges (a,b), (a,d), (b,b), (b,d), (c,a), (c,b), (d,b) is what the tool at the top shows when it loads. Notice the loop at b, and the two-way pair b ↔ d.</p>
+  <p><b>Slide example 2.</b> The ordered pairs of the slide's second digraph are (1,3), (1,4), (2,1), (2,2), (2,3), (3,1), (3,3), (4,1), (4,3). Press "Slide digraph example 2" to draw them.</p>
+
+  <h3>Reading properties from a digraph</h3>
+  <div class="scroll"><table>
+    <tr><th class="l">Property</th><th class="l">What to look for</th></tr>
+    <tr><td class="l"><b>Reflexive</b></td><td class="l">A loop at <i>every</i> vertex.</td></tr>
+    <tr><td class="l"><b>Symmetric</b></td><td class="l">If (x, y) is an edge, so is (y, x). Every arrow has a return arrow.</td></tr>
+    <tr><td class="l"><b>Antisymmetric</b></td><td class="l">If (x, y) with x ≠ y is an edge, then (y, x) is not an edge. No return arrows (loops are fine).</td></tr>
+    <tr><td class="l"><b>Transitive</b></td><td class="l">If (x, y) and (y, z) are edges, so is (x, z). Every two-step route has a direct shortcut arrow.</td></tr>
+  </table></div>
+  <div class="tip"><b>Tip.</b> To check transitivity on a drawing, follow every two-arrow path x → y → z and ask "is there a direct arrow from x to z?". Loops count: x → x → y needs the arrow x → y, which is already there.</div>
+</section>
+
+<section id="w5-equiv">
+  <h2>3. Equivalence relations</h2>
+  <p><b>Big picture.</b> An equivalence relation is a precise version of "is the same kind as". "Has the same birthday month as", "lives in the same city as" and "has the same remainder when divided by 3" all sort things into groups of look-alikes.</p>
+  <div class="idea"><b>Definition 1.</b> A relation on a set A is an <b>equivalence relation</b> if it is <b>reflexive, symmetric and transitive</b>.</div>
+  <div class="idea"><b>Definition 2.</b> If a and b are related by an equivalence relation, they are called <b>equivalent</b>, written <span class="e">a ∼ b</span>.</div>
+  <p>Why these three? Reflexive: everything is the same kind as itself. Symmetric: if a is the same kind as b, then b is the same kind as a. Transitive: if a matches b and b matches c, then a matches c.</p>
+  <p><b>Try it.</b> Press "Same remainder mod 3" in the tool at the top. It shows the relation <i>a ∼ b if a and b leave the same remainder when divided by 3</i> on {1, …, 6}: the matrix, the digraph, and a verdict that it is an equivalence relation, with its classes listed. Then press "a divides b". It fails: which property breaks?</p>
+  <div class="beyond">Beyond the slides: the "same remainder mod 3" relation is my example. It is the classic one: a ∼ b exactly when 3 divides a − b.</div>
+
+  <h3>Equivalence classes</h3>
+  <p>Let A be a nonempty set and ∼ an equivalence relation on A. The <b>equivalence class of a</b>, written <span class="e">[a]</span> and read "bracket a", is the set of all elements of A that are equivalent to a. (The formula did not show in my copy of your slide, so this is the standard definition.) Your slide lists three facts:</p>
+  <ul>
+    <li>For each a ∈ A, <span class="e">a ∈ [a]</span>. (Because ∼ is reflexive.)</li>
+    <li>For each a, b ∈ A, <span class="e">a ∼ b</span> if and only if <span class="e">[a] = [b]</span>.</li>
+    <li>For each a, b ∈ A, <span class="e">[a] = [b]</span> or <span class="e">[a] ∩ [b] = ∅</span>. Two classes are either identical or completely separate.</li>
+  </ul>
+  <p>In the mod 3 example, [1] = [4] = {1, 4}, [2] = [5] = {2, 5} and [3] = [6] = {3, 6}. Three classes, no overlaps.</p>
+
+  <h3>Partitions</h3>
+  <div class="idea"><b>Definition (from your slides).</b> A <b>partition</b> of a set S is a collection of disjoint nonempty subsets of S that have S as their union. That is, the subsets A<sub>i</sub> (i ∈ I) form a partition of S if and only if:
+    <ul style="margin:.4em 0 0">
+      <li>A<sub>i</sub> ≠ ∅ for every i ∈ I,</li>
+      <li>A<sub>i</sub> ∩ A<sub>j</sub> = ∅ whenever i ≠ j,</li>
+      <li>and the union of all the A<sub>i</sub> is S.</li>
+    </ul>
+  </div>
+  <p><b>Picture.</b> Cut a cake into pieces: no piece is empty, no two pieces overlap, and together they make the whole cake. The equivalence classes of an equivalence relation on A form a partition of A.</p>
+  <div class="beyond">Beyond the slides: the reverse also holds. Every partition of a set gives an equivalence relation: say a ∼ b when a and b lie in the same piece.</div>
+
+  <h3>Partition checker</h3>
+  <p>Type a set and a collection of subsets in braces. The checker tests the three conditions one by one.</p>
+  <div class="card lab">
+    <label for="w5-pt-set">Set S</label>
+    <input type="text" id="w5-pt-set" value="1, 2, 3, 4, 5, 6" autocomplete="off" spellcheck="false">
+    <label for="w5-pt-blocks">Collection of subsets</label>
+    <input type="text" id="w5-pt-blocks" value="{1, 2}, {3, 4}, {5, 6}" autocomplete="off" spellcheck="false">
+    <div id="w5-pt-out"></div>
+  </div>
+</section>
+
+<section id="w5-mistakes">
+  <h2>4. Common mistakes</h2>
+  <ul>
+    <li>Reading a matrix with rows and columns swapped. Row = first element.</li>
+    <li>Calling a matrix antisymmetric because it is not symmetric. Test the mirror positions.</li>
+    <li>Forgetting that the diagonal must be <i>all</i> 1s for reflexive.</li>
+    <li>In a digraph, forgetting a loop at one vertex when checking reflexive.</li>
+    <li>Checking transitivity by eye and missing a two-step path.</li>
+    <li>Claiming an equivalence relation when one of the three properties fails. Name the pair that breaks it.</li>
+    <li>Listing a class twice. [1] and [4] in the mod 3 example are the same class, {1, 4}.</li>
+    <li>Calling something a partition when a block is empty, two blocks overlap, an element is missing, or an extra element appears.</li>
+  </ul>
+  <p><b>Connections.</b> Matrices and digraphs are two pictures of the pairs from Week 4. Equivalence relations combine three of the Week 4 properties. The partition conditions use set operations (∩, ∪, ∅) you already know, and "if and only if" is the biconditional from Week 1.</p>
+</section>
+
+<section id="w5-recall">
+  <h2>5. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w5-recall-list"></div>
+</section>
+
+<section id="w5-practice">
+  <h2>6. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Several come from your slide exercises. Write your attempt first. Hints come in three levels, and the solution unlocks only after you have written an attempt. Use the tools above to <i>check</i> an answer, but work it out yourself first.</p>
+  <div id="w5-practice-list"></div>
+</section>
+
+<section id="w5-checkpoint">
+  <h2>7. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w5-objs"></div>
+    <button class="btn primary" type="button" id="w5-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w5-cp-reset">Clear all my work</button>
+    <div id="w5-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+</div>
+
+<div class="week w6" data-week="6" id="week6" role="tabpanel" hidden>
+<section class="hero" id="w6-top">
+  <h1>Practice until the pattern is automatic.</h1>
+  <p class="lead">This lab makes fresh exam-style questions in the same styles as your tutorials: logic, algorithms, relations and graphs. Every question is new (new numbers, new relations, new graphs), each answer is checked for you, and you can ask for up to three hints before you look at a solution.</p>
+  <p>I wrote these as new questions, not copies of your tutorial or coursework questions. They test the same skills, so the coursework itself stays yours to do.</p>
+
+  <div class="card xlab">
+    <div class="xctl">
+      <div><label for="w6-topic">Practise</label><select id="w6-topic"></select></div>
+      <div><label for="w6-level">Level</label><select id="w6-level"><option value="0">Any level</option><option value="1">Easy</option><option value="2">Medium</option><option value="3">Hard</option></select></div>
+      <button class="btn primary" type="button" id="w6-new">New question</button>
+    </div>
+    <div class="xctl xcode-row">
+      <div><label for="w6-code">Question code (to redo a question)</label><input type="text" id="w6-code" placeholder="for example dijkstra-482913" autocomplete="off" spellcheck="false"></div>
+      <button class="btn" type="button" id="w6-loadcode">Load code</button>
+      <span class="err" id="w6-codeerr" role="alert"></span>
+    </div>
+    <div id="w6-qbox"></div>
+  </div>
+
+  <div class="tip"><b>How to use it.</b> Try each question on paper first, then type the answer. If it is wrong, read the feedback, then use one hint at a time. Open the solution only after you have tried. Your accuracy per question type is saved below, so you can see your weak spots.</div>
+</section>
+
+<section id="w6-patterns">
+  <h2>1. How each tutorial question type works</h2>
+  <p>Your tutorial and coursework sheets keep reusing a small set of question types. Here is the method for each one, in a few steps. Open a card, then try the matching question type above.</p>
+
+  <h3>Logic</h3>
+  <details><summary>Translate a sentence into logic</summary>
+    <ol><li>Name the two simple statements: p and q.</li><li>Spot the key word: "only if", "if", "necessary", "sufficient", "unless", "but", "neither … nor", "not both".</li><li>Write the connective, then test the row p = T, q = F against the sentence.</li></ol>
+    <div class="scroll"><table><tr><th class="l">English</th><th class="l">Formula</th></tr>
+    <tr><td class="l">P only if Q · Q is necessary for P · P is sufficient for Q · whenever P, Q</td><td class="l sym">p → q</td></tr>
+    <tr><td class="l">P if Q · P whenever Q</td><td class="l sym">q → p</td></tr>
+    <tr><td class="l">P unless Q</td><td class="l sym">¬q → p</td></tr>
+    <tr><td class="l">P if and only if Q · necessary and sufficient</td><td class="l sym">p ↔ q</td></tr>
+    <tr><td class="l">P but not Q</td><td class="l sym">p ∧ ¬q</td></tr>
+    <tr><td class="l">neither P nor Q</td><td class="l sym">¬p ∧ ¬q</td></tr>
+    <tr><td class="l">P or Q but not both</td><td class="l sym">p ⊕ q</td></tr></table></div>
+    <p class="small"><b>Common slip:</b> reversing "only if" and "if".</p></details>
+  <details><summary>Construct a truth table</summary>
+    <ol><li>List the variables and write 2<sup>n</sup> rows (TTT, TTF, … , FFF).</li><li>Add a column for each sub-expression, starting with the innermost brackets and negations.</li><li>Fill column by column, not row by row.</li><li>The last column is the answer.</li></ol>
+    <p class="small"><b>Common slip:</b> forgetting precedence (¬ first, then ∧, ∨, →, ↔). Use brackets to be safe.</p></details>
+  <details><summary>Tautology, contradiction or contingency</summary>
+    <ol><li>Build the truth table.</li><li>All T: tautology. All F: contradiction. Mixed: contingency.</li></ol>
+    <p>Shortcut: to show a conditional is a tautology, ask whether the hypothesis can be true while the conclusion is false. If never, it is a tautology.</p></details>
+  <details><summary>Show a tautology or an equivalence using laws (no truth table)</summary>
+    <ol><li>Rewrite → as ¬ and ∨ using p → q ≡ ¬p ∨ q.</li><li>Push negations inward with De Morgan.</li><li>Regroup so that p and ¬p sit together (associative, commutative).</li><li>Finish with the negation law (p ∨ ¬p ≡ T), then domination or identity.</li><li>Write the name of the law beside every line.</li></ol>
+    <p class="small"><b>Common slip:</b> a line without a named law. Marks are given for the reason.</p></details>
+  <details><summary>Verify a law with a truth table</summary>
+    <ol><li>Build one column for each side of the law.</li><li>If the two columns agree in all rows, the law is verified.</li></ol></details>
+
+  <h3>Algorithms</h3>
+  <details><summary>Properties of an algorithm (the Goldbach-style question)</summary>
+    <ol><li>Go through the properties one at a time: input, output, precision (definiteness), finiteness, correctness, generality.</li><li>For each, ask: "what could go wrong with this procedure?"</li><li>Then ask which of your answers depend on an <i>unproved</i> fact. If the algorithm's stopping depends on whether a conjecture is true, finiteness cannot be guaranteed.</li></ol></details>
+  <details><summary>Linear and binary search steps</summary>
+    <p><b>Linear:</b> write i, the test x ≠ a<sub>i</sub>, and the new i at each step, then the location.</p>
+    <p><b>Binary:</b> write a table with columns i, j, m, a<sub>m</sub>, and the comparison x &gt; a<sub>m</sub>. Update i := m + 1 or j := m, and stop when i = j. Finally test x = a<sub>i</sub>.</p>
+    <p class="small"><b>Common slip:</b> forgetting the floor, or using binary search on an unsorted list.</p></details>
+  <details><summary>Sorting: describe or trace</summary>
+    <p><b>Insertion sort in words:</b> keep the left part sorted; take the next element, find its place among the sorted ones, shift the larger ones right, and drop it in. Repeat until the end.</p>
+    <p><b>Bubble sort:</b> repeatedly compare neighbours and swap when out of order; after pass k the k largest are in place at the right.</p></details>
+  <details><summary>Write min, max or sum (the "write an algorithm" question)</summary>
+    <ol><li>Start with the first element: min := a<sub>1</sub> (or sum := a<sub>1</sub>).</li><li><b>for</b> i := 2 <b>to</b> n, update with a<sub>i</sub>.</li><li>For min: <b>if</b> min &gt; a<sub>i</sub> <b>then</b> min := a<sub>i</sub>. For sum: sum := sum + a<sub>i</sub>.</li><li><b>return</b> the variable.</li></ol></details>
+  <details><summary>Greedy change</summary>
+    <p>Take as many of the largest coin as fit, then move to the next coin with what is left. To see if greedy is optimal, try swapping the largest coin for smaller ones.</p></details>
+
+  <h3>Relations</h3>
+  <details><summary>Union, intersection and difference</summary>
+    <p>Treat each relation as a set of pairs. Write both sets, tick which pairs are shared, then combine: ∪ all pairs in either, ∩ shared pairs, R<sub>1</sub> − R<sub>2</sub> pairs in R<sub>1</sub> that are not in R<sub>2</sub>.</p></details>
+  <details><summary>Composition S ∘ R</summary>
+    <p>Make a three-column table: pair (x, y) in R, pairs (y, z) in S that start with the same y, resulting pair (x, z). R is applied first. Remove duplicates.</p></details>
+  <details><summary>Relation to matrix, matrix to relation</summary>
+    <p>Rows are first elements, columns second elements. Put 1 where the pair is in R, else 0. To go back, each 1 in row i, column j gives (i, j).</p></details>
+  <details><summary>Draw or read a digraph</summary>
+    <p>Each pair (a, b) is an arrow from a to b; (a, a) is a loop. To read one, go vertex by vertex and list every arrow that leaves it.</p></details>
+  <details><summary>Reflexive, symmetric (and antisymmetric) from a matrix</summary>
+    <p>Reflexive: whole diagonal is 1. Symmetric: the matrix equals its mirror image. Antisymmetric: no mirrored pair of 1s off the diagonal.</p></details>
+  <details><summary>Is it a partition?</summary>
+    <p>Check three things: every subset is nonempty; no element is in two subsets; the union is exactly the whole set. Repeats inside one subset do not matter, and an element not in the set spoils the union.</p></details>
+  <details><summary>Equivalence relation from a partition</summary>
+    <p>Two elements are related exactly when they are in the same subset. For each subset, write every ordered pair of its elements (including (a, a)). A subset with k elements gives k × k pairs.</p></details>
+
+  <h3>Graphs (see the next section)</h3>
+  <details><summary>In-degree and out-degree</summary>
+    <p>For each vertex count arrows arriving (in) and leaving (out). Parallel arrows count each time; a loop adds 1 to both. The sum of in-degrees equals the sum of out-degrees equals the number of edges.</p></details>
+  <details><summary>Adjacency list and adjacency matrix</summary>
+    <p>List: for each vertex, the vertices it has an edge to. Matrix: a<sub>ij</sub> is the number of edges from vertex i to vertex j, with the vertices in the stated order.</p></details>
+  <details><summary>Draw a graph from an adjacency matrix</summary>
+    <p>Draw one dot per row. For each entry a<sub>ij</sub> draw that many edges between i and j (undirected: use the entries above the diagonal; directed: draw arrows from i to j). A 1 on the diagonal is a loop.</p></details>
+  <details><summary>Dijkstra's shortest path</summary>
+    <ol><li>Distance 0 at the start, ∞ everywhere else.</li><li>Finalise the unvisited vertex with the smallest distance.</li><li>For each neighbour, new distance = (this distance) + (edge weight). Keep it if smaller.</li><li>Repeat until all vertices are finalised, then read paths backwards from the predecessors.</li></ol></details>
+</section>
+
+<section id="w6-graphs">
+  <h2>2. Graph basics and tools</h2>
+  <div class="beyond">Beyond your slides: the Chapter 1 to 3 slides you sent me do not cover graphs, but your tutorial and coursework sheets do. This section follows those questions and the standard definitions, so check it against your lecturer's notes.</div>
+  <ul>
+    <li>A <b>graph</b> has vertices and edges. In a <b>directed graph</b> each edge is an arrow from one vertex to another. A <b>multigraph</b> allows several edges between the same two vertices, and a <b>loop</b> is an edge from a vertex to itself.</li>
+    <li><b>Undirected degree:</b> the number of edge ends at the vertex, so a loop counts 2. The degrees add up to 2 × (number of edges).</li>
+    <li><b>Directed:</b> in-degree is the number of edges arriving, out-degree the number leaving, and a loop counts 1 for each. Both sums equal the number of edges.</li>
+    <li><b>Adjacency list:</b> each vertex with the vertices it is joined to. <b>Adjacency matrix:</b> row i, column j holds the number of edges from i to j (for an undirected graph the matrix is symmetric, and a loop gives a 1 on the diagonal).</li>
+  </ul>
+  <h3>Graph lab</h3>
+  <p>Type edges like <span class="e">a-b, b-c, c-c</span>. Tick "directed" to read each edge as an arrow from the first vertex to the second. Parallel edges are allowed (type them twice). The lab draws the graph and gives the degrees, the adjacency list and the adjacency matrix.</p>
+  <div class="card lab">
+    <label for="w6-gl-e">Edges</label>
+    <input type="text" id="w6-gl-e" value="a-b, a-b, b-c, c-c, c-d, a-d" autocomplete="off" spellcheck="false">
+    <label for="w6-gl-v">Extra vertices (optional, for isolated ones)</label>
+    <input type="text" id="w6-gl-v" value="" autocomplete="off" spellcheck="false" placeholder="e">
+    <label class="xopt" style="margin-top:10px"><input type="checkbox" id="w6-gl-dir"> <span>Directed</span></label>
+    <div id="w6-gl-out"></div>
+  </div>
+  <h3>Dijkstra tool</h3>
+  <p>Type weighted edges like <span class="e">A-B:4, A-D:3</span> and a start vertex. The tool shows the table you would write by hand: one row per step, with the vertex being finalised.</p>
+  <div class="card lab">
+    <label for="w6-dj-e">Weighted edges</label>
+    <input type="text" id="w6-dj-e" value="A-B:4, A-C:2, B-C:1, B-D:5, C-D:8, C-E:10, D-E:2" autocomplete="off" spellcheck="false">
+    <label for="w6-dj-s">Start vertex</label>
+    <input type="text" id="w6-dj-s" value="A" autocomplete="off" spellcheck="false" style="max-width:8ch">
+    <div id="w6-dj-out"></div>
+  </div>
+</section>
+
+<section id="w6-mock">
+  <h2>3. Mock exam</h2>
+  <p>A mixed set from all four topics, with no feedback until you submit, like the real thing. A timer runs while you work. After submitting you see the marks per topic, every solution, and your weakest topic.</p>
+  <div class="card">
+    <div class="xctl">
+      <div><label for="w6-mock-n">Number of questions</label><select id="w6-mock-n"><option value="8">8 (short)</option><option value="12" selected>12 (medium)</option><option value="16">16 (long)</option></select></div>
+      <button class="btn primary" type="button" id="w6-mock-start">Start a mock exam</button>
+    </div>
+  </div>
+  <div id="w6-mock-box"></div>
+</section>
+
+<section id="w6-sheet">
+  <h2>4. Exam cheat sheet</h2>
+  <p>One page of everything you need to recall, collected from all the weeks.</p>
+  <div class="card">
+    <h3 style="margin-top:0">Logic</h3>
+    <ul>
+      <li><b>p → q</b> is false only when p = T and q = F. p → q ≡ ¬p ∨ q ≡ ¬q → ¬p. Converse (q → p) and inverse (¬p → ¬q) are <i>not</i> equivalent to it.</li>
+      <li><b>De Morgan:</b> ¬(p ∧ q) ≡ ¬p ∨ ¬q, ¬(p ∨ q) ≡ ¬p ∧ ¬q.</li>
+      <li><b>Laws:</b> identity (p ∧ T ≡ p), domination (p ∨ T ≡ T), idempotent, double negation, negation (p ∨ ¬p ≡ T, p ∧ ¬p ≡ F), commutative, associative, distributive, absorption.</li>
+      <li>Precedence: ¬, ∧, ∨, →, ↔. A truth table with n variables has 2<sup>n</sup> rows.</li>
+      <li>Tautology: all T. Contradiction: all F. Contingency: mixed.</li>
+    </ul>
+    <h3>Algorithms</h3>
+    <ul>
+      <li>Properties: input, output, definiteness, correctness, finiteness, effectiveness, generality.</li>
+      <li><b>Linear search:</b> i := 1; while (i ≤ n and x ≠ a<sub>i</sub>) i := i + 1; location is i or 0.</li>
+      <li><b>Binary search</b> (sorted list): i := 1, j := n; while i &lt; j: m := ⌊(i + j)/2⌋; if x &gt; a<sub>m</sub> then i := m + 1 else j := m; then test x = a<sub>i</sub>.</li>
+      <li><b>Bubble sort:</b> pass i compares j = 1 to n − i. <b>Insertion sort:</b> insert a<sub>j</sub> into the sorted first j − 1 items.</li>
+      <li><b>Greedy change:</b> largest coin that fits, repeatedly. Not always optimal (coins 4, 3, 1 and n = 6).</li>
+    </ul>
+    <h3>Relations</h3>
+    <ul>
+      <li>Reflexive: (a, a) for every a. Symmetric: (a, b) gives (b, a). Antisymmetric: (a, b) and (b, a) give a = b. Transitive: (a, b), (b, c) give (a, c).</li>
+      <li>Matrix: m<sub>ij</sub> = 1 iff (a<sub>i</sub>, b<sub>j</sub>) ∈ R. Reflexive: diagonal all 1. Symmetric: mirror image. Antisymmetric: m<sub>ij</sub> = 0 or m<sub>ji</sub> = 0 for i ≠ j.</li>
+      <li>Composition S ∘ R: (x, z) when (x, y) ∈ R and (y, z) ∈ S. R acts first.</li>
+      <li>Equivalence relation = reflexive + symmetric + transitive. Classes [a]: either equal or disjoint. Partition: nonempty, disjoint, union is the whole set.</li>
+    </ul>
+    <h3>Graphs</h3>
+    <ul>
+      <li>Undirected: sum of degrees = 2 × edges (loop counts 2). Directed: sum of in-degrees = sum of out-degrees = edges (loop counts 1 each).</li>
+      <li>Adjacency matrix a<sub>ij</sub> = number of edges from i to j. Adjacency list = neighbours of each vertex.</li>
+      <li><b>Dijkstra:</b> finalise the smallest unvisited distance, update neighbours with (distance + weight) if smaller, repeat.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="w6-progress">
+  <h2>5. Your progress</h2>
+  <p>Every question you answer is counted once (the first time you check it). Use the Practice buttons to drill your weak types.</p>
+  <div id="w6-progress-box"></div>
+  <p><button class="btn" type="button" id="w6-reset">Clear my exam-lab progress</button></p>
+</section>
+
+</div>
+
+<div class="week w7" data-week="7" id="week7" role="tabpanel" hidden>
+<section class="hero" id="w7-top">
+  <h1>Test 1 mock paper: 60 minutes, full marking scheme.</h1>
+  <p class="lead">A timed paper on Chapters 1, 2 and 3, built around the topics your lecturer said to focus on. Do it by hand on paper, like the real test, then mark yourself with the scheme.</p>
+  <div class="card">
+    <h3 style="margin-top:0">The format</h3>
+    <ul>
+      <li><b>Section A:</b> 6 shorter questions, 30 marks, about 18 minutes.</li>
+      <li><b>Section B:</b> 5 longer questions, 60 marks, about 32 minutes.</li>
+      <li><b>Total:</b> 90 marks. That is about 50 minutes of writing, so you have roughly 10 minutes left in the hour to check your work. (The real paper may weight marks differently, so treat the percentage as a guide.)</li>
+    </ul>
+    <h3>What is covered</h3>
+    <ul>
+      <li><b>Logic:</b> naming laws (De Morgan, identity, and so on) and proofs where you must write the law beside each step.</li>
+      <li><b>Algorithms:</b> bubble sort step by step; coding max, min and sum; location and calculation for linear and binary search.</li>
+      <li><b>Relations:</b> equivalence classes and partitions; digraph to relation and relation to digraph (the two free-mark questions, A2 and A3: aim for full marks); matrices.</li>
+    </ul>
+    <p>Difficulty goes from medium to hard. Section B contains the hardest parts (a proof that needs the biconditional law, a full equivalence-relation question, and the binary search table).</p>
+    <p><label for="w7-limit"><b>Time limit</b></label> <select id="w7-limit"><option value="3600" selected>60 minutes (the real test)</option><option value="3000">50 minutes (extra pressure)</option></select></p>
+    <div class="togrow">
+      <button class="btn primary big" type="button" id="w7-start">Start the timed attempt</button>
+      <button class="btn big" type="button" id="w7-print">Print the blank paper</button>
+    </div>
+    <p class="small" id="w7-last" hidden></p>
+  </div>
+  <div class="tip"><b>How to get the most from it.</b> Put your notes away and use only a pen and paper. Do not open the marking scheme until you press Finish. Mark yourself strictly: a step without its law name earns nothing in a logic proof.</div>
+</section>
+
+<section id="w7-paperwrap">
+  <h2>The paper</h2>
+  <div class="mtimer" id="w7-timerbar" hidden>
+    <span id="w7-timernote">Time left</span>
+    <b id="w7-clock">60:00</b>
+    <button class="btn" type="button" id="w7-timerfinish">Finish</button>
+  </div>
+  <p class="small" id="w7-paperhint">Press "Start the timed attempt" above to open the paper and start the clock.</p>
+  <div class="paper" id="w7-paper" hidden></div>
+  <div class="card" id="w7-result" hidden aria-live="polite"></div>
+</section>
+
+</div>
+</main>
+</div>
+<footer class="sitefoot"><span>CKC111 Discrete Structures · unofficial study aid</span><a class="ig-credit" href="https://www.instagram.com/baswara.hm/" target="_blank" rel="noopener"><svg class="ig-ic" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg> Made by @baswara.hm</a></footer>
+<script src="script.js"></script>
+</body>
+</html>
