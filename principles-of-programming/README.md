@@ -3,8 +3,8 @@
 Study site for CCA101 / CPT111 Principles of Programming:
 
 - **Material**: notes condensed from the lecture slides, with runnable examples ("Try it").
-- **Test 1 Mock**: Moodle-style quiz (single + "select one or more") with a bank of 141 questions. 30 random questions in 60 minutes, or practice by topic.
-- **ProgrAss 1**: 55 CodeRunner-style problems with 10 tests each (extra hidden tests are in `data/tests-more.js`), including a 20-question "Step by step" set (`data/problems-new.js`) that goes from easy to hard across Weeks 2–5. A partial program, computer-generated variables, Precheck / Check, hidden tests (shown in full once you pass), a penalty regime and plain-English hints for compiler errors. Includes a timed mock with 3–6 questions (40 minutes each).
+- **Test 1 Mock**: Moodle-style quiz (single + "select one or more") with a bank of 321 questions (`data/quiz-test1.js` adds 180 written from the Week 1–7 slides in the style of the past Test 1). 30 random questions in 60 minutes, or practice by topic.
+- **ProgrAss 1**: 59 CodeRunner-style problems, including 4 in the style of the past Test 1 coding questions (`data/problems-past.js`), with 10 tests each (extra hidden tests are in `data/tests-more.js`), including a 20-question "Step by step" set (`data/problems-new.js`) that goes from easy to hard across Weeks 2–5. A partial program, computer-generated variables, Precheck / Check, hidden tests (shown in full once you pass), a penalty regime and plain-English hints for compiler errors. Includes a timed mock with 3–6 questions (40 minutes each).
 - **Question generator**: endless new CodeRunner questions (10 tests each) from 10 question types (tiered pricing, digit manipulation, ranges, series, nested-loop patterns, classification, unit conversion, sentinel loops, number properties, switch menus). Each question has a shareable code such as `digits-482913`. The mock can use generated questions too.
 - **Scratchpad**: run any C++ program with stdin.
 

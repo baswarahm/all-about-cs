@@ -11,8 +11,9 @@ window.QUIZ = [
       'Patterns can help us to generalise the problem based on the existing problems we have faced before',
       'It is about breaking large problems down to easily micro-manage the people',
       'It is an internalisation thought process towards formulating solutions for problems'],
-  a: [0, 1, 2, 4],
-  e: 'CT is the thought process of formulating problems and solutions. Decomposition breaks down the <i>task</i>, not people, so (d) is wrong.' },
+  a: [0, 1, 4],
+  e: 'CT is the thought process of formulating problems and solutions. Decomposition breaks down the <i>task</i>, not people, so (d) is wrong. ' +
+     'The past Test 1 key did <b>not</b> accept (c): <i>generalising</i> is abstraction; patterns are about noticing similarities.' },
 { t: 'ct', q: 'Filtering out information that is not necessary to solve a problem and generalising the information that is necessary is called:',
   o: ['Decomposition', 'Pattern recognition', 'Abstraction', 'Evaluation'], a: [2],
   e: 'Abstraction removes unnecessary detail and represents the idea in general terms (variables).' },
@@ -60,8 +61,9 @@ window.QUIZ = [
 // ───────── Computers & hardware ─────────
 { t: 'computers', m: true, q: 'The following information is correct about <b>compiler and linker</b>:',
   o: ['Compiler is called after linker', 'Linker will link the program with the compiler', 'Compiler will translate the program to a machine-readable command',
-      'Linker will call the monitor to display the terminal when a program runs'], a: [2],
-  e: 'Order is preprocessor → compiler → linker. The compiler produces machine code; the linker connects library code to make an executable.' },
+      'Linker will call the monitor to display the terminal when a program runs'], a: [2, 3],
+  e: 'Order is preprocessor → compiler → linker. The compiler produces machine code; the linker connects the machine code with library (hardware-specific) code, ' +
+     'such as the code that shows output on the screen, to make an executable. The past Test 1 key accepted (c) and (d).' },
 { t: 'computers', m: true, q: 'The following is true about <b>volatile memory</b>:',
   o: ['Only L1 and L2 is a cache', 'RAM is the slowest among available volatile memory in the computer', 'L3 is the slowest among available volatile memory in the computer',
       'L1 is part of the processor', 'RAM is what is known as cache in the computer', 'We can make the computer release its volatile memory by shutting it down', 'L3 is part of the RAM'],

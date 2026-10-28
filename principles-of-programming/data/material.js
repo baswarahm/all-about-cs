@@ -548,6 +548,62 @@ int main() {
   ],
 },
 {
+  id: 'files',
+  week: 'Week 3 & 6–7',
+  title: 'Random Numbers & Files',
+  test: ['Test 1'],
+  sections: [
+    { h: 'Random numbers: rand() and srand()', html: `
+<p><code>rand()</code> (header <code>&lt;cstdlib&gt;</code>) returns a <b>pseudo-random</b> int from 0 up to the largest int the computer holds.
+Without <code>srand()</code> it gives the <b>same sequence every time</b> the program runs.</p>
+<p><code>srand(x)</code> <b>seeds</b> the generator with an unsigned int <code>x</code>. Using the time as the seed gives a different sequence on every run:</p>
+<pre class="code">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+using namespace std;
+
+int main() {
+    unsigned seed = time(0);   // get the system time
+    srand(seed);               // seed the random number generator
+    int dice = rand() % 6 + 1; // 1 to 6
+    cout &lt;&lt; "You rolled " &lt;&lt; dice &lt;&lt; endl;
+    return 0;
+}</pre>
+<p><code>seed</code> is <b>just a variable</b>; any unsigned value works. Range formula: <code>rand() % (max - min + 1) + min</code>.</p>
+<p>The addendum slides also show the C++11 way: <code>#include &lt;random&gt;</code>, a <code>random_device</code> engine and a <code>uniform_int_distribution&lt;int&gt; randomInt(0, 100);</code> object.</p>` },
+    { h: 'Files: the three stream types', html: `
+<p>File I/O needs <code>#include &lt;fstream&gt;</code>. There is no slide set for this yet; these notes follow the textbook chapter and the past Test 1.</p>
+<table class="mini"><tr><th>Type</th><th>Use</th></tr>
+<tr><td><code>ofstream</code></td><td>output file stream: create a file and write to it</td></tr>
+<tr><td><code>ifstream</code></td><td>input file stream: read from an existing file</td></tr>
+<tr><td><code>fstream</code></td><td>can read, write, or both, depending on the flags</td></tr></table>
+<p>Steps: (1) include fstream, (2) define a file stream object, (3) <b>open</b> the file, (4) use <code>&lt;&lt;</code> / <code>&gt;&gt;</code> like cout / cin, (5) <b>close</b> the file.</p>
+<pre class="code">ofstream outFile;
+outFile.open("scores.txt");   // creates the file, or ERASES it if it exists
+outFile &lt;&lt; 90 &lt;&lt; endl;
+outFile.close();
+
+ifstream inFile;
+int score;
+inFile.open("scores.txt");
+if (!inFile)                  // or inFile.fail()
+    cout &lt;&lt; "Error opening file.\n";
+else
+    while (inFile &gt;&gt; score)   // stops at the end of the file
+        cout &lt;&lt; score &lt;&lt; endl;
+inFile.close();</pre>` },
+    { h: 'File access flags', html: `
+<table class="mini"><tr><th>Flag</th><th>Meaning</th></tr>
+<tr><td><code>ios::in</code></td><td>open for input (reading)</td></tr>
+<tr><td><code>ios::out</code></td><td>open for output (writing); on its own an existing file's contents are <b>wiped out</b></td></tr>
+<tr><td><code>ios::app</code></td><td>append: new data is written at the <b>end</b>, the old content is kept</td></tr>
+<tr><td><code>ios::trunc</code></td><td>if the file exists, delete its contents</td></tr>
+<tr><td><code>ios::binary</code></td><td>binary mode (not text)</td></tr></table>
+<p>Combine flags with <code>|</code>. For a file that must be <b>read from and written to</b> without losing what is in it, the past Test 1 answer was
+<code>myFile.open("inout.txt", ios::in | ios::app);</code> (its feedback: <i>ios::out will wipe out the existing content</i>).</p>` },
+  ],
+},
+{
   id: 'week6',
   week: 'Week 6',
   title: 'Week 6 material (coming soon)',
