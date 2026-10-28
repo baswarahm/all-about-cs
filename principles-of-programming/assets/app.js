@@ -140,10 +140,10 @@
 
   // ───────────────────────── home ─────────────────────────
   var EXAMS = [
-    { name: 'Programming Assessment 1', at: '2026-11-03T17:00:00+08:00', time: 'Tue 3 Nov 2026 · 17:00 – 19:00 · DUP C',
-      topics: 'Week 1–6 (Week 6: repetition only). CodeRunner: complete partial programs.', link: '#/progass', cta: 'Practise coding' },
-    { name: 'Test 1', at: '2026-11-10T17:30:00+08:00', time: 'Tue 10 Nov 2026 · 17:30 – 18:30 · DUP C',
-      topics: 'Week 1–7 (up to basic file processing). Moodle quiz, single and multiple answer.', link: '#/quiz', cta: 'Take a mock test' },
+    { name: 'Programming Assessment 1', at: '2026-11-03T17:00:00+08:00', time: 'Tue 3 Nov 2026 · 17:00 – 18:00 (1 hour) · DUP C',
+      topics: 'Week 1–6 (Week 6: repetition only). CodeRunner: 2–4 partial programs to complete.', link: '#/progass', cta: 'Practise coding' },
+    { name: 'Test 1', at: '2026-11-10T17:30:00+08:00', time: 'Tue 10 Nov 2026 · 17:30 – 19:30 (2 hours) · DUP C',
+      topics: 'Week 1–7 (up to basic file processing). Moodle quiz, single and multiple answer, plus CodeRunner questions.', link: '#/quiz', cta: 'Take a mock test' },
   ];
   function viewHome() {
     var solved = PROBLEMS.filter(function (p) { return (store.get('prog-' + p.id, {}).best || 0) > 0; }).length;
