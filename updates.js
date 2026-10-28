@@ -1,128 +1,83 @@
-// "What's new" button for every course page.
-// Add new entries at the TOP of a course's list (newest first). Dates are YYYY-MM-DD.
-// Each course page loads this file with <script src="../updates.js" data-course="..."></script>;
-// the small button is placed right after the "CS courses" button in its navbar.
+// "Last updated" note for every course page: the date and time (Malaysia time) plus one short sentence.
+// When you update a course, change its `at` (YYYY-MM-DDTHH:MM with +08:00) and `text`.
+// Each course page loads this file with <script src="../updates.js" data-course="..."></script>.
+// Wide screens: small text in the navbar, after the "CS courses" button. Phones: a thin line right under the navbar.
 (function () {
   var UPDATES = {
-    'computer-organisation': [
-      { date: '2026-10-28', items: ['Lecture slides and tutorial sheets are now kept private; their links only open on the owner\'s computer'] },
-    ],
-    'discrete-structures': [
-      { date: '2026-10-28', items: ['New look, matching the other CS courses', 'Tutorial and coursework PDFs removed from the public site'] },
-    ],
-    'principles-of-programming': [
-      { date: '2026-10-28', items: [
-        'Test 1 mock now has 2 programming questions (10 marks each), like the past Test 1',
-        '180 new Test 1 questions from the Week 1–7 slides (321 in total)',
-        'New notes: Random Numbers & Files',
-        '4 "Past Test 1 style" coding questions in ProgrAss',
-        'Every ProgrAss question now has 10 tests; hidden tests are shown after you pass',
-        '20 "Step by step" coding questions, easy to hard, Weeks 2–5',
-      ] },
-    ],
+    'computer-organisation': { at: '2026-10-28T19:42+08:00', text: 'Lecture slides and tutorial sheets are now kept private.' },
+    'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
+    'principles-of-programming': { at: '2026-10-28T21:54+08:00', text: 'The Test 1 mock now has 2 programming questions, plus 180 new Test 1 questions.' },
   };
 
   var me = document.currentScript;
-  var course = me && me.getAttribute('data-course');
-  var list = UPDATES[course];
-  if (!list || !list.length) return;
+  var u = UPDATES[me && me.getAttribute('data-course')];
+  if (!u) return;
 
-  var SEEN_KEY = 'cs-updates-seen:' + course;
-  function getSeen() { try { return localStorage.getItem(SEEN_KEY) || ''; } catch (e) { return ''; } }
-  function setSeen(v) { try { localStorage.setItem(SEEN_KEY, v); } catch (e) {} }
-  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  function nice(d) { var p = d.split('-'); return +p[2] + ' ' + MONTHS[+p[1] - 1] + ' ' + p[0]; }
+  function when(iso) {
+    var d = new Date(iso);
+    try {
+      var f = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kuala_Lumpur', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+      return f.format(d).replace(/\b(am|pm)\b/i, function (m) { return m.toUpperCase(); }) + ' MYT';
+    } catch (e) { return iso.replace('T', ' ').slice(0, 16) + ' MYT'; }
+  }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
   function init() {
     var anchor = document.querySelector('.courses-btn, .coursesbtn');
     if (!anchor) return;
-    var latest = list[0].date;
-    var cs = getComputedStyle(anchor);
+    var header = anchor.closest('header') || anchor.parentNode;
+    var stamp = 'Updated ' + when(u.at);
 
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'upd-btn';
-    btn.setAttribute('aria-expanded', 'false');
-    btn.setAttribute('aria-label', 'What\'s new on this page');
-    btn.title = 'Latest update: ' + nice(latest);
-    btn.innerHTML = 'New<span class="upd-dot" aria-hidden="true"></span>';
-    // look like the CS courses button next to it, just smaller
-    btn.style.cssText = 'position:relative;flex:0 0 auto;align-self:center;cursor:pointer;' +
-      'font-family:' + cs.fontFamily + ';font-size:11px;font-weight:600;letter-spacing:.04em;line-height:1;' +
-      'border:1px solid;border-radius:' + cs.borderTopLeftRadius + ';' +
-      'height:' + Math.min(parseFloat(cs.height) || 28, 28) + 'px;padding:0 8px;margin:0 0 0 6px;white-space:nowrap';
-    anchor.parentNode.insertBefore(btn, anchor.nextSibling);
-    // copy the neighbour's colours again whenever the page switches between light and dark
-    // also follow its flex order and hide when it is hidden (some headers reorder or hide it on small screens)
+    var css = document.createElement('style');
+    css.textContent =
+      '.upd-note{flex:0 1 auto;min-width:0;max-width:220px;align-self:center;margin-left:10px;display:flex;flex-direction:column;' +
+        'font-size:10.5px;line-height:1.3;opacity:.8}' +
+      '.upd-note b{font-weight:600}' +
+      '.upd-note span,.upd-note b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
+      '.upd-strip{display:none;font-size:11px;line-height:1.35;padding:5px 16px;opacity:.85;border-bottom:1px dashed}';
+    document.head.appendChild(css);
+
+    // in the navbar (wide screens)
+    var note = document.createElement('div');
+    note.className = 'upd-note';
+    note.title = stamp + ': ' + u.text;
+    note.innerHTML = '<b>' + esc(stamp) + '</b><span>' + esc(u.text) + '</span>';
+    anchor.parentNode.insertBefore(note, anchor.nextSibling);
+
+    // under the navbar (phones)
+    var strip = document.createElement('div');
+    strip.className = 'upd-strip';
+    strip.innerHTML = '<b>' + esc(stamp) + '</b> · ' + esc(u.text);
+    header.parentNode.insertBefore(strip, header.nextSibling);
+
+    // follow the page's colours (light/dark) and the button's flex order / visibility
     function sync() {
-      cs = getComputedStyle(anchor);
-      btn.style.color = cs.color; btn.style.borderColor = cs.borderTopColor; btn.style.background = cs.backgroundColor;
-      btn.style.order = cs.order;
-      btn.style.display = cs.display === 'none' ? 'none' : '';
+      var cs = getComputedStyle(anchor), hs = getComputedStyle(header);
+      note.style.color = getComputedStyle(anchor.parentNode).color;
+      note.style.order = cs.order;
+      if (cs.display === 'none') note.style.visibility = 'hidden'; else note.style.visibility = '';
+      strip.style.color = hs.color;
+      strip.style.borderColor = cs.borderTopColor;
     }
-    sync();
-    var mo = new MutationObserver(function () { setTimeout(sync, 0); close(); });
+    // keep the note in the navbar only while it fits without squeezing the menu; otherwise use the strip
+    var nav = header.querySelector('nav');
+    function fit() {
+      note.style.display = ''; strip.style.display = 'none';
+      var tooTight = window.innerWidth <= 700 ||
+        (nav && nav.scrollWidth > nav.clientWidth + 1) || header.scrollWidth > header.clientWidth + 1;
+      if (tooTight) { note.style.display = 'none'; strip.style.display = 'block'; }
+    }
+    sync(); fit();
+    window.addEventListener('resize', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    var mo = new MutationObserver(function () { setTimeout(sync, 0); });
     mo.observe(document.documentElement, { attributes: true });
     mo.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme'] });
     if (window.matchMedia) {
       var mq = window.matchMedia('(prefers-color-scheme: dark)');
       if (mq.addEventListener) mq.addEventListener('change', function () { setTimeout(sync, 0); });
     }
-
-    var style = document.createElement('style');
-    style.textContent =
-      '.upd-dot{position:absolute;top:-4px;right:-4px;width:8px;height:8px;border-radius:50%;background:#e8590c;display:none}' +
-      '.upd-btn.unseen .upd-dot{display:block}' +
-      '.upd-btn:hover{opacity:.75}' +
-      '.upd-pop{position:fixed;z-index:1000;width:min(320px,calc(100vw - 24px));max-height:60vh;overflow:auto;padding:12px 14px;' +
-      'border:1px solid;box-shadow:0 12px 32px -12px rgba(0,0,0,.45);font-size:13px;line-height:1.45}' +
-      '.upd-pop h4{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.7}' +
-      '.upd-pop .upd-date{font-weight:700;margin:10px 0 4px}.upd-pop .upd-date:first-of-type{margin-top:0}' +
-      '.upd-pop ul{margin:0;padding-left:18px}.upd-pop li{margin:2px 0}';
-    document.head.appendChild(style);
-
-    if (getSeen() < latest) btn.classList.add('unseen');
-
-    var pop = null;
-    function close() {
-      if (!pop) return;
-      pop.remove(); pop = null;
-      btn.setAttribute('aria-expanded', 'false');
-      document.removeEventListener('click', outside, true);
-      document.removeEventListener('keydown', onKey);
-    }
-    function outside(e) { if (pop && !pop.contains(e.target) && e.target !== btn && !btn.contains(e.target)) close(); }
-    function onKey(e) { if (e.key === 'Escape') { close(); btn.focus(); } }
-    btn.addEventListener('click', function () {
-      if (pop) { close(); return; }
-      pop = document.createElement('div');
-      pop.className = 'upd-pop';
-      pop.setAttribute('role', 'dialog');
-      pop.setAttribute('aria-label', 'Latest updates');
-      // use the page's own colours so it fits every course's theme, light or dark
-      var body = getComputedStyle(document.body);
-      var bg = body.backgroundColor;
-      if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') bg = getComputedStyle(document.documentElement).backgroundColor || '#fff';
-      pop.style.background = bg;
-      pop.style.color = body.color;
-      pop.style.borderColor = cs.borderTopColor;
-      pop.style.fontFamily = body.fontFamily;
-      pop.innerHTML = '<h4>Latest updates</h4>' + list.map(function (u) {
-        return '<div class="upd-date">' + nice(u.date) + '</div><ul>' + u.items.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>';
-      }).join('');
-      document.body.appendChild(pop);
-      var r = btn.getBoundingClientRect(), w = pop.offsetWidth;
-      pop.style.top = (r.bottom + 8) + 'px';
-      pop.style.left = Math.max(12, Math.min(r.right - w, window.innerWidth - w - 12)) + 'px';
-      btn.setAttribute('aria-expanded', 'true');
-      btn.classList.remove('unseen');
-      setSeen(latest);
-      setTimeout(function () { document.addEventListener('click', outside, true); }, 0);
-      document.addEventListener('keydown', onKey);
-    });
-    window.addEventListener('resize', function () { close(); sync(); });
-    window.addEventListener('scroll', function () { close(); setTimeout(sync, 0); }, { passive: true });
+    window.addEventListener('resize', sync);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
