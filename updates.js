@@ -4,7 +4,7 @@
 // Wide screens: small text in the navbar, after the "CS courses" button. Phones: a thin line right under the navbar.
 (function () {
   var UPDATES = {
-    'computer-organisation': { at: '2026-10-28T19:42+08:00', text: 'Lecture slides and tutorial sheets are now kept private.' },
+    'computer-organisation': { at: '2026-10-28T22:52+08:00', text: 'New Random Test 1 (a fresh 50-question paper every time) and a question bank for each topic.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
     'principles-of-programming': { at: '2026-10-28T22:40+08:00', text: 'The Test 1 mock now has 2–5 programming questions (you choose; 4 by default), like the past Test 1.' },
   };

@@ -55,11 +55,12 @@ window.addEventListener('hashchange', route);
    ===================================================================== */
 function readCount(t) { const r = store.get('read', {}); return t.sections.filter(s => r[t.id + '/' + s.id]).length; }
 function bestOf(id) { const h = store.get('hist:' + id, []); return h.length ? Math.max(...h.map(x => x.score)) : null; }
+function lastN(id) { const h = store.get('hist:' + id, []); return h.length ? h[h.length - 1].n || 50 : 50; }
 
 function viewHome() {
   const paperRow = t => {
     const best = bestOf(t.id), inprog = store.get('run:' + t.id, null);
-    return `<tr><td><b>${t.title}</b><small>${t.blurb}</small>${best !== null ? `<span class="best-c">Best so far: ${best}/50</span>` : ''}</td>
+    return `<tr><td><b>${t.title}</b><small>${t.blurb}</small>${best !== null ? `<span class="best-c">Best so far: ${best}/${lastN(t.id)}</span>` : ''}</td>
       <td><a class="btn sm ${t.id === 'mock1' ? 'primary' : ''}" href="#test/${t.id}">${inprog && !inprog.done ? 'Resume' : 'Open'}</a></td></tr>`;
   };
   app.innerHTML = `
@@ -67,14 +68,14 @@ function viewHome() {
     <div class="cover-main">
       <div class="doc-id"><span>CCA102 / CST131 · Sem 1 2026/27</span><span>Test 1 · Topics 1–3</span></div>
       <h1>Computer Organisation,<br><em>Test 1</em> revision</h1>
-      <p class="lede">The notes from the three topics, last year's paper with the answers corrected, two mock papers, drills and solvers that show the working.</p>
+      <p class="lede">The notes from the three topics, last year's paper with the answers corrected, two mock papers, a random Test 1 that is new every time, a question bank for each topic, drills and solvers that show the working.</p>
       <div class="hero-cta"><a class="btn primary" href="#learn/t1">Read Topic 1</a><a class="btn" href="#test/past">Open last year's paper</a></div>
     </div>
     <dl class="spec">
       <div><dt>Format</dt><dd>50 MCQ, 60 min</dd></div>
       <div><dt>Coverage</dt><dd>Topics 1–3</dd></div>
       <div><dt>2025/26 split</dt><dd>18 / 14 / 18</dd></div>
-      <div><dt>Papers here</dt><dd>3 × 50 questions</dd></div>
+      <div><dt>Question bank</dt><dd>${BANK.length + 150} + endless calculations</dd></div>
     </dl>
   </section>
 
@@ -86,7 +87,7 @@ function viewHome() {
     </section>
     <section>
       <h2 class="h-sec"><span>02</span>Papers</h2>
-      <table class="papers">${TESTS.map(paperRow).join('')}</table>
+      <table class="papers">${TESTS.concat(DYNAMIC).map(paperRow).join('')}</table>
     </section>
   </div>
 
@@ -98,6 +99,7 @@ function viewHome() {
       <li><b>Drill</b> conversions and 2's complement until you get 10 right in a row.</li>
       <li><b>Mock 1 in Exam mode</b> with the 60-minute timer, then go through every wrong answer.</li>
       <li><b>Re-read your weakest topic</b>, then sit Mock 2.</li>
+      <li><b>Random Test 1</b> in Exam mode, again and again: every attempt is a new paper with last year's shape. Use the <b>topic banks</b> in Study mode for your weak topic.</li>
     </ol>
   </section>
 
@@ -162,11 +164,11 @@ function viewCheat() {
    TESTS — list + runner
    ===================================================================== */
 function viewTests() {
-  app.innerHTML = `<div class="page-head"><div><p class="eyebrow">§02 · 3 papers × 50 questions</p><h1>Papers</h1><p class="lede">Choose <b>Study mode</b> to see the answer after every question, or <b>Exam mode</b> for a timed run with results at the end.</p></div></div>
-  <div class="grid3">${TESTS.map(t => {
+  app.innerHTML = `<div class="page-head"><div><p class="eyebrow">§02 · 3 fixed papers + papers that are new every time</p><h1>Papers</h1><p class="lede">Choose <b>Study mode</b> to see the answer after every question, or <b>Exam mode</b> for a timed run with results at the end.</p></div></div>
+  <div class="grid3">${TESTS.concat(DYNAMIC).map(t => {
     const h = store.get('hist:' + t.id, []);
     return `<div class="tcard static">
-      <div class="tcard-top"><span class="pill ${t.id === 'past' ? 'pill-amber' : 'pill-accent'}">${t.id === 'past' ? 'Real paper' : 'Mock paper'}</span>${h.length ? `<span class="best">Best ${Math.max(...h.map(x => x.score))}/50</span>` : ''}</div>
+      <div class="tcard-top"><span class="pill ${t.id === 'past' ? 'pill-amber' : 'pill-accent'}">${t.id === 'past' ? 'Real paper' : t.id === 'random' ? 'New every time' : t.build ? 'Topic bank' : 'Mock paper'}</span>${h.length ? `<span class="best">Best ${Math.max(...h.map(x => x.score))}/${h[h.length - 1].n || 50}</span>` : ''}</div>
       <h3>${t.title}</h3><p>${t.blurb}</p>
       ${h.length ? `<div class="hist">${h.slice(-5).map(x => `<span title="${new Date(x.at).toLocaleString()}">${x.score}</span>`).join('')}</div>` : ''}
       <div class="row"><a class="btn primary" href="#test/${t.id}">Open</a></div>
@@ -178,9 +180,12 @@ function newRun(test, mode) {
 }
 
 function viewTest(id) {
-  const test = TESTS.find(t => t.id === id);
-  if (!test) return viewTests();
+  let test = TESTS.find(t => t.id === id);
+  const dyn = test ? null : DYNAMIC.find(t => t.id === id);
+  if (!test && !dyn) return viewTests();
   let run = store.get('run:' + id, null);
+  // papers from bank.js are built fresh; an attempt in progress keeps its own questions
+  if (dyn) test = Object.assign({}, dyn, { qs: run && !run.done && run.qs ? run.qs : dyn.build() });
   if (!run || run.done) return testIntro(test, run);
   testRunner(test, run);
 }
@@ -190,21 +195,21 @@ function testIntro(test, last) {
   app.innerHTML = `
   <div class="intro">
     <a class="back" href="#tests">← All papers</a>
-    <p class="eyebrow">${test.id === 'past' ? 'Real paper · corrected answers' : 'Practice paper'}</p>
+    <p class="eyebrow">${test.id === 'past' ? 'Real paper · corrected answers' : test.build ? 'New questions every attempt' : 'Practice paper'}</p>
     <h1>${test.title}</h1>
     <p class="lede">${test.blurb}</p>
-    <div class="intro-stats"><div><b>50</b><span>questions</span></div><div><b>${test.minutes}</b><span>minutes</span></div>${byTopic.map((n, i) => `<div><b>${n}</b><span>Topic ${i + 1}</span></div>`).join('')}</div>
+    <div class="intro-stats"><div><b>${test.qs.length}</b><span>questions</span></div><div><b>${test.minutes}</b><span>minutes</span></div>${byTopic.map((n, i) => n ? `<div><b>${n}</b><span>Topic ${i + 1}</span></div>` : '').join('')}</div>
     <div class="modes">
       <button class="mode" data-mode="study"><b>Study mode</b><span>The answer and explanation appear as soon as you pick. No timer pressure. Best for your first attempt.</span></button>
       <button class="mode" data-mode="exam"><b>Exam mode</b><span>${test.minutes}-minute countdown. No feedback until you submit, then a full review.</span></button>
     </div>
     <p class="hint">Keyboard: <kbd>A</kbd>–<kbd>D</kbd> to answer · <kbd>←</kbd> <kbd>→</kbd> to move · <kbd>F</kbd> to flag</p>
-    ${last && last.done ? `<button class="btn" id="seeLast">See your last result (${last.score}/50)</button>` : ''}
+    ${last && last.done && (!test.build || last.qs) ? `<button class="btn" id="seeLast">See your last result (${last.score}/${last.qs ? last.qs.length : 50})</button>` : ''}
   </div>`;
   app.querySelectorAll('.mode').forEach(b => b.addEventListener('click', () => {
-    const run = newRun(test, b.dataset.mode); store.set('run:' + test.id, run); testRunner(test, run);
+    const run = newRun(test, b.dataset.mode); if (test.build) run.qs = test.qs; store.set('run:' + test.id, run); testRunner(test, run);
   }));
-  const s = document.getElementById('seeLast'); if (s) s.addEventListener('click', () => results(test, last));
+  const s = document.getElementById('seeLast'); if (s) s.addEventListener('click', () => results(test.build ? Object.assign({}, test, { qs: last.qs }) : test, last));
 }
 
 function testRunner(test, run) {
@@ -283,12 +288,12 @@ function testRunner(test, run) {
     run.elapsed = Date.now() - run.start; run.done = true;
     run.score = test.qs.filter((q, i) => run.ans[i] === q.a).length;
     save();
-    const h = store.get('hist:' + test.id, []); h.push({ score: run.score, at: Date.now(), mode: run.mode, ms: run.elapsed }); store.set('hist:' + test.id, h);
+    const h = store.get('hist:' + test.id, []); h.push({ score: run.score, n: N, at: Date.now(), mode: run.mode, ms: run.elapsed }); store.set('hist:' + test.id, h);
     results(test, run);
   }
   qgrid.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) go(+b.dataset.i); });
   document.getElementById('rSubmit').onclick = submit;
-  document.getElementById('rRestart').onclick = () => { if (confirm('Start this test again from scratch?')) { store.del('run:' + test.id); testIntro(test, null); } };
+  document.getElementById('rRestart').onclick = () => { if (confirm('Start this test again from scratch?')) { store.del('run:' + test.id); viewTest(test.id); } };
 
   const timerEl = document.getElementById('rTimer');
   const tick = () => {
@@ -348,7 +353,7 @@ function results(test, run) {
     }).join('') : '<p class="empty">Nothing here.</p>';
   };
   document.getElementById('seg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#seg button').forEach(x => x.classList.toggle('on', x === b)); draw(b.dataset.f); });
-  document.getElementById('again').onclick = () => { store.del('run:' + test.id); testIntro(test, null); };
+  document.getElementById('again').onclick = () => { store.del('run:' + test.id); viewTest(test.id); };
   draw(score === N ? 'all' : 'wrong');
   window.scrollTo(0, 0);
 }
