@@ -648,14 +648,14 @@
             s.best = Math.max(s.best || 0, mark); saveProg(id, s); st = s;
           }
           $('#checksUsed').textContent = n; $('#nextPen').textContent = penaltyFor(n + 1) + '%';
-          banner = allPass ? '<div class="result-banner ok">Passed all tests! ✓ Mark for this submission: ' + mark + '%</div>'
+          banner = allPass ? '<div class="result-banner ok">Passed all tests! ✓ Mark for this submission: ' + mark + '%. The hidden tests are shown below.</div>'
             : '<div class="result-banner bad">' + (res.compileError ? 'Compilation failed.' : 'Passed ' + passed + ' of ' + idxs.length + ' tests.') +
               ' Your code must pass every test to earn marks. (Mark 0%)</div>';
         } else {
           banner = allPass ? '<div class="result-banner ok">Precheck: the example tests pass. Press Check to run the hidden tests too.</div>'
             : '<div class="result-banner bad">Precheck: ' + (res.compileError ? 'compilation failed.' : passed + ' of ' + idxs.length + ' example tests pass.') + '</div>';
         }
-        $('#results').innerHTML = banner + (res.note ? '<p class="small muted">' + esc(res.note) + '</p>' : '') + renderResults(p, idxs, res);
+        $('#results').innerHTML = banner + (res.note ? '<p class="small muted">' + esc(res.note) + '</p>' : '') + renderResults(p, idxs, res, all && allPass);
       }, function (err) {
         busy = false;
         $('#precheck').disabled = $('#check').disabled = false;
@@ -726,7 +726,8 @@
     });
   }
 
-  function renderResults(p, idxs, res) {
+  // reveal: after a Check where every test passed, hidden tests are shown in full too.
+  function renderResults(p, idxs, res, reveal) {
     if (res.compileError) {
       return '<p class="small" style="margin:10px 0 4px"><b>Compiler output</b></p>' + errorHints(res.compileError) +
         '<pre class="console"><span class="err">' + esc(res.compileError) + '</span></pre>';
@@ -736,12 +737,12 @@
       '<div class="table-scroll"><table class="tests"><tr><th></th><th>Test</th><th>Expected</th><th>Got</th></tr>' + idxs.map(function (i, k) {
       var t = p.tests[i], r = res.results[k] || {};
       var got = (r.stdout || '') + (r.timedOut ? '\n[time limit exceeded]' : '') + (r.runtimeError ? '\n[runtime error: ' + (r.stderr || '') + ']' : '');
-      if (t.hidden) {
+      if (t.hidden && !reveal) {
         return '<tr class="' + (r.pass ? 'pass' : 'fail') + '"><td class="res">' + (r.pass ? '✓' : '✗') + '</td>' +
           '<td colspan="3" class="muted">Hidden test case' + (r.pass ? '' : ': your output is different. Think about edge cases (0, 1, negative, boundary values).') + '</td></tr>';
       }
       return '<tr class="' + (r.pass ? 'pass' : 'fail') + '"><td class="res">' + (r.pass ? '✓' : '✗') + '</td>' +
-        '<td>' + testInputCell(t) + '</td><td><pre>' + esc(expectedFor(p, i)) + '</pre></td><td><pre>' + esc(got) + '</pre></td></tr>';
+        '<td>' + (t.hidden ? '<span class="pill">hidden</span>' : '') + testInputCell(t) + '</td><td><pre>' + esc(expectedFor(p, i)) + '</pre></td><td><pre>' + esc(got) + '</pre></td></tr>';
     }).join('') + '</table></div>';
   }
 

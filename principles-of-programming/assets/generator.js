@@ -48,6 +48,15 @@
   function mkTests(list, shown) {
     return list.map(function (t, i) { t.hidden = i >= shown; return t; });
   }
+  // every generated question gets TESTS tests: keep adding new values from gen() until there are enough
+  var TESTS = 10;
+  function fillTo(list, gen) {
+    for (var tries = 0; list.length < TESTS && tries < 200; tries++) {
+      var x = gen();
+      if (list.indexOf(x) < 0) list.push(x);
+    }
+    return list;
+  }
 
   var FAMILIES = [];
   function family(f) { FAMILIES.push(f); }
@@ -72,7 +81,7 @@
         if (total < minC) total = minC;
         return th.label + ': RM ' + total + '\n';
       }
-      var xs = uniq([R.int(a + b + 1, a + b + 8), R.int(a + 1, a + b), 1, a, a + b, 0, -R.int(1, 9), a + b + 1]);
+      var xs = fillTo(uniq([R.int(a + b + 1, a + b + 8), R.int(a + 1, a + b), 1, a, a + b, 0, -R.int(1, 9), a + b + 1]), function () { return R.int(0, a + b + 12); });
       var tests = mkTests(xs.map(function (x) { return { vars: '    int ' + v + ' = ' + x + ';', expected: fee(x) }; }), 3);
       return {
         title: th.title,
@@ -134,7 +143,7 @@
       var nums = [R.int(10000, 999999), R.int(100, 9999), R.int(1000000, 99999999), R.int(1, 9)];
       if (task.key === 'harshad') nums = nums.concat([R.pick([18, 21, 111, 1729, 200, 476, 1008]), R.pick([19, 23, 101, 1001, 997])]);
       else nums.push(0, R.pick([1000, 90009, 505050]));
-      nums = uniq(nums);
+      nums = fillTo(uniq(nums), function () { return R.int(1, 999999); });
       var d = R.int(0, 9);
       var tests = mkTests(nums.map(function (n, i) {
         if (task.extraVar) {
@@ -169,6 +178,7 @@
       for (var i = 0; i < 4; i++) { low = R.int(1, 80); ranges.push([low, low + R.int(10, 45)]); }
       ranges.push([R.int(1, 50), 0]); ranges[4][1] = ranges[4][0];
       low = R.int(100, 200); ranges.push([low, low]);
+      while (ranges.length < TESTS) { low = R.int(1, 150); ranges.push([low, low + R.int(0, 40)]); }
       var tests = mkTests(ranges.map(function (rg) {
         return { vars: '    int low = ' + rg[0] + ', high = ' + rg[1] + ';', expected: calc(rg[0], rg[1]) };
       }), 2);
@@ -211,7 +221,7 @@
         return out.join(sep) + '\nSum = ' + sum + '\n';
       }
       var maxN = kind === 'geo' || kind === 'recur' ? (p.r === 3 || p.k === 3 ? 9 : 12) : 15;
-      var ns = uniq([R.int(4, 7), R.int(8, maxN), 1, 0, R.int(2, 3)]);
+      var ns = fillTo(uniq([R.int(4, 7), R.int(8, maxN), 1, 0, R.int(2, 3)]), function () { return R.chance(0.2) ? -R.int(1, 5) : R.int(1, maxN); });
       var tests = mkTests(ns.map(function (n) { return { vars: (spec.vars ? spec.vars + '\n' : '') + '    int n = ' + n + ';', expected: calc(n) }; }), 2);
       return {
         title: spec.title,
@@ -255,6 +265,7 @@
           cpp: 'for (int r = 0; r < n; r++) {\n    for (int c = 0; c < m; c++) {\n        if ((r + c) % 2 == 0) cout << ch;\n        else cout << ch2;\n    }\n    cout << endl;\n}' },
       }[shape];
       var sizes = shape === 'numbers' ? [R.int(3, 5), R.int(6, 9), 1] : [R.int(3, 5), R.int(6, 8), 1];
+      sizes = fillTo(uniq(sizes), function () { return R.int(0, shape === 'numbers' ? 9 : 10); });
       var tests = mkTests(sizes.map(function (n) {
         var m = S.two ? R.int(Math.max(n, 2), n + 6) : 0;
         var vars = '    int n = ' + n + ';' + (S.two ? '\n    int m = ' + m + ';' : '') + "\n    char ch = '" + ch + "';" + (S.second ? "\n    char ch2 = '" + ch2 + "';" : '');
@@ -287,7 +298,7 @@
         var l = x < t[0] ? 0 : x < t[1] ? 1 : x < t[2] ? 2 : 3;
         return th.v + ' = ' + x + ': ' + th.labels[l] + '\n';
       }
-      var xs = uniq([R.int(t[0], t[1] - 1), R.int(t[2], th.hi), R.int(th.lo, t[0] - 1), t[1], t[2] - 1, t[0], th.hi + R.int(1, 20), th.lo - R.int(1, 20), th.hi]);
+      var xs = fillTo(uniq([R.int(t[0], t[1] - 1), R.int(t[2], th.hi), R.int(th.lo, t[0] - 1), t[1], t[2] - 1, t[0], th.hi + R.int(1, 20), th.lo - R.int(1, 20), th.hi]), function () { return R.int(th.lo - 20, th.hi + 20); });
       var tests = mkTests(xs.map(function (x) { return { vars: '    int ' + th.v + ' = ' + x + ';', expected: cls(x) }; }), 3);
       return {
         title: th.title,
@@ -333,7 +344,7 @@
           js: function (x) { return x + ' s = ' + Math.floor(x / 3600) + ' h ' + Math.floor(x % 3600 / 60) + ' min ' + x % 60 + ' s'; },
           cpp: 'cout << secs << " s = " << secs / 3600 << " h " << secs % 3600 / 60 << " min " << secs % 60 << " s" << endl;' },
       }[kind];
-      var xs = uniq([R.int(K.range[0], K.range[1]), R.int(K.range[0], K.range[1]), R.int(1, K.range[0] - 1), 0, R.int(K.range[0], K.range[1])]);
+      var xs = fillTo(uniq([R.int(K.range[0], K.range[1]), R.int(K.range[0], K.range[1]), R.int(1, K.range[0] - 1), 0, R.int(K.range[0], K.range[1])]), function () { return R.int(0, K.range[1]); });
       var tests = mkTests(xs.map(function (x) { return { vars: '    int ' + K.v + ' = ' + x + ';', expected: K.js(x) + '\n' }; }), 2);
       return {
         title: K.title,
@@ -370,6 +381,7 @@
         return a.length ? 'Count: ' + a.length + '\nAverage: ' + (s / a.length).toFixed(2) + '\n' : 'No data.\n';
       }
       var sets = [data(R.int(4, 7)), data(R.int(2, 3)), [], data(1), data(R.int(8, 12))];
+      while (sets.length < TESTS) sets.push(data(R.int(1, 10)));
       sets = sets.map(function (a) { while (!okAverage(a)) a = data(a.length); return a; });
       var tests = mkTests(sets.map(function (a) {
         return { vars: task === 'above' ? '    int limit = ' + limit + ';' : '', stdin: a.concat([sentinel]).join(' '), expected: calc(a) };
@@ -414,7 +426,7 @@
       cpp: 'int sum = 0;\nfor (int d = 1; d < num; d++)\n    if (num % d == 0) sum += d;\nbool result = (num >= 2 && sum == num);' },
     palindrome: { title: 'Palindrome Check', name: 'palindrome', what: 'a palindrome (reads the same when its digits are reversed)',
       js: function (n) { return String(n) === String(n).split('').reverse().join(''); },
-      yes: [7, 121, 4554, 12321, 900009], no: [10, 123, 1220, 98789 + 1],
+      yes: [7, 121, 4554, 12321, 900009], no: [10, 123, 1220, 98789 + 1, 4567],
       cpp: 'int temp = num, rev = 0;\ndo {\n    rev = rev * 10 + temp % 10;\n    temp /= 10;\n} while (temp > 0);\nbool result = (rev == num);' },
     armstrong: { title: 'Armstrong Number Check', name: 'Armstrong', what: 'an Armstrong number (equal to the sum of its digits each raised to the power of the number of digits, e.g. 153 = 1³ + 5³ + 3³). Do not use pow()',
       js: function (n) { var s = String(n), k = s.length, t = 0; for (var i = 0; i < k; i++) { var p = 1; for (var j = 0; j < k; j++) p *= +s[i]; t += p; } return t === n; },
@@ -426,7 +438,8 @@
     make: function (R) {
       var key = R.pick(Object.keys(PROPS)), P = PROPS[key];
       var art = /^[AEIOU]/i.test(P.name) ? 'an' : 'a';
-      var nums = uniq(R.shuffle(P.yes).slice(0, 3).concat(R.shuffle(P.no).slice(0, 3)));
+      var yesPick = R.shuffle(P.yes).slice(0, TESTS / 2);
+      var nums = uniq(yesPick.concat(R.shuffle(P.no).slice(0, TESTS - yesPick.length)));
       nums = R.shuffle(nums);
       // first two examples: one yes, one no
       var y = nums.filter(function (n) { return P.js(n); })[0], n0 = nums.filter(function (n) { return !P.js(n); })[0];
@@ -464,6 +477,7 @@
         [letters[2], R.int(-20, 20), R.int(-9, 9)], [letters[4], R.int(10, 99), R.int(2, 9)],
         [letters[1], R.int(1, 50), R.int(1, 99)], [R.pick(letters.slice(3)), R.int(1, 9), 0],
         [lower ? letters[0].toLowerCase() : R.pick(['Z', 'K', 'W']), R.int(1, 9), R.int(1, 9)], ['?', 3, 4],
+        [letters[2], R.int(1, 99), R.int(1, 99)], [letters[4], R.int(-50, -1), R.int(1, 9)],
       ];
       var tests = mkTests(cases.map(function (c) {
         return { vars: "    char code = '" + c[0] + "';\n    int a = " + c[1] + ', b = ' + c[2] + ';', expected: calc(c[0], c[1], c[2]) };
