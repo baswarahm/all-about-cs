@@ -6,7 +6,7 @@
   var UPDATES = {
     'computer-organisation': { at: '2026-10-28T22:52+08:00', text: 'New Random Test 1 (a fresh 50-question paper every time) and a question bank for each topic.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
-    'principles-of-programming': { at: '2026-10-29T11:45+08:00', text: '38 hard ProgrAss questions now (26 new); unused variables are errors, like the real CodeRunner.' },
+    'principles-of-programming': { at: '2026-10-29T13:01+08:00', text: 'New Extreme level: 15 story-style programs where you work out the rules yourself.' },
   };
 
   var me = document.currentScript;

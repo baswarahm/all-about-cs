@@ -42,6 +42,7 @@
   var STEPS = 'Step by step';   // the easy-to-hard set in data/problems-new.js
   var PAST = 'Past Test 1 style';   // data/problems-past.js
   var HARD = 'Hard';   // data/problems-hard.js
+  var EXTREME = 'Extreme';   // data/problems-extreme.js
   function groupOf(p) { return GROUPS.filter(function (g) { return p.topic.indexOf(g) === 0; })[0] || 'Other'; }
   PROBLEMS.sort(function (a, b) {
     return GROUPS.indexOf(groupOf(a)) - GROUPS.indexOf(groupOf(b)) || a.level - b.level;
@@ -582,9 +583,12 @@
     var taken = {};
     function fromBank(level) {
       var pool = PROBLEMS.filter(function (p) { return p.level === level && !taken[p.id]; });
-      if (level === 3) {   // prefer the long assessment-style hard questions
+      if (level === 3) {   // prefer the extreme story programs, then the long assessment-style hard questions
         var hard = pool.filter(function (p) { return p.set === 'hard'; });
-        if (hard.length && Math.random() < 0.7) pool = hard;
+        var extreme = pool.filter(function (p) { return p.set === 'extreme'; });
+        var roll = Math.random();
+        if (extreme.length && roll < 0.5) pool = extreme;
+        else if (hard.length && roll < 0.85) pool = hard;
       }
       var p = shuffle(pool)[0]; taken[p.id] = true; return p.id;
     }
@@ -622,11 +626,11 @@
           : countPicker + '<button class="btn primary" id="mockStart">Start mock</button>' +
             (mock && mock.finished ? '<a class="btn" href="#/progass/mock">Last result</a>' : '')) +
       '</div></div>' +
-      '<div class="row" style="margin:20px 0 10px"><div class="chips" id="chips">' + ['All'].concat(GROUPS, [STEPS, PAST, HARD]).map(function (g) {
+      '<div class="row" style="margin:20px 0 10px"><div class="chips" id="chips">' + ['All'].concat(GROUPS, [STEPS, PAST, HARD, EXTREME]).map(function (g) {
         return '<button class="chip' + (g === filter ? ' on' : '') + '" data-f="' + g + '">' + g + '</button>';
       }).join('') + '</div><span class="spacer"></span><span class="muted small">' + solved + ' / ' + PROBLEMS.length + ' solved</span>' +
         '<div class="bar" style="width:140px"><span style="width:' + Math.round(100 * solved / PROBLEMS.length) + '%"></span></div></div>' +
-      '<div class="plist">' + PROBLEMS.filter(function (p) { return filter === 'All' || groupOf(p) === filter || (filter === STEPS && p.set === 'steps') || (filter === PAST && p.set === 'past') || (filter === HARD && p.set === 'hard'); }).map(function (p) {
+      '<div class="plist">' + PROBLEMS.filter(function (p) { return filter === 'All' || groupOf(p) === filter || (filter === STEPS && p.set === 'steps') || (filter === PAST && p.set === 'past') || (filter === HARD && p.set === 'hard') || (filter === EXTREME && p.set === 'extreme'); }).map(function (p) {
         var s = progState(p.id);
         var status = s.best > 0 ? '<span class="pill ok">✓ ' + s.best + '%</span>' : s.checks ? '<span class="pill warn">attempted</span>' : '';
         return '<a class="pitem" href="#/progass/' + p.id + '"><span class="pnum">' + (PROBLEMS.indexOf(p) + 1) + '</span><div><div class="ptitle">' + esc(p.title) + '</div>' +
