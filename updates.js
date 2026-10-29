@@ -6,7 +6,7 @@
   var UPDATES = {
     'computer-organisation': { at: '2026-10-28T22:52+08:00', text: 'New Random Test 1 (a fresh 50-question paper every time) and a question bank for each topic.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
-    'principles-of-programming': { at: '2026-10-29T02:14+08:00', text: '12 new hard ProgrAss questions; unused variables are now errors, like the real CodeRunner; the mock is 2 easy, 1 medium and 2 hard questions.' },
+    'principles-of-programming': { at: '2026-10-29T11:45+08:00', text: '38 hard ProgrAss questions now (26 new); unused variables are errors, like the real CodeRunner.' },
   };
 
   var me = document.currentScript;
