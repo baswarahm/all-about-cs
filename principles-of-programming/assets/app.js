@@ -136,6 +136,24 @@
     var page = parts[0] || 'home';
     $all('[data-nav]').forEach(function (a) { a.classList.toggle('active', a.getAttribute('data-nav') === page); });
     window.scrollTo(0, 0);
+    // while a mock assessment is running, only its own pages may be opened and the exam lockdown is on
+    var pa = activeMock(), qm = store.get('quiz-mock', null);
+    if (qm && qm.finished) qm = null;
+    if (pa || qm) {
+      var rest = parts.slice(1).join('/');
+      var allowed = (pa && page === 'progass' && pa.ids.indexOf(rest) >= 0) || (qm && page === 'quiz' && rest === 'mock');
+      var key = pa ? 'pa-warnings' : 'quiz-warnings';
+      window.Lockdown.start({ count: store.get(key, []).length, onViolation: function (type) {
+        var w = store.get(key, []); w.push({ type: type, at: Date.now() }); store.set(key, w);
+      } });
+      if (!allowed) {
+        window.Lockdown.warn('navigate');
+        location.replace(pa ? '#/progass/' + pa.ids[0] : '#/quiz/mock');
+        return;
+      }
+    } else {
+      window.Lockdown.stop();
+    }
     var views = { home: viewHome, material: viewMaterial, quiz: viewQuiz, progass: viewProgass, generator: viewGenerator, playground: viewPlayground };
     (views[page] || viewHome)(parts.slice(1));
   }
@@ -310,6 +328,8 @@
       addCoding(items, pickTestCoding(coding));
       store.set('quiz-mock', { items: items, answers: {}, flags: {}, codes: {}, checks: {}, marks: {}, results: {}, checkedCode: {},
         cur: 0, start: Date.now(), end: Date.now() + mockMinutes() * 60000, finished: false });
+      store.set('quiz-warnings', []);
+      window.Lockdown.enterFullscreen();
       location.hash = '#/quiz/mock';
     });
     $('#startPractice').addEventListener('click', function () {
@@ -400,6 +420,7 @@
           var hist = store.get('quiz-history', []);
           hist.push({ date: Date.now(), score: st.score, total: totalMax, pct: Math.round(100 * total / totalMax) });
           store.set('quiz-history', hist);
+          window.Lockdown.stop();
           st.cur = 0; save(); render();
         });
     }
@@ -433,6 +454,7 @@
         (done ? '<div class="card" style="margin-bottom:16px"><div class="row"><div><div class="muted small">Your score</div>' +
           '<div class="score-big">' + Math.round(100 * finalScore / finalMax) + '%</div></div>' +
           '<div class="muted">' + finalScore + ' / ' + finalMax + ' marks · review each question below</div><span class="spacer"></span>' +
+          warningsNote('quiz-warnings') +
           '<a class="btn" href="#/quiz">Back</a></div></div>' : '') +
         '<div class="quiz-layout">' +
           '<div class="card question">' +
@@ -507,7 +529,7 @@
         if ($('#clear')) $('#clear').addEventListener('click', function () { st.answers[n] = []; save(); render(); });
         var ask = function () {
           var unanswered = items.filter(function (x, i) { return !answered(x, i); }).length;
-          if (confirm('Submit all and finish?' + (unanswered ? '\n' + unanswered + ' question(s) not answered.' : ''))) finish();
+          if (window.Lockdown.confirm('Submit all and finish?' + (unanswered ? '\n' + unanswered + ' question(s) not answered.' : ''))) finish();
         };
         if ($('#finish')) $('#finish').addEventListener('click', ask);
         $('#finish2').addEventListener('click', ask);
@@ -646,6 +668,8 @@
       store.set('mock-src', src);
       var ids = pickPaMock(src);
       store.set('pa-mock', { ids: ids, start: Date.now(), end: Date.now() + PA_MINUTES * 60000, finished: false, codes: {}, checks: {}, best: {} });
+      store.set('pa-warnings', []);
+      window.Lockdown.enterFullscreen();
       location.hash = '#/progass/' + ids[0];
     });
   }
@@ -732,7 +756,7 @@
     updateFull();
 
     $('#reset').addEventListener('click', function () {
-      if (editor.getValue().trim() && !confirm('Clear your answer?')) return;
+      if (editor.getValue().trim() && !window.Lockdown.confirm('Clear your answer?')) return;
       editor.setValue('');
     });
     if ($('#model')) $('#model').addEventListener('click', function () {
@@ -797,8 +821,19 @@
         if (left <= 0) { clearTimers(); finishPaMock(); return; }
         var el = $('#mockTimer'); if (el) { el.textContent = fmtClock(left); el.classList.toggle('low', left < 10 * 60000); }
       });
-      $('#mockFinish').addEventListener('click', function () { if (confirm('Finish the mock attempt? Questions you never passed get 0.')) finishPaMock(); });
+      $('#mockFinish').addEventListener('click', function () { if (window.Lockdown.confirm('Finish the mock attempt? Questions you never passed get 0.')) finishPaMock(); });
     }
+  }
+
+  // summary of the lockdown warnings recorded during a mock
+  function warningsNote(key) {
+    var w = store.get(key, []);
+    if (!w.length) return '<p class="pill ok">No warnings recorded</p>';
+    var counts = {};
+    w.forEach(function (x) { counts[x.type] = (counts[x.type] || 0) + 1; });
+    var names = { copy: 'copy', cut: 'cut', paste: 'paste', shortcut: 'blocked shortcut', contextmenu: 'right-click', drop: 'drag and drop',
+      leave: 'left the window', fullscreen: 'left full screen', navigate: 'tried to open another page', printscreen: 'screenshot' };
+    return '<p class="pill warn">' + w.length + ' warning(s) recorded: ' + Object.keys(counts).map(function (k) { return (names[k] || k) + ' × ' + counts[k]; }).join(', ') + '</p>';
   }
 
   function finishPaMock() {
@@ -815,7 +850,7 @@
     var used = (m.finishedAt || Date.now()) - m.start;
     app.innerHTML = '<div class="row" style="margin-bottom:12px"><a class="btn small" href="#/progass">← ProgrAss</a></div>' +
       '<div class="card"><div class="muted small">Mock ProgrAss result</div><div class="score-big">' + Math.round(total / m.ids.length) + '%</div>' +
-      '<p class="muted">Time used: ' + fmtClock(used) + '</p>' +
+      '<p class="muted">Time used: ' + fmtClock(used) + '</p>' + warningsNote('pa-warnings') +
       '<table class="mini"><tr><th>Question</th><th>Checks</th><th>Mark</th></tr>' + m.ids.map(function (id, i) {
         var p = problemById(id);
         return '<tr><td>' + (i + 1) + '. <a href="#/progass/' + id + '">' + esc(p ? p.title : id) + '</a></td><td>' + (m.checks[id] || 0) + '</td><td><b>' + (m.best[id] || 0) + '%</b></td></tr>';

@@ -6,7 +6,7 @@
   var UPDATES = {
     'computer-organisation': { at: '2026-10-28T22:52+08:00', text: 'New Random Test 1 (a fresh 50-question paper every time) and a question bank for each topic.' },
     'discrete-structures': { at: '2026-10-28T22:00+08:00', text: 'New look to match the other CS courses, with a tidier phone header.' },
-    'principles-of-programming': { at: '2026-10-29T13:01+08:00', text: 'New Extreme level: 15 story-style programs where you work out the rules yourself.' },
+    'principles-of-programming': { at: '2026-10-30T13:17+08:00', text: 'Mock assessments now run in exam mode: copy, paste, right-click and shortcuts are blocked, and warnings are recorded.' },
   };
 
   var me = document.currentScript;
