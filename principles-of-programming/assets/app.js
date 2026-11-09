@@ -606,7 +606,7 @@
         if ($('#clear')) $('#clear').addEventListener('click', function () { st.answers[n] = []; save(); render(); });
         var ask = function () {
           var unanswered = items.filter(function (x, i) { return !answered(x, i); }).length;
-          if (window.Lockdown.confirm('Submit all and finish?' + (unanswered ? '\n' + unanswered + ' question(s) not answered.' : ''))) finish();
+          window.Lockdown.ask('Submit all and finish?' + (unanswered ? ' ' + unanswered + ' question(s) not answered.' : ''), finish);
         };
         if ($('#finish')) $('#finish').addEventListener('click', ask);
         $('#finish2').addEventListener('click', ask);
@@ -837,8 +837,9 @@
     updateFull();
 
     $('#reset').addEventListener('click', function () {
-      if (editor.getValue().trim() && !window.Lockdown.confirm('Clear your answer?')) return;
-      editor.setValue('');
+      var clear = function () { editor.setValue(''); };
+      if (editor.getValue().trim()) window.Lockdown.ask('Clear your answer?', clear);
+      else clear();
     });
     if ($('#model')) $('#model').addEventListener('click', function () {
       if (!st.best && !confirm('Show the model answer? Try it yourself first: you learn more by struggling a bit!')) return;
@@ -902,7 +903,7 @@
         if (left <= 0) { clearTimers(); finishPaMock(); return; }
         var el = $('#mockTimer'); if (el) { el.textContent = fmtClock(left); el.classList.toggle('low', left < 10 * 60000); }
       });
-      $('#mockFinish').addEventListener('click', function () { if (window.Lockdown.confirm('Finish the mock attempt? Questions you never passed get 0.')) finishPaMock(); });
+      $('#mockFinish').addEventListener('click', function () { window.Lockdown.ask('Finish the mock attempt? Questions you never passed get 0.', finishPaMock); });
     }
   }
 
