@@ -3,7 +3,7 @@
 const app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const LETTERS = 'ABCD';
-const TOPIC_NAMES = { 1: 'Introduction', 2: 'Number systems', 3: 'Arithmetic', 4: 'Digital logic' };
+const TOPIC_NAMES = { 1: 'Introduction', 2: 'Number systems', 3: 'Arithmetic', 4: 'Digital logic', 5: 'Memory & instructions', 6: 'Addressing modes' };
 
 /* ---------- storage (safe) ---------- */
 const store = {
@@ -516,6 +516,7 @@ function viewTools() {
     ['mips', 'CPI / MIPS / time', 'Topic 1', `<label>Clock (MHz)<input id="pF" value="400" class="mono"></label><label>Instructions<input id="pIc" value="2000000" class="mono"></label><label class="wide">Mix: CPI:% pairs<input id="pMix" value="1:60, 2:18, 4:12, 8:10" class="mono"></label>`,
       () => { const mix = $('#pMix').value.split(',').map(p => p.split(':').map(Number)); if (mix.some(m => m.length !== 2 || m.some(isNaN))) return '<p class="err">Write pairs like 1:60, 2:40</p>'; return mipsExplain(+$('#pF').value, mix, +$('#pIc').value || 0).html; }],
   ];
+  tools.push(...(window.EXTRA_TOOLS || []));   // Topic 4–6 solvers from topic56.js
   app.innerHTML = `<div class="page-head"><div><p class="eyebrow">§05 · Check your own working</p><h1>Solvers</h1><p class="lede">Enter any values and get the working laid out the way your lecturer shows it. Each tool updates as you type.</p></div></div>
   <div class="tool-nav">${tools.map(t => `<a href="#tools" data-go="${t[0]}">${t[1]}</a>`).join('')}</div>
   <div class="tools">${tools.map(([id, title, tag, form]) => `<section class="tool" id="tool-${id}"><div class="tool-h"><h3>${title}</h3><span class="pill">${tag}</span></div><form class="tool-form" data-t="${id}" onsubmit="return false">${form}</form><div class="tool-out" id="out-${id}"></div></section>`).join('')}</div>`;
