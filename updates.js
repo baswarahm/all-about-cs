@@ -5,7 +5,7 @@
 (function () {
   var UPDATES = {
     'computer-organisation': { at: '2026-11-11T12:09+08:00', text: 'New: Topic 4 Part 2, Topics 5 and 6 notes, Tutorial 4–6 answers and 6 new solvers (K-map, flip-flops, endianness, 0–3 address, addressing modes).' },
-    'discrete-structures': { at: '2026-11-01T20:47+08:00', text: 'New Week 6: Graphs (Chapter 4), with a graph lab, a Dijkstra table and Tutorial 5 as practice.' },
+    'discrete-structures': { at: '2026-11-11T18:05+08:00', text: 'New Week 7: Trees (Chapter 5), with a rooted-tree explorer, a DFS/BFS spanning-tree builder and Tutorial 6 as practice.' },
     'principles-of-programming': { at: '2026-11-08T23:08+08:00', text: 'Sit the real 2025/26 past Test 1 paper, and fairer marks: per test case for programs, per option for Section B.' },
   };
 

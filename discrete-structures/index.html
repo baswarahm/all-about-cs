@@ -22,6 +22,7 @@
       <button type="button" role="tab" class="wtab" id="tab4" data-weekbtn="4" aria-selected="false" tabindex="-1"><b>Week 4</b><span>Relations I</span><i></i></button>
       <button type="button" role="tab" class="wtab" id="tab5" data-weekbtn="5" aria-selected="false" tabindex="-1"><b>Week 5</b><span>Relations II</span><i></i></button>
       <button type="button" role="tab" class="wtab" id="tab8" data-weekbtn="8" aria-selected="false" tabindex="-1"><b>Week 6</b><span>Graphs</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab9" data-weekbtn="9" aria-selected="false" tabindex="-1"><b>Week 7</b><span>Trees</span><i></i></button>
       <button type="button" role="tab" class="wtab exam" id="tab6" data-weekbtn="6" aria-selected="false" tabindex="-1"><b>Exam Lab</b><span>Practice</span><i></i></button>
     </nav>
     <a class="coursesbtn" href="../" title="Back to all CS courses"><span aria-hidden="true">&larr;</span> CS courses</a>
@@ -118,6 +119,18 @@
     <a href="#w8-checkpoint">Weekly checkpoint</a>
     <div class="prog"><span id="w8-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w8-prog-bar"></i></div></div>
   </div>
+  <div class="navgroup" data-week="9" hidden>
+    <a href="#w9-top">Start here</a>
+    <a href="#w9-trees">Trees and forests</a>
+    <a href="#w9-rooted">Rooted trees</a>
+    <a href="#w9-trav">Traversals</a>
+    <a href="#w9-span">Spanning trees</a>
+    <a href="#w9-mistakes">Common mistakes</a>
+    <a href="#w9-recall">Active recall</a>
+    <a href="#w9-practice">Practice set</a>
+    <a href="#w9-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w9-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w9-prog-bar"></i></div></div>
+  </div>
   <div class="navgroup" data-week="6" hidden>
     <a href="#w6-top">Start here</a>
     <a href="#w6-patterns">Question methods</a>
@@ -158,6 +171,7 @@
     <button type="button" class="wcard" data-open-week="4"><span class="wnum">Week 4</span><b>Relations I</b><span class="wdesc">Reflexive, symmetric, antisymmetric and transitive relations; combining and composing.</span><span class="wtools">Try: the relation explorer</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard" data-open-week="5"><span class="wnum">Week 5</span><b>Relations II</b><span class="wdesc">Matrices, digraphs, equivalence relations, classes and partitions.</span><span class="wtools">Try: one relation in three pictures</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard" data-open-week="8"><span class="wnum">Week 6</span><b>Graphs</b><span class="wdesc">Graph terms, degrees, special graphs, adjacency lists and matrices, paths and Dijkstra's shortest paths.</span><span class="wtools">Try: the graph lab and the Dijkstra table</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="9"><span class="wnum">Week 7</span><b>Trees</b><span class="wdesc">Trees and forests, rooted-tree words, m-ary trees, level and height, traversals, and DFS / BFS spanning trees.</span><span class="wtools">Try: the rooted-tree explorer and the spanning-tree builder</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard exam" data-open-week="6"><span class="wnum">Exam Lab</span><b>Practice for the exam</b><span class="wdesc">Fresh exam-style questions with instant checking, a mock exam, graph tools and a cheat sheet.</span><span class="wtools">Try: a mock exam on all four topics</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
   </div>
 </section>
@@ -1351,6 +1365,132 @@ j := n {j is the right endpoint of the interval}
 
 </div>
 
+<!-- Week 7 (Trees) uses the internal number 9, after Week 6 (8). -->
+<div class="week w9" data-week="9" id="week9" role="tabpanel" hidden>
+<section class="hero" id="w9-top">
+  <h1>A tree is a graph with exactly one way between any two points.</h1>
+  <p class="lead">This week covers your Chapter 5 slides on trees: trees and forests, rooted trees and their vocabulary, m-ary trees, level and height, the three traversals, and spanning trees by depth-first and breadth-first search. Tutorial 6 is in the practice set. Anything not on your slides is labelled "Beyond the slides".</p>
+  <p>Type a rooted tree as <span class="e">parent: children</span> lists. The explorer draws it and answers every Tutorial-6-style question: root, internal vertices, leaves, levels, height, m-ary, the three traversals, and the family of any vertex you pick.</p>
+  <div class="card lab">
+    <label for="w9-rt">Rooted tree (parent: children; …), root first</label>
+    <input type="text" id="w9-rt" value="a: b c d; b: e f g; d: h i; e: j k; g: l m; h: n; i: o p; o: q r s" autocomplete="off" spellcheck="false">
+    <label for="w9-rv">Vertex to ask about</label>
+    <input type="text" id="w9-rv" value="o" autocomplete="off" spellcheck="false" style="max-width:8ch">
+    <div class="togrow" role="group" aria-label="Example trees">
+      <button class="btn" type="button" data-w9tree="a: b c d; b: e f g; d: h i; e: j k; g: l m; h: n; i: o p; o: q r s">Tutorial 6 Q2 tree</button>
+      <button class="btn" type="button" data-w9tree="a: b c; b: d e; c: f g">Full binary tree</button>
+      <button class="btn" type="button" data-w9tree="a: b c d; b: e f g; c: h i j; d: k l m">Full 3-ary tree</button>
+    </div>
+    <div id="w9-rt-out"></div>
+  </div>
+  <p><b>Objectives.</b> By the end you can: decide whether a graph is a tree or a forest; use the rooted-tree words (parent, child, sibling, ancestor, descendant, leaf, internal vertex, subtree); recognise m-ary and full m-ary trees; find levels and height; list preorder, inorder and postorder traversals; and build spanning trees with DFS and BFS.</p>
+</section>
+
+<section id="w9-trees">
+  <h2>1. Trees and forests</h2>
+  <div class="idea"><b>Definition (from your slides).</b> A <b>tree</b> is a connected undirected graph with no simple circuits. A <b>forest</b> is a graph with no simple circuit that is not connected; each of its connected components is a tree.</div>
+  <ul>
+    <li>To show a graph is <b>not</b> a tree, point to a simple circuit (e.g. e, b, a, d, e) or show it is not connected.</li>
+    <li>A tree with n vertices has exactly <b>n − 1 edges</b>, and there is a <b>unique simple path</b> between any two vertices.</li>
+  </ul>
+  <div class="beyond">Beyond the slides: the n − 1 edge count is a quick check. Connected with n − 1 edges, or no circuit with n − 1 edges, already means "tree". The spanning-tree tool below reports it for any graph you type.</div>
+</section>
+
+<section id="w9-rooted">
+  <h2>2. Rooted trees and their vocabulary</h2>
+  <div class="idea"><b>Definition.</b> A <b>rooted tree</b> is a tree with one vertex chosen as the <b>root</b> and every edge directed away from it. Choosing a different root gives a different rooted tree.</div>
+  <div class="scroll"><table>
+    <tr><th class="l">Word</th><th class="l">Meaning</th></tr>
+    <tr><td class="l"><b>Parent</b> of v</td><td class="l">the vertex just above v (one edge towards the root)</td></tr>
+    <tr><td class="l"><b>Children</b> of v</td><td class="l">the vertices just below v</td></tr>
+    <tr><td class="l"><b>Siblings</b></td><td class="l">vertices with the same parent</td></tr>
+    <tr><td class="l"><b>Ancestors</b> of v</td><td class="l">every vertex on the path from v up to the root (not v itself)</td></tr>
+    <tr><td class="l"><b>Descendants</b> of v</td><td class="l">every vertex that has v as an ancestor</td></tr>
+    <tr><td class="l"><b>Leaf</b></td><td class="l">a vertex with no children</td></tr>
+    <tr><td class="l"><b>Internal vertex</b></td><td class="l">a vertex that has children (the root is internal unless it is the only vertex)</td></tr>
+    <tr><td class="l"><b>Subtree</b> rooted at v</td><td class="l">v, all its descendants, and the edges between them</td></tr>
+  </table></div>
+  <h3>m-ary trees, level and height</h3>
+  <ul>
+    <li>An <b>m-ary tree</b>: every internal vertex has <b>at most</b> m children. A <b>full m-ary tree</b>: every internal vertex has <b>exactly</b> m children. m = 2 is a <b>binary tree</b>.</li>
+    <li>An <b>ordered rooted tree</b> lists the children of each vertex from left to right. In a binary tree the first child is the left child and the second the right child.</li>
+    <li>The <b>level</b> of a vertex is the length of the path from the root to it (the root is level 0). The <b>height</b> of the tree is the largest level.</li>
+  </ul>
+</section>
+
+<section id="w9-trav">
+  <h2>3. Tree traversals</h2>
+  <p>A traversal visits every vertex of an ordered rooted tree in a fixed order. For root r with subtrees T1, T2, …, Tn from left to right:</p>
+  <div class="scroll"><table>
+    <tr><th class="l">Traversal</th><th class="l">Rule</th><th class="l">Memory hook</th></tr>
+    <tr><td class="l"><b>Preorder</b></td><td class="l">visit r, then T1, T2, …, Tn in preorder</td><td class="l">root <b>first</b></td></tr>
+    <tr><td class="l"><b>Inorder</b></td><td class="l">T1 in inorder, then r, then T2, …, Tn in inorder</td><td class="l">root <b>after the first subtree</b></td></tr>
+    <tr><td class="l"><b>Postorder</b></td><td class="l">T1, T2, …, Tn in postorder, then r</td><td class="l">root <b>last</b></td></tr>
+  </table></div>
+  <div class="tip"><b>Tip.</b> Trace by hand by walking round the outside of the drawing, starting left of the root. Preorder lists a vertex the first time you pass it; postorder the last time.</div>
+</section>
+
+<section id="w9-span">
+  <h2>4. Spanning trees: DFS and BFS</h2>
+  <div class="idea"><b>Definition.</b> A <b>spanning tree</b> of a simple graph G is a subgraph of G that is a tree and contains every vertex of G. <b>Theorem:</b> a simple graph is connected if and only if it has a spanning tree.</div>
+  <ul>
+    <li><b>Depth-first search (DFS):</b> start at the root and keep going to a new neighbour as long as possible; when stuck, <b>backtrack</b> to the previous vertex and try again. The edges used are <b>tree edges</b>; the others are <b>back edges</b>.</li>
+    <li><b>Breadth-first search (BFS):</b> add all neighbours of the root (level 1), then all new neighbours of the level-1 vertices (level 2), and so on, using a queue.</li>
+    <li>On a directed graph, DFS or BFS may give a <b>spanning forest</b> instead of one tree.</li>
+  </ul>
+  <p>Type a graph; the tool checks whether it is a tree and builds the DFS and BFS spanning trees from the start vertex. When there is a choice it takes the <b>smallest</b> neighbour first (numbers or letters), which is the usual convention in answers.</p>
+  <div class="card lab">
+    <label for="w9-sp-e">Edges of the graph</label>
+    <input type="text" id="w9-sp-e" value="0-1, 0-2, 1-2, 1-3, 1-4, 3-5, 5-6, 5-7, 5-8, 7-8, 8-9" autocomplete="off" spellcheck="false">
+    <label for="w9-sp-s">Start (root)</label>
+    <input type="text" id="w9-sp-s" value="0" autocomplete="off" spellcheck="false" style="max-width:8ch">
+    <div class="togrow" role="group" aria-label="Example graphs">
+      <button class="btn" type="button" data-w9sp="0-1, 0-2, 1-2, 1-3, 1-4, 3-5, 5-6, 5-7, 5-8, 7-8, 8-9">Tutorial 6 Q4(a)</button>
+      <button class="btn" type="button" data-w9sp="0-1, 0-3, 1-3, 1-2, 1-5, 1-6, 2-3, 2-5, 2-4, 3-4, 4-6">Tutorial 6 Q4(b)</button>
+    </div>
+    <div id="w9-sp-out"></div>
+  </div>
+</section>
+
+<section id="w9-mistakes">
+  <h2>5. Common mistakes</h2>
+  <ul>
+    <li>Calling a disconnected graph with no circuits a tree. It is a forest.</li>
+    <li>Counting the vertex itself among its ancestors or descendants.</li>
+    <li>Calling the root a leaf, or forgetting that a vertex with even one child is internal.</li>
+    <li>"Full m-ary" means <i>exactly</i> m children for every internal vertex, not "at most".</li>
+    <li>Starting the level count at 1. The root is at level 0.</li>
+    <li>Mixing up the traversals: pre = root first, post = root last, in = root after the first subtree.</li>
+    <li>In DFS, jumping to a far vertex instead of backtracking along the path.</li>
+  </ul>
+  <p><b>Connections.</b> Trees are special graphs from Week 6: connectivity and circuits decide whether a graph is a tree. DFS and BFS are algorithms like those in Week 3, and BFS gives shortest paths (fewest edges) from the root.</p>
+</section>
+
+<section id="w9-recall">
+  <h2>6. Active recall</h2>
+  <p>Answer from memory in the box, then check. The check button unlocks once you have typed something.</p>
+  <div id="w9-recall-list"></div>
+</section>
+
+<section id="w9-practice">
+  <h2>7. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Most are your Tutorial 6 questions. Write your attempt first; hints come in three levels and the solution unlocks only after you have written an attempt. Check with the tools above, but work it out yourself first.</p>
+  <div id="w9-practice-list"></div>
+</section>
+
+<section id="w9-checkpoint">
+  <h2>8. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w9-objs"></div>
+    <button class="btn primary" type="button" id="w9-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w9-cp-reset">Clear all my work</button>
+    <div id="w9-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+
+</div>
+
 <div class="week w6" data-week="6" id="week6" role="tabpanel" hidden>
 <section class="hero" id="w6-top">
   <h1>Practice until the pattern is automatic.</h1>
@@ -1576,8 +1716,8 @@ j := n {j is the right endpoint of the interval}
 </main>
 </div>
 <footer class="sitefoot"><span>CKC111 Discrete Structures · unofficial study aid</span><a class="ig-credit" href="https://www.instagram.com/baswara.hm/" target="_blank" rel="noopener"><svg class="ig-ic" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg> Made by @baswara.hm</a></footer>
-<script src="script.js?v=20261106a"></script>
-<script src="../updates.js?v=20261111a" data-course="discrete-structures"></script>
+<script src="script.js?v=20261111a"></script>
+<script src="../updates.js?v=20261111b" data-course="discrete-structures"></script>
 <script src="../online.js?v=20261101a" data-course="discrete-structures"></script>
 </body>
 </html>

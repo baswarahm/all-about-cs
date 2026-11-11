@@ -1539,6 +1539,133 @@ var W8={
  ]
 };
 
+/* ===================== WEEK 7 (TREES) TOOLS ===================== */
+/* internal week number 9: ids start with w9- */
+function parseRooted(str){
+  var kids={},parent={},order=[];
+  str.split(";").map(function(s){return s.trim();}).filter(Boolean).forEach(function(part){
+    var m=part.match(/^([A-Za-z0-9]+)\s*:\s*(.*)$/);
+    if(!m)throw new Error('Write each part like "a: b c d".');
+    var p=m[1],cs=m[2].split(/[\s,]+/).filter(Boolean);
+    if(order.indexOf(p)<0)order.push(p);
+    kids[p]=(kids[p]||[]).concat(cs);
+    cs.forEach(function(c){if(parent[c]!==undefined)throw new Error(c+" has two parents, so it is not a tree.");parent[c]=p;if(order.indexOf(c)<0)order.push(c);});
+  });
+  var roots=order.filter(function(v){return parent[v]===undefined;});
+  if(roots.length!==1)throw new Error(roots.length?"There are "+roots.length+" vertices without a parent ("+roots.join(", ")+"); a rooted tree has one root.":"Every vertex has a parent, so there is a circuit.");
+  order.forEach(function(v){if(!kids[v])kids[v]=[];});
+  return {root:roots[0],kids:kids,parent:parent,order:order};
+}
+function treeSvg(T){
+  var pos={},x=0,depth=0;
+  (function lay(v,d){depth=Math.max(depth,d);if(!T.kids[v].length){pos[v]={x:x++,d:d};return;}T.kids[v].forEach(function(c){lay(c,d+1);});var xs=T.kids[v].map(function(c){return pos[c].x;});pos[v]={x:(Math.min.apply(null,xs)+Math.max.apply(null,xs))/2,d:d};})(T.root,0);
+  var W=Math.max(320,x*34+20),H=(depth+1)*56+10,sx=function(p){return 20+p.x*34+(W-20-x*34)/2;},sy=function(p){return 24+p.d*56;};
+  var h='<svg class="dg" viewBox="0 0 '+W+" "+H+'" style="max-width:'+Math.min(W,560)+'px" role="img" aria-label="Rooted tree">';
+  Object.keys(T.parent).forEach(function(c){var a=pos[T.parent[c]],b=pos[c];h+='<line x1="'+f1(sx(a))+'" y1="'+f1(sy(a))+'" x2="'+f1(sx(b))+'" y2="'+f1(sy(b))+'" class="dg-edge"/>';});
+  Object.keys(pos).forEach(function(v){var p=pos[v];h+='<circle cx="'+f1(sx(p))+'" cy="'+f1(sy(p))+'" r="12" class="dg-node"/><text x="'+f1(sx(p))+'" y="'+f1(sy(p)+4)+'" text-anchor="middle" class="dg-label" style="font-size:12px">'+esc(v)+"</text>";});
+  return h+"</svg>";
+}
+function rootedReport(T,v){
+  var lvl={},pre=[],ino=[],post=[];
+  (function walk(u,d){lvl[u]=d;pre.push(u);var k=T.kids[u];if(!k.length){ino.push(u);}else{walk(k[0],d+1);ino.push(u);k.slice(1).forEach(function(c){walk(c,d+1);});}post.push(u);})(T.root,0);
+  // inorder with the slide rule: first subtree, root, then the remaining subtrees
+  ino=[];(function io(u){var k=T.kids[u];if(!k.length){ino.push(u);return;}io(k[0]);ino.push(u);k.slice(1).forEach(io);})(T.root);
+  var internal=T.order.filter(function(u){return T.kids[u].length;}),leaves=T.order.filter(function(u){return !T.kids[u].length;});
+  var height=Math.max.apply(null,Object.keys(lvl).map(function(u){return lvl[u];}));
+  var m=Math.max.apply(null,internal.map(function(u){return T.kids[u].length;}).concat([0]));
+  var full=internal.length&&internal.every(function(u){return T.kids[u].length===m;});
+  var set=function(a){return a.length?"{"+a.join(", ")+"}":"none";};
+  var h='<div class="tv-body"><div>'+treeSvg(T)+"</div><div>"+
+    "<p><b>Root:</b> "+esc(T.root)+"<br><b>Internal vertices:</b> "+set(internal)+"<br><b>Leaves:</b> "+set(leaves)+
+    "<br><b>Height:</b> "+height+" (root at level 0)<br><b>"+(full?"Full "+m+"-ary":m+"-ary (not full)")+"</b>: every internal vertex has "+(full?"exactly ":"at most ")+m+" children.</p></div></div>"+
+    '<div class="scroll"><table><tr><th class="l">Traversal</th><th class="l">Order</th></tr><tr><td class="l">Preorder</td><td class="l">'+pre.join(", ")+'</td></tr><tr><td class="l">Inorder</td><td class="l">'+ino.join(", ")+'</td></tr><tr><td class="l">Postorder</td><td class="l">'+post.join(", ")+"</td></tr></table></div>";
+  if(v&&lvl[v]!==undefined){
+    var anc=[],u=v;while(T.parent[u]!==undefined){u=T.parent[u];anc.push(u);}
+    var desc=[];(function d(x){T.kids[x].forEach(function(c){desc.push(c);d(c);});})(v);
+    var sib=T.parent[v]!==undefined?T.kids[T.parent[v]].filter(function(c){return c!==v;}):[];
+    h+='<h3 class="tv-h">About vertex '+esc(v)+'</h3><div class="scroll"><table>'+
+      [["Level",lvl[v]],["Parent",T.parent[v]!==undefined?T.parent[v]:"none (it is the root)"],["Children",set(T.kids[v])],["Siblings",set(sib)],["Ancestors",set(anc)],["Descendants",set(desc)],["Leaf?",T.kids[v].length?"no (internal)":"yes"],["Subtree rooted here",set([v].concat(desc))]]
+      .map(function(r){return '<tr><th class="l">'+r[0]+'</th><td class="l">'+r[1]+"</td></tr>";}).join("")+"</table></div>";
+  }else if(v){h+='<p class="err">'+esc(v)+" is not in the tree.</p>";}
+  return h;
+}
+function natCmp(a,b){var x=+a,y=+b;return(!isNaN(x)&&!isNaN(y))?x-y:(a<b?-1:a>b?1:0);}
+function spanReport(edgesText,start){
+  var E=parseEdgeList(edgesText),V=uniq([].concat.apply([],E)).sort(natCmp),adj={};
+  V.forEach(function(v){adj[v]=[];});E.forEach(function(e){if(adj[e[0]].indexOf(e[1])<0)adj[e[0]].push(e[1]);if(adj[e[1]].indexOf(e[0])<0)adj[e[1]].push(e[0]);});
+  V.forEach(function(v){adj[v].sort(natCmp);});
+  if(V.indexOf(start)<0)throw new Error('Start "'+start+'" is not in the graph.');
+  var seen={},comp=0;V.forEach(function(s){if(seen[s])return;comp++;var q=[s];seen[s]=1;while(q.length){var x=q.shift();adj[x].forEach(function(y){if(!seen[y]){seen[y]=1;q.push(y);}});}});
+  var loops=E.some(function(e){return e[0]===e[1];}),isTree=comp===1&&E.length===V.length-1&&!loops;
+  var why=isTree?"connected and has "+E.length+" = n − 1 edges, so there is no circuit":comp>1?"not connected ("+comp+" components)"+(E.length===V.length-comp?" — it is a forest":""):"it has "+E.length+" edges but a tree with "+V.length+" vertices has "+(V.length-1)+", so there is a circuit";
+  var dfsE=[],dfsO=[],vis={};(function dfs(v){vis[v]=1;dfsO.push(v);adj[v].forEach(function(w){if(!vis[w]){dfsE.push([v,w]);dfs(w);}});})(start);
+  var bfsE=[],bfsO=[start],vb={},q=[start];vb[start]=1;while(q.length){var x=q.shift();adj[x].forEach(function(w){if(!vb[w]){vb[w]=1;bfsE.push([x,w]);bfsO.push(w);q.push(w);}});}
+  var draw=function(es){return multiSvg(V,es,false,"w9");};
+  var fmt=function(es){return es.map(function(e){return e[0]+"–"+e[1];}).join(", ");};
+  return "<p><b>Is it a tree?</b> "+(isTree?"Yes":"No")+": "+why+". ("+V.length+" vertices, "+E.length+" edges.)</p>"+
+    (comp>1?'<p class="err">The graph is not connected, so there is no spanning tree (DFS/BFS below only reach the start\'s component).</p>':"")+
+    '<div class="tv-body"><div><h3 class="tv-h">DFS spanning tree</h3>'+draw(dfsE)+"<p class=\"small\">Visit order: "+dfsO.join(", ")+"<br>Tree edges: "+fmt(dfsE)+'</p></div><div><h3 class="tv-h">BFS spanning tree</h3>'+draw(bfsE)+"<p class=\"small\">Visit order: "+bfsO.join(", ")+"<br>Tree edges: "+fmt(bfsE)+"</p></div></div>"+
+    '<p class="small">Smallest neighbour first. Every spanning tree of this graph has '+(V.length-1)+" edges.</p>";
+}
+function initWeek7T(){
+  function renderRt(){var out=$("w9-rt-out");try{out.innerHTML=rootedReport(parseRooted($("w9-rt").value),$("w9-rv").value.trim());}catch(e){out.innerHTML='<div class="err">'+esc(e.message)+"</div>";}}
+  function renderSp(){var out=$("w9-sp-out");try{out.innerHTML=spanReport($("w9-sp-e").value,$("w9-sp-s").value.trim());}catch(e){out.innerHTML='<div class="err">'+esc(e.message)+"</div>";}}
+  ["w9-rt","w9-rv"].forEach(function(id){$(id).addEventListener("input",renderRt);});
+  ["w9-sp-e","w9-sp-s"].forEach(function(id){$(id).addEventListener("input",renderSp);});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-w9tree]"),function(b){b.addEventListener("click",function(){$("w9-rt").value=b.getAttribute("data-w9tree");$("w9-rv").value=parseRooted(b.getAttribute("data-w9tree")).root;renderRt();});});
+  Array.prototype.forEach.call(document.querySelectorAll("[data-w9sp]"),function(b){b.addEventListener("click",function(){$("w9-sp-e").value=b.getAttribute("data-w9sp");$("w9-sp-s").value="0";renderSp();});});
+  renderRt();renderSp();
+}
+
+/* ===================== WEEK 7 (TREES) CONTENT ===================== */
+var W9={
+ key:"ckc111-week7",
+ objectives:["Deciding whether a graph is a tree or a forest","Using parent, child, sibling, ancestor, descendant, leaf, internal vertex","Recognising m-ary and full m-ary trees; level and height","Listing preorder, inorder and postorder traversals","Building spanning trees with DFS and BFS"],
+ recall:[
+  ["Define a tree.","A connected undirected graph with no simple circuits."],
+  ["What is a forest?","A graph with no simple circuit that is not connected; each connected component is a tree."],
+  ["What is a rooted tree?","A tree with one vertex chosen as the root and every edge directed away from it."],
+  ["Leaf vs internal vertex?","A leaf has no children; an internal vertex has at least one child."],
+  ["m-ary vs full m-ary tree?","m-ary: every internal vertex has at most m children. Full m-ary: exactly m children."],
+  ["What are the level of a vertex and the height of a tree?","Level = length of the path from the root (root = 0). Height = the largest level."],
+  ["Give the rule for preorder, inorder and postorder.","Pre: root, then subtrees left to right. In: first subtree, root, then the other subtrees. Post: subtrees left to right, then root."],
+  ["What is a spanning tree, and when does one exist?","A subgraph that is a tree and contains every vertex. A simple graph has one if and only if it is connected."],
+  ["DFS vs BFS in one sentence each.","DFS goes as deep as possible and backtracks when stuck; BFS adds all neighbours level by level (using a queue)."]
+ ],
+ practice:[
+  {l:"Easy",q:'Tutorial 6 Q1. A graph has 6 vertices. When can it be a tree? Then decide: graph (b) on the sheet has 6 vertices and only 4 edges, graph (d) has 6 vertices and contains the circuit along its bottom edge and two diagonals. Are they trees?',
+   h:["A tree on n vertices has n − 1 edges.","With fewer edges it cannot be connected; with a circuit it is not a tree.","Use the definition: connected and no simple circuit."],
+   s:'A tree on 6 vertices must be connected with exactly 5 edges (no circuit). (b) has only 4 edges, so it is not connected: <b>not a tree</b> (it is a forest). (d) contains a simple circuit: <b>not a tree</b>. On the sheet, (a), (c) and (e) are trees (connected, 5 edges, no circuit); (b), (d) and (f) are not. ⚠ Check the drawings yourself: count edges and look for circuits.'},
+  {l:"Easy",q:'Tutorial 6 Q2(a)–(c), the tree a: b c d; b: e f g; d: h i; e: j k; g: l m; h: n; i: o p; o: q r s. Which vertex is the root? Which are internal? Which are leaves?',
+   h:["The root has no parent.","Internal = has at least one child.","Leaves = no children. Every vertex is exactly one of internal or leaf."],
+   s:'Root: <b>a</b>. Internal: <b>a, b, d, e, g, h, i, o</b>. Leaves: <b>c, f, j, k, l, m, n, p, q, r, s</b>.'},
+  {l:"Easy",q:'Tutorial 6 Q2(d)–(f). In the same tree: the children of j, the parent of h, the siblings of o.',
+   h:["j is a leaf.","h hangs below d.","Siblings share a parent: o's parent is i."],
+   s:'Children of j: <b>none</b> (j is a leaf). Parent of h: <b>d</b>. Siblings of o: <b>p</b>.'},
+  {l:"Medium",q:'Tutorial 6 Q2(g)–(h). The ancestors of m and the descendants of b.',
+   h:["Walk up from m to the root.","Descendants: everything below b.","Do not include the vertex itself."],
+   s:'Ancestors of m: <b>g, b, a</b>. Descendants of b: <b>e, f, g, j, k, l, m</b>.'},
+  {l:"Medium",q:'Tutorial 6 Q3. Draw (list) the subtrees rooted at (a) e and (b) i.',
+   h:["A subtree rooted at v is v with all its descendants.","e has two children.","i has children o and p, and o has three children."],
+   s:'(a) Root e with children j and k: vertices {e, j, k}. (b) Root i with children o and p; o has children q, r, s: vertices {i, o, p, q, r, s}.'},
+  {l:"Medium",q:'For the Tutorial 6 Q2 tree, give its height and the level of q. Is it a full m-ary tree?',
+   h:["Count edges from a down to q.","Height = the deepest level.","Compare the number of children of the internal vertices."],
+   s:'q: a → d → i → o → q, so level <b>4</b>; that is the deepest, so height <b>4</b>. Not full m-ary: a has 3 children but e has 2 and h has 1.'},
+  {l:"Medium",q:'List the preorder, inorder and postorder traversals of the ordered tree a: b c; b: d e; c: f g.',
+   h:["Pre: root first.","In: left subtree, root, right subtree.","Post: root last."],
+   s:'Preorder: <b>a, b, d, e, c, f, g</b>. Inorder: <b>d, b, e, a, f, c, g</b>. Postorder: <b>d, e, b, f, g, c, a</b>.'},
+  {l:"Challenging",q:'Tutorial 6 Q4(a). Graph edges 0–1, 0–2, 1–2, 1–3, 1–4, 3–5, 5–6, 5–7, 5–8, 7–8, 8–9. Build the DFS and BFS spanning trees from 0 (smallest neighbour first).',
+   h:["DFS: 0 → 1 → 2, stuck, back to 1 → 3 → 5 → …","BFS: level 1 is {1, 2}; level 2 is everything new next to 1 and 2.","Both trees have 10 − 1 = 9 edges."],
+   s:'DFS tree edges: 0–1, 1–2, 1–3, 3–5, 5–6, 5–7, 7–8, 8–9, 1–4 (visit order 0, 1, 2, 3, 5, 6, 7, 8, 9, 4). BFS tree edges: 0–1, 0–2, 1–3, 1–4, 3–5, 5–6, 5–7, 5–8, 8–9. Check with the spanning-tree tool. (⚠ the edges were read from the tutorial picture; check them against your sheet.)'},
+  {l:"Challenging",q:'Tutorial 6 Q4(b). Graph edges 0–1, 0–3, 1–3, 1–2, 1–5, 1–6, 2–3, 2–5, 2–4, 3–4, 4–6. Build the DFS and BFS spanning trees from 0.',
+   h:["DFS from 0: go to 1, then 2 (smallest new neighbour of 1), then 3 …","BFS: level 1 = {1, 3}.","7 vertices → 6 edges."],
+   s:'DFS: 0–1, 1–2, 2–3, 3–4, 4–6, 2–5 (order 0, 1, 2, 3, 4, 6, 5). BFS: 0–1, 0–3, 1–2, 1–5, 1–6, 3–4 (order 0, 1, 3, 2, 5, 6, 4).'},
+  {l:"Challenging",q:'Prove: a simple graph that has a spanning tree is connected.',
+   h:["Take any two vertices u and v of G.","They are both in the spanning tree T, which is connected.","A path in T uses edges of G."],
+   s:'Given: T is a spanning tree of G. Goal: any two vertices of G are joined by a path. Take u, v in G. T contains every vertex, so u, v are in T. T is a tree, so it is connected and has a path from u to v. T is a subgraph of G, so that path is also in G. Hence G is connected. ∎'}
+ ]
+};
+
 /* ===================== WEEK 2 (uses the logic engine exposed by Week 1) ===================== */
 function initWeek2(){
   var L=window.CKCLogic;
@@ -2919,8 +3046,8 @@ function initMock1(){
   try{var last=JSON.parse(localStorage.getItem(MOCK_KEY)||"null");if(last){$("w7-last").hidden=false;$("w7-last").textContent="Your last attempt: "+last.score+" / "+last.total+" ("+last.pct+"%).";}}catch(e){}
 }
 
-initWeek2();initWeek4();initWeek5();initWeek6G();initExamLab();initMock1();
-buildKit(2,W2);buildKit(4,W4);buildKit(5,W5);buildKit(8,W8);
+initWeek2();initWeek4();initWeek5();initWeek6G();initWeek7T();initExamLab();initMock1();
+buildKit(2,W2);buildKit(4,W4);buildKit(5,W5);buildKit(8,W8);buildKit(9,W9);
 if(typeof module!=="undefined"&&module.exports){module.exports.data={W4:W4,W5:W5};}
 })();
 
@@ -2932,10 +3059,10 @@ if(typeof module!=="undefined"&&module.exports){module.exports.data={W4:W4,W5:W5
 if(typeof document==="undefined"||!document.getElementById){return;}
 var AKEY="ckc111-active-week";
 /* Week 6 (Graphs) is panel 8, so the Exam Lab (6) and Test 1 (7) keep their ids; ORDER is the order of the tabs */
-var ORDER=[0,1,2,3,4,5,8,6];   /* Test 1 (7) is archived: it has no tab, and is opened from the Home archive card */
-var NAMES={0:"Home",1:"Week 1",2:"Week 2",3:"Week 3",4:"Week 4",5:"Week 5",8:"Week 6",6:"Exam Lab",7:"Test 1 archive"};
-var SUBS={0:"Overview",1:"Logic I",2:"Equivalences",3:"Algorithms",4:"Relations I",5:"Relations II",8:"Graphs",6:"Practice",7:"Mock paper"};
-var TITLES={0:"CKC111 Discrete Structures: Study Guide",1:"Week 1: Propositional Logic",2:"Week 2: Logical Equivalences",3:"Week 3: Basic Algorithms",4:"Week 4: Relations I",5:"Week 5: Relations II",8:"Week 6: Graphs",6:"Exam Lab: Practice",7:"Test 1 archive: Mock Paper"};
+var ORDER=[0,1,2,3,4,5,8,9,6];   /* Test 1 (7) is archived: it has no tab, and is opened from the Home archive card */
+var NAMES={0:"Home",1:"Week 1",2:"Week 2",3:"Week 3",4:"Week 4",5:"Week 5",8:"Week 6",9:"Week 7",6:"Exam Lab",7:"Test 1 archive"};
+var SUBS={0:"Overview",1:"Logic I",2:"Equivalences",3:"Algorithms",4:"Relations I",5:"Relations II",8:"Graphs",9:"Trees",6:"Practice",7:"Mock paper"};
+var TITLES={0:"CKC111 Discrete Structures: Study Guide",1:"Week 1: Propositional Logic",2:"Week 2: Logical Equivalences",3:"Week 3: Basic Algorithms",4:"Week 4: Relations I",5:"Week 5: Relations II",8:"Week 6: Graphs",9:"Week 7: Trees",6:"Exam Lab: Practice",7:"Test 1 archive: Mock Paper"};
 function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
 function $(id){return document.getElementById(id);}
 var panels=qa(".week"),groups=qa(".navgroup"),tabs=qa("[data-weekbtn]"),rail=$("nav"),fab=$("fab"),backdrop=$("backdrop");
@@ -2943,8 +3070,8 @@ var panels=qa(".week"),groups=qa(".navgroup"),tabs=qa("[data-weekbtn]"),rail=$("
 /* ---- progress read from the saved answers ---- */
 function readJSON(k){try{var s=localStorage.getItem(k);return s?JSON.parse(s):null;}catch(e){return null;}}
 function progress(n){
-  if((n>=1&&n<=5)||n===8){
-    var s=readJSON("ckc111-week"+(n===8?6:n)),c=0,i;
+  if((n>=1&&n<=5)||n===8||n===9){
+    var s=readJSON("ckc111-week"+(n===8?6:n===9?7:n)),c=0,i;
     if(s&&s.attempts){for(i=0;i<10;i++){if(String(s.attempts["p"+i]||"").trim().length>=4)c++;}}
     return {frac:c/10,text:c+" of 10 practice questions tried"};
   }
@@ -2971,7 +3098,7 @@ function paint(){
   var last=lastWeek(),btn=$("w0-continue");
   if(btn)btn.textContent=last?("Continue: "+NAMES[last]+" · "+SUBS[last]):"Start Week 1";
 }
-function lastWeek(){try{var s=parseInt(localStorage.getItem(AKEY),10);return s>=1&&s<=8?s:0;}catch(e){return 0;}}
+function lastWeek(){try{var s=parseInt(localStorage.getItem(AKEY),10);return s>=1&&s<=9?s:0;}catch(e){return 0;}}
 
 /* ---- tabs ---- */
 function show(n,keepScroll,focus){
