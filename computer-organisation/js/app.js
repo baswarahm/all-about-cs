@@ -79,14 +79,14 @@ function viewHome() {
   app.innerHTML = `
   <section class="cover">
     <div class="cover-main">
-      <div class="doc-id"><span>CCA102 / CST131 · Sem 1 2026/27</span><span>Test 1 done · now Topic 4</span></div>
+      <div class="doc-id"><span>CCA102 / CST131 · Sem 1 2026/27</span><span>Topics 1–6 done · mid-semester break</span></div>
       <h1>Computer Organisation<br><em>revision</em></h1>
-      <p class="lede">Notes for every topic so far, a question bank for the new Topic 4 (Digital Logic), drills and solvers that show the working. Everything from Test 1 is in the archive.</p>
-      <div class="hero-cta"><a class="btn primary" href="#learn/t4">Read Topic 4</a><a class="btn" href="#test/bank4">Topic 4 question bank</a><a class="btn" href="#archive">Test 1 archive</a></div>
+      <p class="lede">Notes for Topics 1–6 (up to addressing modes), Tutorial 1–6 answers, question banks, drills and solvers that show the working. Next after the break: the CPU (Week 9).</p>
+      <div class="hero-cta"><a class="btn primary" href="#learn/t6">Read Topic 6</a><a class="btn" href="#test/bank6">Topic 6 question bank</a><a class="btn" href="#archive">Test 1 archive</a></div>
     </div>
     <dl class="spec">
       <div><dt>Test 1</dt><dd>Done · archived</dd></div>
-      <div><dt>Now</dt><dd>Topic 4 · Digital logic</dd></div>
+      <div><dt>Next</dt><dd>Week 9 · CPU · Assignment 2 in Week 10</dd></div>
       <div><dt>Topics</dt><dd>${TOPICS.length} with notes</dd></div>
       <div><dt>Question bank</dt><dd>${BANK.length + 150} + endless calculations</dd></div>
     </dl>

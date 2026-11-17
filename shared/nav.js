@@ -106,6 +106,11 @@
       list.push({ e: c.emoji, t: c.name, s: 'Course', go: base + c.path });
       PAGES[c.id].slice(1).forEach(function (p) { list.push({ e: p[0], t: c.name.split(' ')[0] + ' · ' + p[1], s: 'Course', go: base + c.path + p[2] }); });
     });
+    (window.CS_DEADLINES || []).forEach(function (x) {   // upcoming tests and deadlines (shared/deadlines.js)
+      if (x.end.getTime() < Date.now() || (site !== 'hub' && x.c !== site && x.c !== 'all')) return;
+      var days = Math.max(0, Math.ceil((x.start.getTime() - Date.now()) / 864e5));
+      list.push({ e: '📅', t: x.t, s: days ? 'in ' + days + ' days' : 'now', go: base + '#soon' });
+    });
     if (site !== 'hub') list.push({ e: '🏫', t: 'All CS courses', s: 'Main page', go: base || './' });
     list.push({ e: '◑', t: 'Switch dark / light', s: 'Setting', go: function () { var b = d.getElementById('themeBtn') || d.getElementById('theme'); if (b) b.click(); } });
     return list;
@@ -195,7 +200,7 @@
     box.innerHTML = '<div class="cs-hello-top"><b>' + hi + '</b><span class="cs-streak big" title="Best streak: ' + st.best + ' days">🔥 ' + st.n + ' day' + (st.n > 1 ? 's' : '') + ' in a row</span></div>' +
       '<p class="cs-tip">💡 ' + tips[new Date().getDate() % tips.length] + '</p>' +
       (lc ? '<a class="cs-continue" href="' + lc.path + (last[lc.id].h || '') + '"><span class="e">' + lc.emoji + '</span><span><small>Continue where you left off</small><b>' + esc(lc.name) + '</b><em>' + esc(last[lc.id].t || '') + '</em></span><span class="arr">→</span></a>' : '');
-    var grid = d.querySelector('main .grid'); if (grid) grid.parentNode.insertBefore(box, grid.previousElementSibling && grid.previousElementSibling.id === 'reminder' ? grid.previousElementSibling : grid);
+    var lede = d.querySelector('main .lede'); if (lede) lede.insertAdjacentElement('afterend', box);
     COURSES.forEach(function (c) {   // "opened 2 h ago" on each course card
       var card = d.querySelector('.course.' + (c.id === 'pop' ? 'fp' : c.id)), l = last[c.id]; if (!card) return;
       card.insertAdjacentHTML('afterbegin', '<span class="cs-emoji" aria-hidden="true">' + c.emoji + '</span>');
