@@ -162,3 +162,40 @@ button:not(:disabled):active, .btn:active, .course:active { transform: translate
   .site-hub .soon-list li { grid-template-columns: 1fr auto; gap: 6px 12px; }
   .site-hub .soon-k { grid-column: 1 / -1; justify-self: start; }
 }
+
+/* Discrete: all weeks in reach. Tablet/laptop: the week tabs wrap into a grid (no sideways scrolling).
+   Phone: one "current week" button that opens a picker with every week. */
+.cs-weekbtn { display: none; }
+/* the week tabs always get their own full-width row */
+  .site-ds .topbar-in { flex-wrap: wrap; }
+  .site-ds .wtabs { order: 3; flex: 1 0 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); overflow: visible;
+    -webkit-mask-image: none; mask-image: none; padding: 0 0 4px; border-top: 1px solid var(--line); }
+  .site-ds .wtab { min-width: 0; padding: 7px 6px 6px; }
+  .site-ds .wtab b, .site-ds .wtab span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.site-ds .wtab { justify-content: flex-start; }
+@media (max-width: 680px) {
+  .site-ds .wtabs { display: none; }
+  .site-ds .cs-weekbtn { order: 3; flex: 1 0 100%; display: flex; align-items: center; gap: 8px; margin: 2px 0 8px; padding: 9px 12px; min-height: 44px;
+    border: 1.5px solid var(--ink); background: var(--soft); color: var(--ink); font: 500 .85rem var(--body); text-align: left; cursor: pointer; }
+  .site-ds .cs-weekbtn b { font-weight: 700; }
+  .site-ds .cs-weekbtn span:not([aria-hidden]) { color: var(--muted); font: .75rem var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .site-ds .cs-weekbtn em { margin-left: auto; font: 600 .72rem var(--mono); font-style: normal; color: var(--brand); white-space: nowrap; }
+}
+.cs-weeks .cs-jump-box { padding: 0 0 14px; }
+.cs-weeks-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 2px solid var(--ink); font-size: 1.05rem; }
+.cs-x { width: 36px; height: 36px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font-size: 1rem; cursor: pointer; }
+.cs-weeks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; padding: 14px 14px 0; overflow-y: auto; }
+.cs-wk { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 12px; min-height: 76px; border: 1.5px solid var(--line, var(--rule)); background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+.cs-wk:hover { border-color: var(--ink); }
+.cs-wk .e { font-size: 1.1rem; }
+.cs-wk b { font-size: .95rem; }
+.cs-wk .s { font: .72rem var(--mono, monospace); color: var(--muted, var(--ink-3)); }
+.cs-wk .bar { display: block; width: 100%; height: 3px; margin-top: auto; background: var(--line, var(--rule)); }
+.cs-wk .bar i { display: block; height: 100%; background: var(--cs-acc); }
+.cs-wk.on { border: 2px solid var(--cs-acc); box-shadow: 3px 3px 0 var(--cs-acc); }
+.cs-wk.exam { background: var(--soft, transparent); }
+/* Discrete: the update note goes under the header (its header row is full) */
+.site-ds .upd-note { display: none !important; }
+.site-ds .upd-strip { display: block !important; }
+@media (max-width: 680px) { .site-co .cs-streak, .site-ds .cs-streak, .site-pop .cs-streak { display: none; } }
+.site-ds .brandlink { margin-right: auto; }

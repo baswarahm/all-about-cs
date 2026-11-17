@@ -167,7 +167,7 @@
   if (site === 'pop' || site === 'ds') {
     var tabs = site === 'pop' ? PAGES.pop.slice(0, 5).map(function (p) { return { e: p[0], t: p[1], go: p[2] }; }) : [
       { e: '🏠', t: 'Home', go: 'tab:0' },
-      { e: '📅', t: 'Weeks', go: function () { openJump(); inp.value = 'week'; render(); } },
+      { e: '📅', t: 'Weeks', go: function () { openWeeks(); } },
       { e: '🎯', t: 'Exam Lab', go: 'tab:6' },
       { e: '☰', t: 'Sections', go: function () { var f = d.getElementById('fab'); if (f) f.click(); } },
       { e: '🔍', t: 'Search', go: openJump }
@@ -188,6 +188,43 @@
       });
     };
     addEventListener('hashchange', mark); d.addEventListener('click', function () { setTimeout(mark, 60); }); mark();
+  }
+
+
+  /* ───────── Discrete: every week in reach (a picker instead of a sideways-scrolling strip on phones) ───────── */
+  var weeks, wbtn;
+  function openWeeks() {
+    if (!weeks) {
+      weeks = el('div', 'cs-jump cs-weeks');
+      weeks.innerHTML = '<div class="cs-jump-box" role="dialog" aria-modal="true" aria-label="Choose a week"><div class="cs-weeks-head"><b>Choose a week</b><button type="button" class="cs-x" aria-label="Close">✕</button></div><div class="cs-weeks-grid"></div></div>';
+      d.body.appendChild(weeks);
+      weeks.addEventListener('mousedown', function (e) { if (e.target === weeks) closeWeeks(); });
+      weeks.querySelector('.cs-x').onclick = closeWeeks;
+      weeks.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeWeeks(); });
+    }
+    var grid = weeks.querySelector('.cs-weeks-grid');
+    grid.innerHTML = '';
+    [].forEach.call(d.querySelectorAll('.wtab'), function (t) {
+      var n = t.getAttribute('data-weekbtn'), p = parseFloat(getComputedStyle(t).getPropertyValue('--p')) || 0;
+      var b = el('button', 'cs-wk' + (t.getAttribute('aria-selected') === 'true' ? ' on' : '') + (n === '6' ? ' exam' : ''),
+        '<span class="e" aria-hidden="true">' + (n === '0' ? '🏠' : n === '6' ? '🎯' : '📅') + '</span><b>' + esc(t.querySelector('b').textContent) + '</b><span class="s">' + esc(t.querySelector('span').textContent) + '</span>' +
+        (n !== '0' ? '<span class="bar"><i style="width:' + Math.round(p * 100) + '%"></i></span>' : ''));
+      b.type = 'button'; b.onclick = function () { closeWeeks(); go('tab:' + n); };
+      grid.appendChild(b);
+    });
+    weeks.hidden = false; d.body.classList.add('cs-noscroll');
+    var on = grid.querySelector('.on') || grid.firstChild; if (on) on.focus();
+  }
+  function closeWeeks() { if (weeks) { weeks.hidden = true; d.body.classList.remove('cs-noscroll'); if (wbtn) wbtn.focus(); } }
+  if (site === 'ds') {
+    var strip = d.querySelector('.wtabs');
+    wbtn = el('button', 'cs-weekbtn'); wbtn.type = 'button'; wbtn.setAttribute('aria-haspopup', 'dialog'); wbtn.onclick = openWeeks;
+    if (strip) strip.insertAdjacentElement('afterend', wbtn);
+    var label = function () {
+      var t = d.querySelector('.wtab[aria-selected="true"]');
+      if (t) wbtn.innerHTML = '<span aria-hidden="true">📅</span><b>' + esc(t.querySelector('b').textContent) + '</b><span>' + esc(t.querySelector('span').textContent) + '</span><em>All weeks ▾</em>';
+    };
+    label(); d.addEventListener('click', function () { setTimeout(label, 60); });
   }
 
   /* ───────── main page: greeting, streak and "continue" ───────── */
