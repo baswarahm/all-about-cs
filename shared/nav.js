@@ -17,7 +17,7 @@
   var PAGES = {
     co: [['🏠', 'Home', '#home'], ['📖', 'Notes', '#learn/t1'], ['🎯', 'Practice', '#practice'], ['📝', 'Tests', '#tests'],
          ['🛠️', 'Tools', '#tools'], ['✏️', 'Tutorials', '#tutorials'], ['📋', 'Cheat sheet', '#cheat']],
-    pop: [['🏠', 'Home', '#/'], ['📖', 'Notes', '#/material'], ['🎯', 'Practice', '#/generator'], ['📝', 'Tests', '#/quiz'], ['💻', 'Code', '#/playground']],
+    pop: [['🏠', 'Home', '#/'], ['📖', 'Notes', '#/material'], ['🎯', 'Practice', '#/generator'], ['📝', 'Tests', '#/quiz'], ['💻', 'Code', '#/playground'], ['🧩', 'Problem bank (all lab questions)', '#/progass']],
     ds: []
   };
   function get(k, def) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? def : v; } catch (e) { return def; } }
@@ -160,7 +160,7 @@
 
   /* ───────── phone bottom bar (Discrete and Programming) ───────── */
   if (site === 'pop' || site === 'ds') {
-    var tabs = site === 'pop' ? PAGES.pop.map(function (p) { return { e: p[0], t: p[1], go: p[2] }; }) : [
+    var tabs = site === 'pop' ? PAGES.pop.slice(0, 5).map(function (p) { return { e: p[0], t: p[1], go: p[2] }; }) : [
       { e: '🏠', t: 'Home', go: 'tab:0' },
       { e: '📅', t: 'Weeks', go: function () { openJump(); inp.value = 'week'; render(); } },
       { e: '🎯', t: 'Exam Lab', go: 'tab:6' },

@@ -844,4 +844,95 @@ int main() {
 <p>A <code>do-while</code> fits well: the user must guess at least once. It is best in your own IDE (for example Visual Studio), where you can react to each hint. The "Try it" box sends all its input at once, so the <code>&amp;&amp; cin</code> part stops the loop when your typed guesses run out. The ProgrAss version of this question gives you the secret symbol so it can be tested.</p>` },
   ],
 },
+{
+  id: 'week7',
+  week: 'Week 7',
+  title: 'Advanced File Processing',
+  test: ['Week 7 lab'],
+  sections: [
+    { h: 'Ask for the file name, then check it opened', html: `
+<p>Most Week 7 lab questions start the same way: ask the user for a file name, open it, and stop with an error if it is not there.</p>
+<pre class="code">string name;
+getline(cin, name);            // getline: file names can contain spaces
+ifstream inFile(name);         // open while declaring (C++11)
+// older compilers: inFile.open(name.c_str());
+if (!inFile) {                 // true when the file could not be opened
+    cout &lt;&lt; "Error: cannot open " &lt;&lt; name &lt;&lt; "." &lt;&lt; endl;
+} else {
+    // ... read the file ...
+    inFile.close();
+}</pre>
+<p><code>if (!inFile)</code> and <code>if (inFile.fail())</code> mean the same thing. Always <b>close</b> a file when you are done.</p>` },
+    { h: 'Three ways to read: word, line, character', html: `
+<table class="tbl"><tr><th>Read</th><th>Code</th><th>Good for</th></tr>
+<tr><td>a word or number</td><td><code>while (inFile &gt;&gt; word)</code></td><td>counting words, reading numbers (Q4, Q6, Q10, Q11)</td></tr>
+<tr><td>a whole line</td><td><code>while (getline(inFile, line))</code></td><td>showing lines, line numbers (Q1, Q2, Q5)</td></tr>
+<tr><td>one character</td><td><code>while (inFile.get(c))</code></td><td>copying or changing every character, even spaces and newlines (Q7, Q8)</td></tr></table>
+<p>Write one character with <code>outFile.put(c);</code>. <code>&gt;&gt;</code> <b>skips</b> spaces and newlines; <code>get</code> does not.</p>
+<p>Each loop stops by itself at the end of the file, because the read fails. Do not write <code>while (!inFile.eof())</code>: it runs one time too many.</p>` },
+    { h: 'Counting patterns', html: `
+<pre class="code">int n = 0;
+while (getline(inFile, line)) {
+    n++;                                   // line number, starting at 1
+    if (n % 2 == 1)                        // only lines 1, 3, 5, ...
+        cout &lt;&lt; n &lt;&lt; ": " &lt;&lt; line &lt;&lt; endl;
+}</pre>
+<p><b>Pause every 24 lines</b> (Q2, Q5): before printing a line, if 24, 48, … lines are already shown, wait for Enter:</p>
+<pre class="code">if (count &gt; 0 &amp;&amp; count % 24 == 0) {
+    cout &lt;&lt; "-- Press Enter to see more --" &lt;&lt; endl;
+    cin.get();                             // waits for a key (Enter)
+}</pre>
+<p><b>Sentences</b> (Q4): count the <code>'.'</code> characters inside each word. <b>Word length</b> (Q6): <code>word.length()</code>.</p>` },
+    { h: 'Random access: seekg and tellg', html: `
+<p>A file has a <b>read position</b> (the "get" pointer) and a <b>write position</b> (the "put" pointer). You can move them:</p>
+<table class="tbl"><tr><th>Code</th><th>Meaning</th></tr>
+<tr><td><code>inFile.seekg(10, ios::beg)</code></td><td>go to byte 10 from the <b>beginning</b></td></tr>
+<tr><td><code>inFile.seekg(-1, ios::end)</code></td><td>go to the <b>last</b> character</td></tr>
+<tr><td><code>inFile.seekg(5, ios::cur)</code></td><td>move 5 bytes forward from where you are</td></tr>
+<tr><td><code>inFile.tellg()</code></td><td>the current read position (a number)</td></tr>
+<tr><td><code>outFile.seekp(…)</code> / <code>tellp()</code></td><td>the same for the write position</td></tr></table>
+<p><b>Last line of a file</b> (Q3): go to the end, then back up one character at a time until the character before you is <code>'\\n'</code>:</p>
+<pre class="code">char c;
+punch.seekg(-1, ios::end);             // the last character
+punch.get(c);
+long pos = (long)punch.tellg() - 1;    // its position
+if (c == '\\n') pos--;                  // skip a final newline
+while (pos &gt; 0) {
+    punch.seekg(pos - 1);
+    punch.get(c);
+    if (c == '\\n') break;              // found the start of the last line
+    pos--;
+}
+punch.seekg(pos);
+getline(punch, line);</pre>
+<p>If the file already hit the end (the end-of-file flag is set), call <code>inFile.clear();</code> before <code>seekg</code>, or the move is ignored.</p>` },
+    { h: 'A file filter: simple encryption', html: `
+<p>A <b>filter</b> reads one file, changes the data, and writes another file (Q7, Q8). Read and write one character at a time so nothing is lost:</p>
+<pre class="code">ifstream in("plain.txt");
+ofstream out("coded.txt");
+char c;
+while (in.get(c)) {
+    if (c &gt;= 'a' &amp;&amp; c &lt;= 'z')
+        c = (c - 'a' + 10) % 26 + 'a';   // a→k ... q→a
+    out.put(c);
+}</pre>
+<p>To decrypt, move the other way: <code>(c - 'a' + 16) % 26 + 'a'</code> (16 = 26 − 10, so <code>%</code> never sees a negative number). The lab's simplest idea, <code>c + 10</code> on every character, also works as long as the decrypter does <code>c - 10</code>.</p>` },
+    { h: 'Formatted output to a file', html: `
+<p><code>fixed</code> and <code>setprecision</code> (header <code>&lt;iomanip&gt;</code>) work on an <code>ofstream</code> exactly like on <code>cout</code> (Q9, Q11):</p>
+<pre class="code">outFile &lt;&lt; fixed &lt;&lt; setprecision(2);
+outFile &lt;&lt; "Paycheck: $" &lt;&lt; salary * (1 + bonus / 100) * (1 - tax / 100) &lt;&lt; endl;</pre>
+<p>Read numbers in the order they appear: <code>inFile &gt;&gt; first &gt;&gt; last &gt;&gt; dept;</code> then <code>inFile &gt;&gt; salary &gt;&gt; bonus &gt;&gt; tax;</code>. Line breaks in the file do not matter to <code>&gt;&gt;</code>.</p>
+<p>Reading pairs until the file ends (Q10): <code>while (inFile &gt;&gt; price &gt;&gt; sold) { … }</code>.</p>` },
+    { h: 'Common mistakes', html: `
+<ul>
+<li>Using <code>cin &gt;&gt; name</code> for a file name with spaces. Use <code>getline</code>.</li>
+<li>Forgetting <code>if (!inFile)</code>, so a missing file prints nothing and gives no error.</li>
+<li><code>while (!inFile.eof())</code>: the last value is processed twice.</li>
+<li>Using <code>&gt;&gt;</code> in a copy or encryption program: spaces and newlines disappear. Use <code>get</code> and <code>put</code>.</li>
+<li>Opening an output file you also need to read: <code>ofstream</code> (or <code>ios::out</code>) <b>wipes</b> it first.</li>
+<li><code>seekg</code> after reaching the end without <code>clear()</code>.</li>
+</ul>
+<div class="callout"><b>Practise:</b> all 11 Week 7 lab questions are in the <a href="#/progass">problem bank</a> (filter <b>Week 7 lab</b>), with test files and automatic checking.</div>` },
+  ],
+},
 ];
