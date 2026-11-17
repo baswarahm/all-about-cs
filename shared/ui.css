@@ -1,0 +1,50 @@
+/* shared/ui.css — the look every page shares. Loaded after each page's own stylesheet.
+   Each course keeps one accent colour: CO orange, Discrete purple, Programming red.
+   <html class="site-hub | site-co | site-ds | site-pop"> chooses the page. */
+
+/* ───────── one neutral dark palette (Programming used a green-tinted one) ───────── */
+@media (prefers-color-scheme: dark) {
+  :root.site-pop:not([data-theme="light"]) {
+    --paper: #111110; --sheet: #181816; --ink: #ece7da; --ink-2: #c9c3b5; --muted: #8f897b; --rule: #2f2e2a; --rule-strong: #4a4740;
+    --hl: #3a3420; --code-bg: #1b1b19; --console-bg: #0d0d0c;
+  }
+}
+:root.site-pop[data-theme="dark"] {
+  --paper: #111110; --sheet: #181816; --ink: #ece7da; --ink-2: #c9c3b5; --muted: #8f897b; --rule: #2f2e2a; --rule-strong: #4a4740;
+  --hl: #3a3420; --code-bg: #1b1b19; --console-bg: #0d0d0c;
+}
+
+/* ───────── one header: logo badge · menu · online · ← CS courses · theme ───────── */
+/* Discrete */
+.site-ds .topbar { background: var(--surface); border-bottom: 2px solid var(--ink); }
+.site-ds .topbar-in { min-height: 58px; gap: 22px; padding: 0 24px; max-width: 1160px; }
+.site-ds .brandlink { font-family: var(--body); border-radius: 0; }
+.site-ds .brandlink .mark { width: auto; height: auto; padding: 3px 7px; border-radius: 0; background: transparent; color: var(--ink);
+  border: 1.5px solid var(--ink); font: 600 .82rem var(--mono); letter-spacing: .04em; }
+.site-ds .brandlink .bt b { font: 600 .95rem var(--body); }
+.site-ds .brandlink .bt span { font: .7rem var(--mono); }
+.site-ds .wtab { border-radius: 0; }
+.site-ds .wtab[aria-selected="true"] { background: transparent; box-shadow: none; border-bottom-color: var(--brand); }
+.site-ds .coursesbtn { border-radius: 0; }
+
+/* Programming */
+.site-pop .topbar { min-height: 58px; }
+.site-pop .logo { border: 1.5px solid var(--ink); background: transparent; color: var(--ink); padding: 3px 7px; }
+.site-pop .brand-text { font: 600 .95rem var(--sans); }
+
+/* the same square theme button everywhere (CO and the hub used a text button) */
+.theme-btn, .icon-btn#themeBtn, .site-ds #theme.iconbtn {
+  width: 34px; height: 34px; padding: 0; display: inline-grid; place-items: center; align-self: center; flex-shrink: 0;
+  border: 1.5px solid var(--ink); border-radius: 0; background: transparent; color: var(--ink); cursor: pointer; font-size: 0;
+}
+.theme-btn::before, .icon-btn#themeBtn::before { content: "◑"; font-size: 17px; line-height: 1; }
+.site-pop .icon-btn#themeBtn { font-size: 0; }
+.theme-btn > span { display: none !important; }
+.theme-btn:hover, .icon-btn#themeBtn:hover, .site-ds #theme.iconbtn:hover { background: var(--ink); color: var(--paper, var(--surface)); }
+
+/* ───────── shared basics ───────── */
+:focus-visible { outline: 3px solid var(--sig, var(--brand, var(--pen, var(--fp, #d9480f)))); outline-offset: 2px; }
+@media (max-width: 700px) {
+  /* bigger tap targets on phones */
+  .theme-btn, .icon-btn#themeBtn, .site-ds #theme.iconbtn { width: 40px; height: 40px; }
+}

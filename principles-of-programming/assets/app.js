@@ -121,7 +121,7 @@
     if (t) document.documentElement.setAttribute('data-theme', t);
     else document.documentElement.removeAttribute('data-theme');
   }
-  applyTheme(store.get('theme', null));
+  // the saved choice is applied by shared/theme.js
   $('#themeBtn').addEventListener('click', function () {
     var cur = document.documentElement.getAttribute('data-theme');
     if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

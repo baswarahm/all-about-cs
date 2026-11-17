@@ -14,8 +14,7 @@ const store = {
 
 /* ---------- theme ---------- */
 (function initTheme() {
-  const saved = store.get('theme', null);
-  if (saved) document.documentElement.dataset.theme = saved;
+  // the saved choice is applied by shared/theme.js
   document.getElementById('themeBtn').addEventListener('click', () => {
     const cur = document.documentElement.dataset.theme ||
       (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
