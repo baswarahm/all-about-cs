@@ -72,7 +72,7 @@
     main { padding-top: 32px; }
   }
 </style>
-<link rel="stylesheet" href="shared/ui.css?v=20261117a">
+<link rel="stylesheet" href="shared/ui.css?v=20261117b">
 </head>
 <body>
 <header class="top">
@@ -85,7 +85,7 @@
 <main>
   <p class="eyebrow">CS Courses · 2026/2027</p>
   <h1>Year 1 Semester 1</h1>
-  <p class="lede">Pick a course to open its revision site: notes, tutorials, mock tests and practice.</p>
+  <p class="lede">Pick a course and start studying. Press <kbd>/</kbd> or <kbd>Ctrl K</kbd> on any page to jump anywhere.</p>
   <!-- reminder for the next test; it hides itself once the test has ended (data-end) -->
   <aside class="reminder" id="reminder" data-start="2026-11-10T17:30:00+08:00" data-end="2026-11-10T18:30:00+08:00">
     <div class="rem-tag">Reminder</div>
@@ -101,15 +101,15 @@
     <a class="course co" href="computer-organisation/">
       <span class="code">CCA102 / CST131</span>
       <h2>Computer Organisation</h2>
-      <p>Test 1 notes, past paper with answers, mock tests, drills and step-by-step solvers.</p>
-      <ul class="tags"><li>Number systems</li><li>Arithmetic</li><li>Solvers</li></ul>
+      <p>Topics 1–6 notes, Tutorials 1–6 answers, past papers, drills and step-by-step solvers.</p>
+      <ul class="tags"><li>Number systems</li><li>Logic circuits</li><li>Solvers</li></ul>
       <span class="go"><span>Open course</span><span>&rarr;</span></span>
     </a>
     <a class="course ds" href="discrete-structures/">
       <span class="code">CKC111</span>
       <h2>Discrete Structures</h2>
-      <p>Weekly lessons on logic, equivalences, algorithms and relations, plus an exam lab and Test 1 mock paper.</p>
-      <ul class="tags"><li>Logic</li><li>Relations</li><li>Mock paper</li></ul>
+      <p>Weeks 1–7: logic, algorithms, relations, graphs and trees, with interactive tools and an exam lab.</p>
+      <ul class="tags"><li>Logic</li><li>Graphs</li><li>Trees</li></ul>
       <span class="go"><span>Open course</span><span>&rarr;</span></span>
     </a>
     <a class="course fp" href="principles-of-programming/">
@@ -149,5 +149,6 @@
     var t = setInterval(tick, 30000); tick();
   })();
 </script>
+<script src="shared/nav.js?v=20261117b"></script>
 </body>
 </html>

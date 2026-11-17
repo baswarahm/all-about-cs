@@ -48,3 +48,89 @@
   /* bigger tap targets on phones */
   .theme-btn, .icon-btn#themeBtn, .site-ds #theme.iconbtn { width: 40px; height: 40px; }
 }
+
+/* ───────── shared/nav.js pieces ───────── */
+.site-co  { --cs-acc: var(--sig); }
+.site-ds  { --cs-acc: var(--brand); }
+.site-pop { --cs-acc: var(--pen); }
+.site-hub { --cs-acc: var(--co); }
+.cs-jump-btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px; align-self: center; flex-shrink: 0;
+  border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font: 500 .8rem var(--mono, monospace); cursor: pointer; }
+.cs-jump-btn kbd { font: .68rem var(--mono, monospace); opacity: .6; border: 1px solid currentColor; padding: 0 4px; }
+.cs-jump-btn:hover { background: var(--ink); color: var(--paper, var(--surface)); }
+.cs-streak { display: inline-flex; align-items: center; align-self: center; flex-shrink: 0; height: 34px; padding: 0 8px; font: 600 .82rem var(--mono, monospace); color: var(--ink); white-space: nowrap; }
+@media (max-width: 1100px) { .cs-jump-btn kbd, .cs-jump-btn .lbl { display: none; } .cs-jump-btn { width: 34px; padding: 0; justify-content: center; } }
+
+/* Jump to */
+.cs-jump { position: fixed; inset: 0; z-index: 200; background: rgba(10,10,8,.55); display: flex; justify-content: center; align-items: flex-start; padding: 10vh 16px 16px; animation: csFade .15s ease; }
+.cs-jump[hidden] { display: none; }
+.cs-jump-box { width: min(620px, 100%); max-height: 76vh; display: flex; flex-direction: column; background: var(--paper, var(--surface)); color: var(--ink);
+  border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--cs-acc); animation: csPop .18s cubic-bezier(.2,1.4,.4,1); }
+.cs-jump-box input { font: 500 1.05rem var(--sans, var(--body, system-ui)); padding: 16px 18px; border: 0; border-bottom: 2px solid var(--ink); background: transparent; color: var(--ink); outline: none; }
+.cs-jump-box ul { list-style: none; margin: 0; padding: 6px; overflow-y: auto; }
+.cs-jump-box li { display: flex; align-items: center; gap: 12px; padding: 9px 12px; cursor: pointer; }
+.cs-jump-box li .e { width: 1.6em; text-align: center; font-size: 1.05rem; }
+.cs-jump-box li .t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cs-jump-box li .s { font: .72rem var(--mono, monospace); opacity: .65; white-space: nowrap; }
+.cs-jump-box li[aria-selected="true"] { background: var(--cs-acc); color: #fff; }
+.cs-jump-box li.none { cursor: default; opacity: .7; }
+.cs-jump-foot { margin: 0; padding: 8px 14px; border-top: 1px solid var(--rule, var(--line)); font: .72rem var(--mono, monospace); opacity: .7; }
+.cs-jump-foot kbd { border: 1px solid currentColor; padding: 0 4px; margin-right: 2px; font: inherit; }
+body.cs-noscroll { overflow: hidden; }
+
+/* phone bottom bar (Discrete, Programming; CO has its own with the same look) */
+.cs-tabbar { display: none; }
+@media (max-width: 680px) {
+  .cs-tabbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: var(--paper, var(--surface));
+    border-top: 2px solid var(--ink); padding-bottom: env(safe-area-inset-bottom); }
+  .cs-tabbar a, .cs-tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 2px 8px; min-height: 52px;
+    border: 0; border-top: 3px solid transparent; margin-top: -2px; background: none; color: var(--ink); font: 500 .68rem var(--sans, var(--body, system-ui)); text-decoration: none; cursor: pointer; }
+  .cs-tabbar .e { font-size: 1.15rem; line-height: 1.2; transition: transform .2s; }
+  .cs-tabbar .on { border-top-color: var(--cs-acc); font-weight: 700; }
+  .cs-tabbar .on .e { transform: translateY(-2px) scale(1.15); }
+  body.cs-has-tabbar { padding-bottom: 64px; }
+  .site-pop.site-pop .nav { display: none; }
+  .site-ds .fab { display: none !important; }
+  .site-co .nav .ic { font-size: 1.1rem; line-height: 1.2; }
+  .cs-streak { padding: 0 4px; font-size: .75rem; }
+  .cs-jump-btn { width: 40px; height: 40px; }
+}
+
+/* fun: confetti and a toast */
+.cs-confetti { position: fixed; inset: 0; pointer-events: none; z-index: 300; overflow: hidden; }
+.cs-confetti i { position: absolute; top: -12px; width: 8px; height: 13px; animation: csFall linear forwards; }
+@keyframes csFall { to { top: 105vh; transform: translateX(var(--dx)) rotate(720deg); } }
+.cs-toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 310; padding: 12px 18px; background: var(--ink); color: var(--paper, var(--surface));
+  font: 600 .92rem var(--sans, var(--body, system-ui)); border-bottom: 3px solid var(--cs-acc); box-shadow: 0 8px 24px rgba(0,0,0,.25); animation: csUp .3s cubic-bezier(.2,1.4,.4,1); max-width: calc(100vw - 32px); }
+.cs-toast.out { opacity: 0; transition: opacity .4s; }
+@keyframes csUp { from { transform: translate(-50%, 20px); opacity: 0; } }
+@keyframes csPop { from { transform: scale(.96); opacity: 0; } }
+@keyframes csFade { from { opacity: 0; } }
+
+/* fun: things feel springy to press */
+button:not(:disabled):active, .btn:active, .course:active { transform: translateY(1px) scale(.98); }
+
+/* main page */
+.site-hub .cs-hello { margin: 0 0 22px; padding: 18px 20px; border: 2px solid var(--ink); background: var(--paper); box-shadow: 6px 6px 0 var(--tint); }
+.site-hub .cs-hello-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+.site-hub .cs-hello-top b { font: 600 1.25rem var(--serif); }
+.site-hub .cs-streak.big { height: auto; padding: 4px 10px; border: 1.5px solid var(--ink); font-size: .85rem; }
+.site-hub .cs-tip { margin: 8px 0 0; color: var(--ink-2); }
+.site-hub .cs-continue { display: flex; align-items: center; gap: 14px; margin-top: 14px; padding: 12px 14px; background: var(--ink); color: var(--paper); text-decoration: none; transition: transform .15s; }
+.site-hub .cs-continue:hover { transform: translateX(4px); }
+.site-hub .cs-continue .e { font-size: 1.6rem; }
+.site-hub .cs-continue small { display: block; font: .7rem var(--mono); opacity: .7; text-transform: uppercase; letter-spacing: .06em; }
+.site-hub .cs-continue b { display: block; }
+.site-hub .cs-continue em { font-style: normal; font-size: .85rem; opacity: .8; }
+.site-hub .cs-continue .arr { margin-left: auto; font-size: 1.3rem; }
+.site-hub .course { position: relative; transition: transform .18s, box-shadow .18s; }
+.site-hub .course:hover { transform: translate(-3px, -3px) rotate(-.4deg); }
+.site-hub .cs-emoji { position: absolute; top: 14px; right: 16px; font-size: 1.9rem; transition: transform .3s; }
+.site-hub .course:hover .cs-emoji { transform: rotate(-12deg) scale(1.2); }
+.site-hub .cs-seen { display: block; margin-top: 6px; font: .72rem var(--mono); color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { .cs-jump, .cs-jump-box, .cs-toast { animation: none; } .site-hub .course:hover, .site-hub .course:hover .cs-emoji { transform: none; } }
+
+/* emoji icons in the CO and Programming menus */
+.site-co .nav .ic { font-size: .95rem; }
+.site-pop .nav a i { border: 0; padding: 0; font-style: normal; font-size: .95rem; background: none !important; }
+@media (max-width: 860px) { .site-ds .cs-streak, .site-ds .cs-jump-btn { order: 2; margin: 4px 0; } }
