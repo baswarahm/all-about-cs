@@ -72,6 +72,7 @@
         if (!h.offsetParent || !h.textContent.trim()) return;
         list.push({ t: h.textContent.trim().slice(0, 80), s: 'On this page', go: function () { h.scrollIntoView({ behavior: 'smooth' }); } });
       });
+      [].forEach.call(d.querySelectorAll('.sv-list a'), function (x) { list.push({ t: x.textContent.trim(), s: 'Solver', go: x.getAttribute('href') }); });
     }
     COURSES.forEach(function (c) {
       if (c.id === site) return;

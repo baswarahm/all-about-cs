@@ -563,3 +563,35 @@ p.tip { border-left: 3px solid var(--warn); padding: 4px 12px; font-size: .9rem;
   .cheat { grid-template-columns: 1fr 1fr 1fr; }
   .cheat section { padding: 10px; font-size: 11px; }
 }
+
+/* ───────── Solvers: list on the left, one solver on the right ───────── */
+.sv { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 32px; align-items: start; }
+.sv-list { position: sticky; top: 76px; max-height: calc(100vh - 96px); overflow-y: auto; border-right: 1px solid var(--rule); padding-right: 16px; }
+.sv-group + .sv-group { margin-top: 18px; }
+.sv-gh { margin: 0 0 6px; font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.sv-list a { display: block; padding: 6px 10px; margin-left: -10px; border-left: 3px solid transparent; color: var(--ink-2); font-size: .9rem; line-height: 1.35; text-decoration: none; }
+.sv-list a:hover { color: var(--ink); background: var(--paper); }
+.sv-list a[aria-current] { color: var(--ink); font-weight: 600; border-left-color: var(--sig); background: var(--paper); }
+.sv-main { min-width: 0; background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--ink); padding: 20px 24px 22px; }
+.sv-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+.sv-head h2 { margin: 0; font-size: 1.45rem; }
+.sv-head .pill { text-decoration: none; }
+.sv-pick { display: none; }
+.sv-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin: 4px 0 10px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.sv-bar > span { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+.sv-mode { display: inline-flex; border: 1.5px solid var(--ink); }
+.sv-mode button { padding: 6px 12px; border: 0; background: transparent; color: var(--ink-2); font: 500 .8rem var(--sans); cursor: pointer; }
+.sv-mode button + button { border-left: 1.5px solid var(--ink); }
+.sv-mode button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.sv-stepper { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.sv-stepper span { font: .78rem var(--mono); color: var(--ink-3); }
+.sv-pn { display: flex; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: .88rem; }
+.sv-pn a { color: var(--ink-2); text-decoration: none; }
+.sv-pn a:hover { color: var(--sig); }
+@media (max-width: 900px) {
+  .sv { grid-template-columns: 1fr; gap: 0; }
+  .sv-list { display: none; }
+  .sv-pick { display: flex; flex-direction: column; gap: 4px; margin: 0 0 16px; font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); }
+  .sv-pick select { padding: 10px; min-height: 44px; border: 1.5px solid var(--ink); background: var(--bg); color: var(--ink); font: 500 .95rem var(--sans); text-transform: none; letter-spacing: 0; }
+  .sv-main { padding: 16px; }
+}

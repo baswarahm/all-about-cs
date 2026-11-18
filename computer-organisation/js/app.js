@@ -494,7 +494,7 @@ function viewTutorials(g) {
 /* =====================================================================
    TOOLS — step-by-step solvers
    ===================================================================== */
-function viewTools() {
+function viewTools(pick) {
   const baseSel = (id, v) => `<select id="${id}">${[2, 3, 4, 5, 6, 7, 8, 9, 10, 16].map(b => `<option value="${b}" ${b === v ? 'selected' : ''}>base ${b}</option>`).join('')}</select>`;
   const bitsSel = (id, v, opts = [4, 5, 6, 8, 12, 16]) => `<select id="${id}">${opts.map(b => `<option ${b === v ? 'selected' : ''}>${b}</option>`).join('')}</select>`;
   const tools = [
@@ -516,14 +516,60 @@ function viewTools() {
       () => { const mix = $('#pMix').value.split(',').map(p => p.split(':').map(Number)); if (mix.some(m => m.length !== 2 || m.some(isNaN))) return '<p class="err">Write pairs like 1:60, 2:40</p>'; return mipsExplain(+$('#pF').value, mix, +$('#pIc').value || 0).html; }],
   ];
   tools.push(...(window.EXTRA_TOOLS || []));   // Topic 4–6 solvers from topic56.js
-  app.innerHTML = `<div class="page-head"><div><p class="eyebrow">§05 · Check your own working</p><h1>Solvers</h1><p class="lede">Enter any values and get the working laid out the way your lecturer shows it. Each tool updates as you type.</p></div></div>
-  <div class="tool-nav">${tools.map(t => `<a href="#tools" data-go="${t[0]}">${t[1]}</a>`).join('')}</div>
-  <div class="tools">${tools.map(([id, title, tag, form]) => `<section class="tool" id="tool-${id}"><div class="tool-h"><h3>${title}</h3><span class="pill">${tag}</span></div><form class="tool-form" data-t="${id}" onsubmit="return false">${form}</form><div class="tool-out" id="out-${id}"></div></section>`).join('')}</div>`;
-  tools.forEach(([id, , , , fn]) => {
-    const run = () => { try { document.getElementById('out-' + id).innerHTML = fn(); } catch (e) { document.getElementById('out-' + id).innerHTML = '<p class="err">Check your input.</p>'; } };
-    const f = app.querySelector(`[data-t="${id}"]`); f.addEventListener('input', run); f.addEventListener('change', run); run();
-  });
-  app.querySelector('.tool-nav').addEventListener('click', e => { const a = e.target.closest('[data-go]'); if (!a) return; e.preventDefault(); document.getElementById('tool-' + a.dataset.go).scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  // one solver at a time: a list grouped by topic on the left, the chosen solver on the right (#tools/<id>)
+  const ids = tools.map(t => t[0]);
+  let saved = null; try { saved = localStorage.getItem('co1:tool'); } catch (e) {}
+  const id = ids.includes(pick) ? pick : ids.includes(saved) ? saved : ids[0];
+  try { localStorage.setItem('co1:tool', id); } catch (e) {}
+  const topicOf = t => +String(t[2]).match(/\d/)[0];
+  const groups = [...new Set(tools.map(topicOf))].sort((x, y) => x - y);
+  const i = ids.indexOf(id), [, title, tag, form, fn] = tools[i], prev = tools[i - 1], next = tools[i + 1];
+  const list = groups.map(g => `<div class="sv-group"><p class="sv-gh">Topic ${g} · ${TOPIC_NAMES[g] || ''}</p>${tools.filter(t => topicOf(t) === g).map(t =>
+    `<a href="#tools/${t[0]}"${t[0] === id ? ' aria-current="page"' : ''}>${t[1]}</a>`).join('')}</div>`).join('');
+  const pickSel = `<label class="sv-pick">Solver<select id="svPick">${groups.map(g => `<optgroup label="Topic ${g} · ${TOPIC_NAMES[g] || ''}">${tools.filter(t => topicOf(t) === g).map(t =>
+    `<option value="${t[0]}"${t[0] === id ? ' selected' : ''}>${t[1]}</option>`).join('')}</optgroup>`).join('')}</select></label>`;
+  app.innerHTML = `<div class="page-head"><div><p class="eyebrow">§05 · Check your own working</p><h1>Solvers</h1><p class="lede">Type your own numbers. The working updates as you type, in the same steps as the lecture slides.</p></div></div>
+  <div class="sv">
+    <nav class="sv-list" aria-label="Solvers">${list}</nav>
+    <section class="sv-main" aria-labelledby="svTitle">
+      ${pickSel}
+      <div class="sv-head"><h2 id="svTitle">${title}</h2><a class="pill" href="#learn/t${topicOf(tools[i])}">${tag} notes</a></div>
+      <form class="tool-form" id="svForm" onsubmit="return false">${form}</form>
+      <div class="sv-bar"><span>Working</span><div class="sv-mode" role="group" aria-label="How to show the working">
+        <button type="button" data-mode="all" aria-pressed="true">All steps</button><button type="button" data-mode="step" aria-pressed="false">One step at a time</button></div></div>
+      <div class="tool-out" id="svOut" aria-live="polite"></div>
+      <div class="sv-stepper" id="svStep" hidden><button type="button" class="btn" id="svNext">Next step</button><button type="button" class="btn ghost" id="svAll">Show all</button><span id="svCount"></span></div>
+      <div class="sv-pn">${prev ? `<a href="#tools/${prev[0]}">← ${prev[1]}</a>` : '<span></span>'}${next ? `<a href="#tools/${next[0]}">${next[1]} →</a>` : ''}</div>
+    </section>
+  </div>`;
+  const out = $('#svOut'), stepper = $('#svStep');
+  let mode = 'all', shown = 0;
+  // a step is one block of the working; inside a table, each row (a cycle) is its own step
+  const steps = () => {
+    const st = [];
+    [...out.children].forEach(el => {
+      const rows = [...el.querySelectorAll('tr')].filter(tr => !tr.querySelector('th'));
+      if (rows.length > 1) rows.forEach(r => st.push({ el: r, box: el })); else st.push({ el });
+    });
+    return st;
+  };
+  const paint = () => {
+    const st = steps(), step = mode === 'step';
+    st.forEach((x, k) => { x.el.hidden = step && k >= shown; });
+    [...out.children].forEach(el => { if (st.some(x => x.box === el)) el.hidden = step && !st.some((x, k) => x.box === el && k < shown); });
+    stepper.hidden = !step || shown >= st.length;
+    $('#svCount').textContent = step ? `Step ${Math.min(shown, st.length)} of ${st.length}` : '';
+  };
+  const run = () => { try { out.innerHTML = fn(); } catch (e) { out.innerHTML = '<p class="err">Check your input.</p>'; } shown = 1; paint(); };
+  $('#svForm').addEventListener('input', run); $('#svForm').addEventListener('change', run); run();
+  app.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.mode; shown = 1;
+    app.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    paint();
+  }));
+  $('#svNext').addEventListener('click', () => { shown++; paint(); const st = steps(); if (st[shown - 1]) st[shown - 1].el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+  $('#svAll').addEventListener('click', () => { shown = steps().length; paint(); });
+  $('#svPick').addEventListener('change', e => { location.hash = 'tools/' + e.target.value; });
 }
 
 route();
