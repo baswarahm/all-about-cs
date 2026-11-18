@@ -97,7 +97,7 @@
       : `F = (${r.groups.map(g => `(${g.str})'`).join(' · ')})' : each product term is a NAND gate (${r.groups.map(g => g.str).join(', ')}), and their outputs go into one more NAND gate (NAND–NAND = SOP).`;
     return `<p><b>Minterms:</b> F = Σm(${ones.join(', ') || '–'})</p>` + tbl([...vars, 'F', ''], rows) +
       `<p><b>K-map</b> (rows and columns in the order 00, 01, 11, 10):</p>` + kmapHtml(n, vars, ones) +
-      (r.groups.length ? `<p><b>Groups</b> (largest blocks of 1, 2, 4 or 8 that cover every 1):</p><ul>${r.groups.map(g => `<li><b>${g.str}</b> covers m${g.ms.join(', m')} — the variables that stay the same in the block</li>`).join('')}</ul>` : '') +
+      (r.groups.length ? `<p><b>Groups</b> (largest blocks of 1, 2, 4 or 8 that cover every 1):</p><ul>${r.groups.map(g => `<li><b>${g.str}</b> covers m${g.ms.join(', m')}: the variables that stay the same in the block</li>`).join('')}</ul>` : '') +
       `<p class="ans">Simplest SOP: <b>F = ${r.sop}</b></p>` + (nand ? `<p><b>NAND only:</b> ${h(nand)}</p>` : '');
   }
 
@@ -325,39 +325,39 @@
       ] });
 
   /* ───────── tutorial answers ───────── */
-  Object.assign(TUT_GROUPS, { T4: { name: 'Tutorial 4 — Digital Logic 1' }, T5: { name: 'Tutorial 5 — Digital Logic II' }, T6: { name: 'Tutorial 6 — Memory locations and addressing' } });
+  Object.assign(TUT_GROUPS, { T4: { name: 'Tutorial 4: Digital Logic 1' }, T5: { name: 'Tutorial 5: Digital Logic II' }, T6: { name: 'Tutorial 6: Memory locations and addressing' } });
   const gates = [['OR', 'A + B', [0, 1, 1, 1]], ['AND', 'A · B', [0, 0, 0, 1]], ['AND with inverted inputs (= NOR)', "A'·B' = (A + B)'", [1, 0, 0, 0]], ['NOR', "(A + B)'", [1, 0, 0, 0]], ['NAND', "(A · B)'", [1, 1, 1, 0]], ['OR with inverted inputs (= NAND)', "A' + B' = (A · B)'", [1, 1, 1, 0]], ['XOR', 'A ⊕ B', [0, 1, 1, 0]], ['XNOR', "(A ⊕ B)'", [1, 0, 0, 1]]];
-  add('T4', 'Q1 — Name each gate and complete its truth table', () => ({ ans: 'OR, AND, AND(inv) = NOR, NOR, NAND, OR(inv) = NAND, XOR, XNOR, buffer', html:
+  add('T4', 'Q1. Name each gate and complete its truth table', () => ({ ans: 'OR, AND, AND(inv) = NOR, NOR, NAND, OR(inv) = NAND, XOR, XNOR, buffer', html:
     tbl(['Gate (in the order on the sheet)', 'Expression', 'AB = 00', '01', '10', '11'], gates.map(g => [g[0], g[1], ...g[2]])) +
     '<p>The last symbol (one input, triangle, no bubble) is a <b>buffer</b>: Output = A (0 → 0, 1 → 1).</p><p class="small">A gate with bubbles on its inputs inverts the inputs first. By De Morgan, an AND with inverted inputs is a NOR and an OR with inverted inputs is a NAND.</p>' }));
-  add('T4', 'Q2 — Simplify with the commutative law (and X · X = X, X + X = X)', () => ({ ans: 'Remove the repeated terms', html:
+  add('T4', 'Q2. Simplify with the commutative law (and X · X = X, X + X = X)', () => ({ ans: 'Remove the repeated terms', html:
     `<ol><li>(A′+D)(D+A′)(B+E+A′)(A′+E+B)(A+B+C) → <b>(A′ + D)(A′ + B + E)(A + B + C)</b>: (D+A′) = (A′+D) and (A′+E+B) = (B+E+A′).</li>
      <li>(X+Y)(Y+Z)(Y+X) → <b>(X + Y)(Y + Z)</b></li><li>(A+B+C)(D+E+F)(X+Y)(C+A+B) → <b>(A + B + C)(D + E + F)(X + Y)</b></li>
      <li>(ABC)+(A′B′C′)+(B′C′)+A(B+C)+(CBA)+(C′B′) → <b>ABC + A′B′C′ + B′C′ + A(B + C)</b>: CBA = ABC and C′B′ = B′C′.</li></ol>
      <p class="small">Order does not matter (commutative), and a repeated term or bracket adds nothing (idempotent). ⚠ Check the bars on your printed sheet for (a): if a bar differs, the brackets are not the same.</p>` }));
-  add('T4', 'Q3 — 3-input K-map from the truth table (outputs 1,1,0,1,0,1,0,0)', () => ({ ans: "F = A'B' + A'C + B'C", html: boolReport('11010100') }));
-  add('T4', 'Q4 — 4-input K-map from the truth table', () => ({ ans: 'see the map', html: boolReport('0100010001110101') }));
-  add('T4', "Q5 — Simplify A'BC + AB'C + ABC (a) algebra (b) K-map", () => ({ ans: 'F = AC + BC = C(A + B)', html:
+  add('T4', 'Q3. 3-input K-map from the truth table (outputs 1,1,0,1,0,1,0,0)', () => ({ ans: "F = A'B' + A'C + B'C", html: boolReport('11010100') }));
+  add('T4', 'Q4. 4-input K-map from the truth table', () => ({ ans: 'see the map', html: boolReport('0100010001110101') }));
+  add('T4', "Q5. Simplify A'BC + AB'C + ABC (a) algebra (b) K-map", () => ({ ans: 'F = AC + BC = C(A + B)', html:
     `<p><b>(a) Algebra:</b> A′BC + ABC = BC(A′ + A) = BC. AB′C + ABC = AC(B′ + B) = AC (ABC is used twice: X = X + X). So F = BC + AC = <b>C(A + B)</b>.</p><p><b>(b) K-map:</b></p>` + boolReport("A'BC + AB'C + ABC") }));
-  add('T5', 'Q1 — The toggle situation in a J-K flip-flop', () => ({ ans: 'J = K = 1 → Q becomes Q′ every clock', html:
+  add('T5', 'Q1. The toggle situation in a J-K flip-flop', () => ({ ans: 'J = K = 1 → Q becomes Q′ every clock', html:
     `<p>When <b>J = K = 1</b>, each clock pulse reverses the output: 0 → 1 → 0 → 1. This is the toggle. (In an S-R flip-flop S = R = 1 is not allowed; the J-K feedback fixes that.)</p>` + ffReport('JK', 0, '00 01 10 11 11 11') }));
-  add('T5', 'Q2 — Address bits needed for 4K memory', () => ({ ans: '12 bits', html: memReport('4K', 1) }));
-  add('T5', 'Q3 — The universal gates', () => ({ ans: 'NAND and NOR', html:
+  add('T5', 'Q2. Address bits needed for 4K memory', () => ({ ans: '12 bits', html: memReport('4K', 1) }));
+  add('T5', 'Q3. The universal gates', () => ({ ans: 'NAND and NOR', html:
     `<p><b>NAND</b> and <b>NOR</b> are universal: each one alone can build NOT, AND and OR, so any Boolean function.</p>` +
     tbl(['Build', 'With NAND only', 'With NOR only'], [["NOT A", "(A·A)′", "(A+A)′"], ['A AND B', "((A·B)′)′", "(A′ + B′)′"], ['A OR B', "(A′·B′)′", "((A+B)′)′"]]) +
     '<p class="small">Using one gate type gives a regular design that is cheaper to manufacture.</p>' }));
-  add('T5', "Q4 — F = ABC + BCD' + A'BC: truth table, K-map, NAND only", () => ({ ans: 'F = BC; NAND: F = ((BC)′)′', html:
+  add('T5', "Q4. F = ABC + BCD' + A'BC: truth table, K-map, NAND only", () => ({ ans: 'F = BC; NAND: F = ((BC)′)′', html:
     `<p><b>Algebra check:</b> ABC + A′BC = BC(A + A′) = BC, and BCD′ is already inside BC (absorption), so F = <b>BC</b>.</p>` + boolReport("ABC + BCD' + A'BC") +
     `<p><b>NAND only:</b> one NAND gate on B and C gives (BC)′; a second NAND with both inputs joined inverts it back to BC.</p>` }));
-  add('T5', 'Q5 — Flip-flop: definition, latch vs flip-flop, applications', () => ({ ans: '1-bit bistable store; latch = level, flip-flop = edge', html:
+  add('T5', 'Q5. Flip-flop: definition, latch vs flip-flop, applications', () => ({ ans: '1-bit bistable store; latch = level, flip-flop = edge', html:
     `<ul><li><b>Flip-flop:</b> a bistable sequential circuit that stores 1 bit (Q and Q′) and keeps it until the clock and inputs change it.</li>
      <li><b>Latch</b>: level-triggered, its output follows the inputs while it is enabled. <b>Flip-flop</b>: edge-triggered, it changes only at the clock edge, so all flip-flops in a system change together.</li>
      <li><b>Applications:</b> registers (D flip-flops), shift registers, counters (the program counter), storing a bit of memory, frequency division and synchronising signals.</li></ul>` }));
-  add('T6', 'Q1 — Instruction and instruction set', () => ({ ans: 'One command vs all commands of the CPU', html:
+  add('T6', 'Q1. Instruction and instruction set', () => ({ ans: 'One command vs all commands of the CPU', html:
     `<p>An <b>instruction</b> is a binary command the processor executes: an <b>opcode</b> (what to do) and <b>operands</b> (what to do it to: registers, memory addresses or values). The <b>instruction set</b> is the complete collection of instructions a processor can execute (data transfer, arithmetic, logical, conversion, I/O, system control, transfer of control). It is the part of the architecture the programmer sees.</p>` }));
-  add('T6', 'Q2 — Big-endian vs little-endian', () => ({ ans: 'Which byte goes at the lowest address', html: endianReport('12345678', '0') + '<p><b>Common architecture:</b> big-endian: IBM mainframes, network protocols, many older RISC designs; little-endian: Intel x86 (and most PCs). Some (ARM, PowerPC) can switch.</p>' }));
-  add('T6', 'Q3 — Stack machine program for X = (A + B²) / (D² − E)', () => ({ ans: 'PUSH A, PUSH B, PUSH B, MUL, ADD, PUSH D, PUSH D, MUL, PUSH E, SUB, DIV, POP X', html: (() => { const p = progs('X', parseArith('(A + B^2) / (D^2 - E)')); return tbl(['Instruction', 'Stack after it'], p.p0.map(r => [`<span class="mono">${r[0]}</span>`, h(r[1])])); })() }));
-  add('T6', 'Q4 — X = (A + B×C) / (D − E×F) on 0-, 1-, 2- and 3-address machines', () => ({ ans: '3-addr: 5 · 2-addr: 8 · 1-addr: 11 · 0-addr: 12 instructions', html: addrReport('X = (A + B*C) / (D - E*F)') }));
+  add('T6', 'Q2. Big-endian vs little-endian', () => ({ ans: 'Which byte goes at the lowest address', html: endianReport('12345678', '0') + '<p><b>Common architecture:</b> big-endian: IBM mainframes, network protocols, many older RISC designs; little-endian: Intel x86 (and most PCs). Some (ARM, PowerPC) can switch.</p>' }));
+  add('T6', 'Q3. Stack machine program for X = (A + B²) / (D² − E)', () => ({ ans: 'PUSH A, PUSH B, PUSH B, MUL, ADD, PUSH D, PUSH D, MUL, PUSH E, SUB, DIV, POP X', html: (() => { const p = progs('X', parseArith('(A + B^2) / (D^2 - E)')); return tbl(['Instruction', 'Stack after it'], p.p0.map(r => [`<span class="mono">${r[0]}</span>`, h(r[1])])); })() }));
+  add('T6', 'Q4. X = (A + B×C) / (D − E×F) on 0-, 1-, 2- and 3-address machines', () => ({ ans: '3-addr: 5 · 2-addr: 8 · 1-addr: 11 · 0-addr: 12 instructions', html: addrReport('X = (A + B*C) / (D - E*F)') }));
 
   /* ───────── bank questions (w = why each option, in order) ───────── */
   const Qs = [

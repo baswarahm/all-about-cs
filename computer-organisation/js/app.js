@@ -273,7 +273,7 @@ function testRunner(test, run) {
           if (reveal) cls = k === q.a ? 'right' : (chosen === k ? 'wrong' : 'dim');
           return `<button class="opt ${cls}" data-k="${k}" ${reveal ? 'disabled' : ''}><span class="L">${LETTERS[j]}</span><span class="T">${q.o[k]}</span></button>`;
         }).join('')}</div>
-        ${reveal ? `<div class="explain ${chosen === q.a ? 'good' : 'bad'}"><b>${chosen === q.a ? 'Correct' : 'Not quite — answer ' + LETTERS[ord.indexOf(q.a)]}</b>${q.e}${whyList(q, ord, chosen)}</div>` : ''}
+        ${reveal ? `<div class="explain ${chosen === q.a ? 'good' : 'bad'}"><b>${chosen === q.a ? 'Correct' : 'Not quite. Answer ' + LETTERS[ord.indexOf(q.a)]}</b>${q.e}${whyList(q, ord, chosen)}</div>` : ''}
       </div>
       <div class="q-foot">
         <button class="btn" id="prevQ" ${i === 0 ? 'disabled' : ''}>← Previous</button>
@@ -342,7 +342,7 @@ function results(test, run) {
   const N = test.qs.length, score = run.score, pct = Math.round(100 * score / N);
   const topics = [1, 2, 3].map(t => { const ids = test.qs.map((q, i) => i).filter(i => test.qs[i].t === t); const c = ids.filter(i => run.ans[i] === test.qs[i].a).length; return { t, c, n: ids.length }; });
   const weakest = [...topics].sort((a, b) => a.c / a.n - b.c / b.n)[0];
-  const verdict = pct >= 85 ? 'Excellent — you are ready.' : pct >= 70 ? 'Good. Fix the mistakes below and you are there.' : pct >= 50 ? 'A pass, but review the weak topic before the test.' : 'Go back to the notes, then try again.';
+  const verdict = pct >= 85 ? 'Excellent, you are ready.' : pct >= 70 ? 'Good. Fix the mistakes below and you are there.' : pct >= 50 ? 'A pass, but review the weak topic before the test.' : 'Go back to the notes, then try again.';
   app.innerHTML = `
   <div class="results">
     <a class="back" href="#tests">← All papers</a>
@@ -361,7 +361,7 @@ function results(test, run) {
     const list = test.qs.map((q, i) => ({ q, i })).filter(({ q, i }) => f === 'all' || (f === 'wrong' && run.ans[i] !== q.a) || (f === 'flag' && run.flag[i]));
     rev.innerHTML = list.length ? list.map(({ q, i }) => {
       const ord = optOrder(test, i, run.seed), ok = run.ans[i] === q.a;
-      return `<div class="rq ${ok ? 'ok' : 'bad'}"><div class="q-meta"><span class="qn">Q${i + 1}</span><span class="pill t${q.t}">Topic ${q.t}</span><span class="mark">${ok ? '✓ Correct' : run.ans[i] === null ? '— Skipped' : '✗ Wrong'}</span></div>
+      return `<div class="rq ${ok ? 'ok' : 'bad'}"><div class="q-meta"><span class="qn">Q${i + 1}</span><span class="pill t${q.t}">Topic ${q.t}</span><span class="mark">${ok ? '✓ Correct' : run.ans[i] === null ? 'Skipped' : '✗ Wrong'}</span></div>
         <div class="q-text">${q.q}</div>
         <div class="opts small">${ord.map((k, j) => `<div class="opt ${k === q.a ? 'right' : run.ans[i] === k ? 'wrong' : 'dim'}"><span class="L">${LETTERS[j]}</span><span class="T">${q.o[k]}</span>${run.ans[i] === k ? '<em>your answer</em>' : ''}</div>`).join('')}</div>
         <div class="explain">${q.e}${whyList(q, ord, run.ans[i])}</div></div>`;
@@ -479,7 +479,7 @@ function viewTutorials(g) {
   const cur = groups.includes(g) ? g : 'T1';
   app.innerHTML = `
   <div class="page-head"><div><p class="eyebrow">§04 · Worked solutions</p><h1>Tutorial answers</h1><p class="lede">Every tutorial question and slide activity, with the full working shown. Try each one yourself first, then open it to check.</p></div></div>
-  <div class="seg wide">${groups.map(k => `<a href="#tutorials/${k}" class="${k === cur ? 'on' : ''}">${TUT_GROUPS[k].name.split(' — ')[0]}<small>${TUT_GROUPS[k].name.split(' — ')[1]}</small></a>`).join('')}</div>
+  <div class="seg wide">${groups.map(k => `<a href="#tutorials/${k}" class="${k === cur ? 'on' : ''}">${TUT_GROUPS[k].name.split(': ')[0]}<small>${TUT_GROUPS[k].name.split(': ')[1]}</small></a>`).join('')}</div>
   <div class="tut-head"><h2>${TUT_GROUPS[cur].name}</h2><div class="row"><button class="btn sm ghost" id="expand">Expand all</button></div></div>
   <div class="tut-list">${ANS.map((a, i) => a.g === cur ? `<details class="ans" data-i="${i}"><summary><span class="aq">${a.q}</span><span class="aa">Show answer</span></summary><div class="sol"></div></details>` : '').join('')}</div>`;
   const fill = d => { const a = ANS[d.dataset.i]; if (!a.r) a.r = a.f(); const sol = d.querySelector('.sol'); if (!sol.innerHTML) { sol.innerHTML = a.r.html; d.querySelector('.aa').innerHTML = a.r.ans; } };

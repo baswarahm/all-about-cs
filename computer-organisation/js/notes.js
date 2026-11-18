@@ -35,7 +35,7 @@ const TOPICS = [
         <h4>Why families matter</h4>
         <p>A manufacturer sells a <b>family</b> of models with the <b>same architecture but different organisation</b>. The architecture stays the same, so code is compatible (the same programs run on every model). The organisation changes from model to model (more cores, bigger cache, better pipelines, newer memory), so each model has a different price and performance. Examples: IBM System/360 (first planned family, 1964) and x86.</p>
         ${tip('The ISA is the <b>boundary between hardware and software</b>, which is why it counts as architecture.')}
-        ${check('Cache size — architecture or organisation?', 'Organisation. The programmer cannot see it; the same program runs with any cache size.')}
+        ${check('Cache size: architecture or organisation?', 'Organisation. The programmer cannot see it; the same program runs with any cache size.')}
       ` },
       { id: 'struct', title: 'Structure & function', html: `
         <h4>The 4 functions</h4>
@@ -89,7 +89,7 @@ const TOPICS = [
       ` },
       { id: 'cloud', title: 'Cloud computing', html: `
         <p>NIST definition: a model for <b>ubiquitous, convenient, on-demand network access to a shared pool of configurable computing resources</b>.</p>
-        ${T(['Service', 'You get', 'Examples'], [['<b>SaaS</b> — Software', 'Ready-to-use application software', 'Google Apps, Office 365, Dropbox'], ['<b>PaaS</b> — Platform', 'Tools/environment to <b>build and deploy your own</b> apps', 'Google App Engine, Windows Azure'], ['<b>IaaS</b> — Infrastructure', 'Raw processing, storage, networks', 'Amazon Web Services, Google Compute Engine, Azure']])}
+        ${T(['Service', 'You get', 'Examples'], [['<b>SaaS</b>: Software', 'Ready-to-use application software', 'Google Apps, Office 365, Dropbox'], ['<b>PaaS</b>: Platform', 'Tools/environment to <b>build and deploy your own</b> apps', 'Google App Engine, Windows Azure'], ['<b>IaaS</b>: Infrastructure', 'Raw processing, storage, networks', 'Amazon Web Services, Google Compute Engine, Azure']])}
         ${key('<b>S</b>aaS = <b>S</b>oftware for end-users. <b>P</b>aaS = <b>P</b>rogrammers deploy apps. <b>I</b>aaS = <b>I</b>nfrastructure (VMs, storage).')}
         ${tip('Tutorial 1 Scenario 3 (moving the school servers to the cloud): give <b>one benefit</b> (access anywhere, scalable, no hardware to maintain), <b>one risk</b> (data security/privacy, needs the internet, long-term cost, vendor lock-in) and <b>one responsibility the department still has</b> (accounts and access control, security settings, backups/data policy, its own network). The cloud does <b>not</b> remove every infrastructure problem: the department and the provider share the responsibility.')}
       ` },
@@ -174,7 +174,7 @@ const TOPICS = [
   },
   {
     id: 't3', num: 3, title: 'Computer Arithmetic', sub: 'ALU, signed representations, 2’s complement add/sub, overflow, multiplication, division, IEEE 754',
-    weight: '18 of 50 MCQs last year — most calculations',
+    weight: '18 of 50 MCQs last year, most of them calculations',
     sections: [
       { id: 'alu', title: 'The ALU', html: `
         <p>The ALU executes arithmetic and logic instructions. "Everything else in the computer (CU, registers, memory) is there to service this unit": they bring data to the ALU and take the results away. It handles integers and may handle floating-point numbers. Its inputs are operands from registers and control signals from the CU. Its outputs are the result (to registers) and <b>flags</b> (e.g. overflow, zero, sign).</p>
@@ -269,7 +269,7 @@ const TOPICS = [
 /* One-page cheat sheet */
 const CHEAT = `
 <div class="cheat">
-  <section><h3>Topic 1 — Must-know facts</h3><ul>
+  <section><h3>Topic 1: Must-know facts</h3><ul>
     <li><b>Architecture</b> = what (programmer-visible, ISA). <b>Organisation</b> = how (hardware, transparent).</li>
     <li>Family = same architecture, different organisation (IBM 360, x86).</li>
     <li>4 functions: processing, storage, movement, control.</li>
@@ -285,7 +285,7 @@ const CHEAT = `
     <li>τ = 1/f · CPI = Σ CPIᵢ·fᵢ · T = Ic·CPI/f · MIPS = f/(CPI·10⁶).</li>
     <li>Amdahl: 1/((1−f)+f/N), max = 1/(1−f). Benchmarks: SPEC CPU2017.</li>
   </ul></section>
-  <section><h3>Topic 2 — Conversions</h3><ul>
+  <section><h3>Topic 2: Conversions</h3><ul>
     <li>Base r digits: 0 … r−1. Hex A–F = 10–15.</li>
     <li>→ decimal: Σ digit × r<sup>pos</sup>. Fraction positions −1, −2 …</li>
     <li>decimal →: integer ÷r, remainders <b>bottom-up</b>. Fraction ×r, integers <b>top-down</b>.</li>
@@ -294,7 +294,7 @@ const CHEAT = `
     <li>BCD: 4 bits per digit. ASCII 7-bit (128). EBCDIC 8-bit (256), IBM.</li>
     <li>2ⁿ: 1 2 4 8 16 32 64 128 256 · 2⁻ⁿ: .5 .25 .125 .0625</li>
   </ul></section>
-  <section><h3>Topic 3 — Arithmetic</h3><ul>
+  <section><h3>Topic 3: Arithmetic</h3><ul>
     <li>Unsigned 0…2ⁿ−1 · SM & 1’s ±(2ⁿ⁻¹−1), two zeros · 2’s −2ⁿ⁻¹…2ⁿ⁻¹−1, one zero.</li>
     <li>2’s comp: invert + 1, or keep up to the first 1 from the right and flip the rest.</li>
     <li>2’s → decimal: MSB weight −128 (8-bit).</li>
@@ -305,7 +305,7 @@ const CHEAT = `
     <li>Restoring division: shift left A,Q; A−M; if negative Q₀=0 and restore, else Q₀=1. Q = quotient, A = remainder.</li>
     <li>IEEE 754: 1 | 8 (bias 127) | 23. Normalise to 1.xxx × 2ᵉ, hidden 1.</li>
   </ul></section>
-  <section><h3>Topic 4 — Digital logic (after Test 1)</h3><ul>
+  <section><h3>Topic 4: Digital logic (after Test 1)</h3><ul>
     <li>AND = all 1 · OR = any 1 · NOT flips · NAND 0 only if all 1 · NOR 1 only if all 0 · XOR 1 if different.</li>
     <li>A+1 = 1 · A·0 = 0 · A+A’ = 1 · A·A’ = 0 · A+A = A · A+BC = (A+B)(A+C).</li>
     <li>De Morgan: (AB)’ = A’+B’ · (A+B)’ = A’B’. Break the bar, change the operation.</li>

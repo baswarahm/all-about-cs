@@ -1,4 +1,4 @@
-/* shared/deadlines.js — tests, assessments and coursework from the three course planners (Sem 1 2026/27).
+/* shared/deadlines.js: tests, assessments and coursework from the three course planners (Sem 1 2026/27).
    Edit the list when a lecturer gives an exact date. Times are Malaysia time (+08:00).
    exact: false = the planner gives only the week, so the date shown is that week's Monday–Sunday.
    The main page shows them in <section id="soon">; an item disappears once its end has passed. */
@@ -35,7 +35,7 @@
     var now = Date.now(), all = box.classList.contains('all');
     var list = L.filter(function (x) { return x.end.getTime() >= now; });
     var shown = all ? list : list.slice(0, 5);
-    box.innerHTML = '<div class="soon-head"><h2>📅 Coming up</h2><span>From the course planners</span></div>' +
+    box.innerHTML = '<div class="soon-head"><h2>Coming up</h2><span>From the course planners</span></div>' +
       (list.length ? '<ol class="soon-list">' + shown.map(function (x) {
         var days = Math.ceil((x.start.getTime() - now) / 864e5), live = x.start.getTime() <= now;
         var when = live ? (x.kind === 'Break' || x.kind === 'Released' || !x.exact ? 'this week' : 'today') :
@@ -47,7 +47,7 @@
           '<span class="soon-k k-' + x.kind.toLowerCase() + '">' + x.kind + '</span>' +
           '<div class="soon-m"><b>' + esc(x.t) + '</b><span>' + tag + ' · ' + esc(x.d) + '</span></div>' +
           '<div class="soon-w"><b>' + when + '</b><span>' + date + (x.exact ? '' : ' (week)') + '</span></div></li>';
-      }).join('') + '</ol>' : '<p>Nothing left this semester. 🎉</p>') +
+      }).join('') + '</ol>' : '<p>Nothing left this semester.</p>') +
       (list.length > 5 ? '<button type="button" class="soon-more">' + (all ? 'Show less' : 'Show all ' + list.length) + '</button>' : '');
     var b = box.querySelector('.soon-more');
     if (b) b.onclick = function () { box.classList.toggle('all'); render(); };

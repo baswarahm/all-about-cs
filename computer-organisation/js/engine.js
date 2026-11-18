@@ -204,7 +204,7 @@ function ieeeEncodeExplain(x) {
     `<p><b>3. Normalise:</b> <span class="mono">1.${frac || '0'} × 2<sup>${ex}</sup></span></p>` +
     `<p><b>4. Biased exponent:</b> ${ex} + 127 = ${E} = <span class="mono">${e}</span></p>` +
     `<p><b>5. Fraction:</b> bits after the leading 1, padded to 23: <span class="mono">${m}</span></p>` +
-    (exact ? '' : `<p class="muted">(Not exactly representable — the fraction is rounded to 23 bits.)</p>`) +
+    (exact ? '' : `<p class="muted">(Not exactly representable: the fraction is rounded to 23 bits.)</p>`) +
     `<p>Answer: <b class="mono">${s} ${e} ${m}</b></p>` };
 }
 function ieeeDecodeExplain(bits) {
