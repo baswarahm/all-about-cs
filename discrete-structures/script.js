@@ -3046,8 +3046,426 @@ function initMock1(){
   try{var last=JSON.parse(localStorage.getItem(MOCK_KEY)||"null");if(last){$("w7-last").hidden=false;$("w7-last").textContent="Your last attempt: "+last.score+" / "+last.total+" ("+last.pct+"%).";}}catch(e){}
 }
 
-initWeek2();initWeek4();initWeek5();initWeek6G();initWeek7T();initExamLab();initMock1();
-buildKit(2,W2);buildKit(4,W4);buildKit(5,W5);buildKit(8,W8);buildKit(9,W9);
+
+/* ===================== WEEK 9 (SETS AND FUNCTIONS): internal number 10, ids start with w10- ===================== */
+function qsa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
+function listOf(s){var seen={},out=[];String(s||"").split(/[,;]/).forEach(function(x){x=x.trim().replace(/^\{|\}$/g,"").trim();if(x&&!seen[x]){seen[x]=1;out.push(x);}});return out;}
+function sortEls(a){var num=a.every(function(x){return x!==""&&!isNaN(+x);});return a.slice().sort(num?function(p,q){return p-q;}:function(p,q){return p<q?-1:p>q?1:0;});}
+function fmtSet(a){return a.length?"{"+sortEls(a).join(", ")+"}":"∅";}
+function fmtNum(v){if(!isFinite(v))return String(v);if(Math.abs(v-Math.round(v))<1e-9)return String(Math.round(v));return String(+v.toPrecision(8));}
+
+/* set expressions: names A B C U, ∪ ∩ − and complement (A' or ~A); ∩ binds tighter than ∪ and − */
+function setParse(src){
+  var s=String(src).replace(/union/gi,"∪").replace(/intersect(ion)?/gi,"∩").replace(/[|u]/g,"∪").replace(/[&n]/g,"∩").replace(/[-–]/g,"−").replace(/[’`]/g,"'").replace(/¬/g,"~").replace(/\{\}/g,"∅");
+  var t=[],i,c;
+  for(i=0;i<s.length;i++){c=s[i];if(/\s/.test(c))continue;if(/[ABCU∅∪∩−'~()]/.test(c))t.push(c);else throw new Error('I do not understand "'+c+'". Use A, B, C, U, ∪, ∩, −, \' and brackets.');}
+  var p=0;
+  function peek(){return t[p];}
+  function prim(){
+    var c=t[p++];
+    if(c==="~")return {op:"c",a:prim()};
+    if(c==="(") {var e=union();if(t[p++]!==")")throw new Error("A bracket is not closed.");return post(e);}
+    if(c&&/[ABCU∅]/.test(c))return post({v:c});
+    throw new Error(c?'Unexpected "'+c+'".':"The expression ends too early.");
+  }
+  function post(e){while(peek()==="'"){p++;e={op:"c",a:e};}return e;}
+  function inter(){var e=prim();while(peek()==="∩"){p++;e={op:"∩",a:e,b:prim()};}return e;}
+  function union(){var e=inter();while(peek()==="∪"||peek()==="−"){var o=t[p++];e={op:o,a:e,b:inter()};}return e;}
+  if(!t.length)throw new Error("Type an expression, like A ∪ B.");
+  var e=union();if(p<t.length)throw new Error('Unexpected "'+t[p]+'".');return e;
+}
+function setStr(e,top){
+  if(e.v)return e.v;
+  if(e.op==="c"){var x=setStr(e.a);return (e.a.v?x:"("+x+")")+"'";}
+  var s=setStr(e.a)+" "+e.op+" "+setStr(e.b);return top?s:"("+s+")";
+}
+function setVars(e,o){if(e.v){if(/[ABC]/.test(e.v))o[e.v]=1;}else{setVars(e.a,o);if(e.b)setVars(e.b,o);}return o;}
+function setEval(e,env,ops){
+  if(e.v)return env[e.v];
+  if(e.op==="c")return ops.c(setEval(e.a,env,ops));
+  var a=setEval(e.a,env,ops),b=setEval(e.b,env,ops);
+  return e.op==="∪"?ops.u(a,b):e.op==="∩"?ops.i(a,b):ops.d(a,b);
+}
+function setSubs(e,list,seen){if(e.v)return;setSubs(e.a,list,seen);if(e.b)setSubs(e.b,list,seen);var k=setStr(e,true);if(!seen[k]){seen[k]=1;list.push(e);}}
+var BOOLOPS={u:function(a,b){return a||b;},i:function(a,b){return a&&b;},d:function(a,b){return a&&!b;},c:function(a){return !a;}};
+
+function vennSvg(e,names){
+  var three=names.length===3,W=300,H=three?220:180,pos=three?[[120,90,58],[180,90,58],[150,142,58]]:[[118,90,62],[182,90,62]];
+  var h='<svg viewBox="0 0 '+W+" "+H+'" class="venn" role="img" aria-label="Venn diagram of '+esc(setStr(e,true))+'"><defs>';
+  pos.forEach(function(c,i){h+='<clipPath id="vc'+i+'"><circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'"/></clipPath>';});
+  var regions=[],n=names.length,r,k;
+  for(r=0;r<(1<<n);r++){
+    h+='<mask id="vm'+r+'"><rect width="'+W+'" height="'+H+'" fill="#fff"/>';
+    for(k=0;k<n;k++)if(!(r>>(n-1-k)&1))h+='<circle cx="'+pos[k][0]+'" cy="'+pos[k][1]+'" r="'+pos[k][2]+'" fill="#000"/>';
+    h+="</mask>";regions.push(r);
+  }
+  h+="</defs>";
+  regions.forEach(function(r){
+    var env={U:true,"∅":false};names.forEach(function(nm,k){env[nm]=!!(r>>(n-1-k)&1);});
+    if(!setEval(e,env,BOOLOPS))return;
+    var g='<rect width="'+W+'" height="'+H+'" class="venn-on"/>';
+    for(var k=n-1;k>=0;k--)if(r>>(n-1-k)&1)g='<g clip-path="url(#vc'+k+')">'+g+"</g>";
+    h+='<g mask="url(#vm'+r+')">'+g+"</g>";
+  });
+  h+='<rect x="1" y="1" width="'+(W-2)+'" height="'+(H-2)+'" class="venn-u"/><text x="10" y="18" class="venn-l">U</text>';
+  pos.forEach(function(c,i){h+='<circle cx="'+c[0]+'" cy="'+c[1]+'" r="'+c[2]+'" class="venn-c"/>';});
+  var lab=three?[[78,52],[222,52],[150,212]]:[[64,40],[236,40]];
+  names.forEach(function(nm,i){h+='<text x="'+lab[i][0]+'" y="'+lab[i][1]+'" class="venn-l" text-anchor="middle">'+nm+"</text>";});
+  return h+"</svg>";
+}
+
+function initWeek9S(){
+  function sets(){
+    var U=listOf($("w10-u").value),env={U:U,"∅":[]},names=["A","B"];
+    env.A=listOf($("w10-a").value);env.B=listOf($("w10-b").value);
+    if($("w10-c").value.trim()){env.C=listOf($("w10-c").value);names.push("C");}
+    return {U:U,env:env,names:names};
+  }
+  function inS(a,x){return a.indexOf(x)>=0;}
+  var SETOPS;
+  function render(){
+    var out=$("w10-out");
+    try{
+      var d=sets(),U=d.U;
+      SETOPS={u:function(a,b){return a.concat(b.filter(function(x){return !inS(a,x);}));},i:function(a,b){return a.filter(function(x){return inS(b,x);});},
+        d:function(a,b){return a.filter(function(x){return !inS(b,x);});},c:function(a){return U.filter(function(x){return !inS(a,x);});}};
+      var e=setParse($("w10-x").value),used=setVars(e,{});
+      if(used.C&&!d.env.C)throw new Error("The expression uses C, but C is empty. Type C above.");
+      var res=setEval(e,d.env,SETOPS),h="",warn=[];
+      d.names.forEach(function(nm){var bad=d.env[nm].filter(function(x){return !inS(U,x);});if(bad.length)warn.push(nm+" has "+fmtSet(bad)+" which "+(bad.length>1?"are":"is")+" not in U.");});
+      if(warn.length)h+='<div class="err">'+esc(warn.join(" "))+" Complements use U, so add them to U.</div>";
+      h+='<div class="verdict-box" style="background:var(--soft)">'+esc(setStr(e,true))+" = "+esc(fmtSet(res))+" &nbsp; |"+esc(setStr(e,true))+"| = "+res.length+"</div>";
+      h+='<div class="venn-wrap">'+vennSvg(e,d.names)+"</div>";
+      var A=d.env.A,B=d.env.B,AB=SETOPS.i(A,B),AuB=SETOPS.u(A,B);
+      h+="<p>|A| = "+A.length+", |B| = "+B.length+", |A ∩ B| = "+AB.length+". Inclusion–exclusion: |A ∪ B| = "+A.length+" + "+B.length+" − "+AB.length+" = <b>"+AuB.length+"</b>.</p>";
+      if(A.length<=4){
+        var ps=[[]];sortEls(A).forEach(function(x){ps=ps.concat(ps.map(function(s){return s.concat([x]);}));});
+        ps.sort(function(p,q){return p.length-q.length;});
+        h+="<p>P(A) has 2<sup>"+A.length+"</sup> = "+ps.length+" subsets: {"+ps.map(function(s){return s.length?"{"+s.join(", ")+"}":"∅";}).join(", ")+"}</p>";
+      }else h+="<p>P(A) has 2<sup>"+A.length+"</sup> = "+Math.pow(2,A.length)+" subsets (too many to list here).</p>";
+      if(A.length*B.length<=20&&A.length&&B.length){
+        var pr=[];sortEls(A).forEach(function(x){sortEls(B).forEach(function(y){pr.push("("+x+", "+y+")");});});
+        h+="<p>A × B = {"+esc(pr.join(", "))+"}, with |A × B| = "+A.length+" · "+B.length+" = "+pr.length+".</p>";
+      }
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  ["w10-u","w10-a","w10-b","w10-c","w10-x"].forEach(function(id){$(id).addEventListener("input",render);});
+  qsa("[data-w10ins]").forEach(function(b){b.addEventListener("click",function(){var x=$("w10-x"),s=x.selectionStart||x.value.length;x.value=x.value.slice(0,s)+b.getAttribute("data-w10ins")+x.value.slice(x.selectionEnd||s);x.focus();render();});});
+
+  /* membership table */
+  function renderM(){
+    var out=$("w10-mout");
+    try{
+      var L=setParse($("w10-ml").value),R=setParse($("w10-mr").value),vs=Object.keys(setVars(R,setVars(L,{}))).sort();
+      if(!vs.length)throw new Error("Use at least one of A, B and C.");
+      var cols=[],seen={};setSubs(L,cols,seen);setSubs(R,cols,seen);
+      cols=cols.filter(function(c){return c!==L&&c!==R&&setStr(c,true)!==setStr(L,true)&&setStr(c,true)!==setStr(R,true);});
+      cols.push(L);cols.push(R);
+      var h='<div class="scroll"><table><tr>';
+      vs.forEach(function(v){h+="<th>"+v+"</th>";});
+      cols.forEach(function(c,i){h+='<th class="'+(i>=cols.length-2?"final":"")+'">'+esc(setStr(c,true))+"</th>";});
+      h+="</tr>";
+      var same=true;
+      for(var r=(1<<vs.length)-1;r>=0;r--){
+        var env={U:true,"∅":false};vs.forEach(function(v,k){env[v]=!!(r>>(vs.length-1-k)&1);});
+        var lv=setEval(L,env,BOOLOPS),rv=setEval(R,env,BOOLOPS);if(lv!==rv)same=false;
+        h+='<tr class="'+(lv===rv?"":"diff")+'">';
+        vs.forEach(function(v){h+="<td>"+(env[v]?1:0)+"</td>";});
+        cols.forEach(function(c,i){h+='<td class="'+(i>=cols.length-2?"final":"")+'">'+(setEval(c,env,BOOLOPS)?1:0)+"</td>";});
+        h+="</tr>";
+      }
+      h+="</table></div>";
+      h+='<div class="verdict-box '+(same?"v-T":"v-F")+'">'+(same?"The last two columns match in every row, so the identity holds.":"The last two columns differ in the highlighted rows, so this is not an identity.")+"</div>";
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  ["w10-ml","w10-mr"].forEach(function(id){$(id).addEventListener("input",renderM);});
+  qsa("[data-w10id]").forEach(function(b){b.addEventListener("click",function(){var p=b.getAttribute("data-w10id").split("|");$("w10-ml").value=p[0];$("w10-mr").value=p[1];renderM();});});
+
+  /* function checker */
+  function rule(src){
+    var s=String(src).replace(/\s+/g,"").replace(/\^/g,"**").replace(/(\d)(x|\()/g,"$1*$2").replace(/\)(x|\d|\()/g,")*$1").replace(/x(\d|\()/g,"x*$1");
+    if(!/^[0-9x+\-*/.()]+$/.test(s.replace(/\*\*/g,"")))throw new Error("A rule may only use x, numbers, + − * / ^ and brackets.");
+    var f=new Function("x","return ("+s+");");return function(x){return f(x);};
+  }
+  function renderF(){
+    var out=$("w10-fout");
+    try{
+      var D=listOf($("w10-fd").value),C=listOf($("w10-fc").value),m=$("w10-fm").value,map={},problems=[];
+      if(!D.length||!C.length)throw new Error("Type the domain and the codomain.");
+      if(/→|->|>/.test(m)){
+        m.split(/[,;]/).forEach(function(pair){
+          if(!pair.trim())return;var q=pair.split(/→|->|>/);if(q.length!==2)throw new Error('Write each arrow like a→x (problem: "'+pair.trim()+'").');
+          var a=q[0].trim(),b=q[1].trim();
+          if(D.indexOf(a)<0){problems.push(a+" is not in the domain.");return;}
+          if(map[a]!==undefined&&map[a]!==b)problems.push(a+" has two images ("+map[a]+" and "+b+"), so this is not a function.");
+          map[a]=b;
+        });
+      }else{
+        var f=rule(m);D.forEach(function(a){if(isNaN(+a))throw new Error("A rule needs a domain of numbers.");map[a]=fmtNum(f(+a));});
+      }
+      D.forEach(function(a){if(map[a]===undefined)problems.push(a+" has no image, so this is not a function from A.");else if(C.indexOf(map[a])<0)problems.push("f("+a+") = "+map[a]+", which is not in the codomain.");});
+      var h=fnSvg(D,C,map);
+      if(problems.length){out.innerHTML=h+'<div class="verdict-box v-F">Not a function from A to B.</div><ul>'+problems.map(function(p){return "<li>"+esc(p)+"</li>";}).join("")+"</ul>";return;}
+      var range=[],pre={};C.forEach(function(c){pre[c]=[];});
+      D.forEach(function(a){pre[map[a]].push(a);if(range.indexOf(map[a])<0)range.push(map[a]);});
+      var share=C.filter(function(c){return pre[c].length>1;}),miss=C.filter(function(c){return !pre[c].length;});
+      var one=!share.length,onto=!miss.length;
+      h+="<p>Domain A = "+esc(fmtSet(D))+", codomain B = "+esc(fmtSet(C))+", range f(A) = <b>"+esc(fmtSet(range))+"</b>.</p>";
+      h+="<p>Preimages: "+C.map(function(c){return c+" ← "+(pre[c].length?"{"+pre[c].join(", ")+"}":"none");}).map(esc).join("; ")+".</p><ul>";
+      h+="<li><b>One-to-one:</b> "+(one?"yes, no two elements share an image.":"no: "+esc(share.map(function(c){return pre[c].join(" and ")+" all map to "+c;}).join("; "))+".")+"</li>";
+      h+="<li><b>Onto:</b> "+(onto?"yes, the range equals the codomain.":"no: nothing maps to "+esc(miss.join(", "))+".")+"</li>";
+      h+="<li><b>Bijection:</b> "+(one&&onto?"yes, so f has an inverse: "+esc(C.map(function(c){return "f⁻¹("+c+") = "+pre[c][0];}).join(", "))+".":"no, so f has no inverse.")+"</li></ul>";
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  function fnSvg(D,C,map){
+    var rows=Math.max(D.length,C.length),H=Math.max(90,rows*32+30),W=280,y=function(i,n){return 24+(H-40)*(n>1?i/(n-1):0.5);};
+    var h='<svg viewBox="0 0 '+W+" "+H+'" class="fnd" role="img" aria-label="Arrow diagram"><defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10z" class="fnd-ah"/></marker></defs>';
+    h+='<text x="50" y="14" class="fnd-l" text-anchor="middle">A</text><text x="230" y="14" class="fnd-l" text-anchor="middle">B</text>';
+    D.forEach(function(a,i){var j=C.indexOf(map[a]);if(j>=0)h+='<line x1="62" y1="'+y(i,D.length)+'" x2="216" y2="'+y(j,C.length)+'" class="fnd-e" marker-end="url(#fa)"/>';});
+    D.forEach(function(a,i){h+='<circle cx="50" cy="'+y(i,D.length)+'" r="11" class="fnd-n"/><text x="50" y="'+(y(i,D.length)+4)+'" text-anchor="middle" class="fnd-t">'+esc(a)+"</text>";});
+    C.forEach(function(c,i){h+='<circle cx="230" cy="'+y(i,C.length)+'" r="11" class="fnd-n"/><text x="230" y="'+(y(i,C.length)+4)+'" text-anchor="middle" class="fnd-t">'+esc(c)+"</text>";});
+    return h+"</svg>";
+  }
+  ["w10-fd","w10-fc","w10-fm"].forEach(function(id){$(id).addEventListener("input",renderF);});
+  qsa("[data-w10f]").forEach(function(b){b.addEventListener("click",function(){var p=b.getAttribute("data-w10f").split("|");$("w10-fd").value=p[0];$("w10-fc").value=p[1];$("w10-fm").value=p[2];renderF();});});
+
+  /* floor and ceiling */
+  function renderFl(){
+    var out=$("w10-flout"),s=$("w10-fl").value.trim(),m=/^(-?\d+(?:\.\d+)?)\s*(?:\/\s*(-?\d+(?:\.\d+)?))?$/.exec(s);
+    if(!m||(m[2]&&+m[2]===0)){out.innerHTML='<div class="err">Type a number like 3.1 or a fraction like -1/2.</div>';return;}
+    var x=m[2]?+m[1]/+m[2]:+m[1],fl=Math.floor(x),ce=Math.ceil(x),h="<p>x = "+fmtNum(x)+". ";
+    h+=fl===ce?"x is an integer, so ⌊x⌋ = ⌈x⌉ = <b>"+fl+"</b>.":"x lies between the integers "+fl+" and "+ce+", so ⌊x⌋ = <b>"+fl+"</b> and ⌈x⌉ = <b>"+ce+"</b>.";
+    if(fl===ce&&fl>=0&&fl<=20){var f=1;for(var i=2;i<=fl;i++)f*=i;h+=" Also "+fl+"! = "+f.toLocaleString("en")+".";}
+    out.innerHTML=h+"</p>";
+  }
+  $("w10-fl").addEventListener("input",renderFl);
+  render();renderM();renderF();renderFl();
+}
+
+/* ===================== WEEK 10 (SEQUENCES, SUMS, MATRICES): internal number 11, ids start with w11- ===================== */
+function initWeek10Q(){
+  function cleanExpr(s,vars){
+    var t=String(s).replace(/\s+/g,"").replace(/\^/g,"**").replace(/(\d)([a-zA-Z(])/g,"$1*$2").replace(/\)([\da-zA-Z(])/g,")*$1");
+    var bare=t.replace(/\*\*/g,"");vars.forEach(function(v){bare=bare.split(v).join("");});
+    if(!/^[0-9+\-*/.()]*$/.test(bare))throw new Error("Only numbers, "+vars.join(", ")+", + − * / ^ and brackets are allowed.");
+    return t;
+  }
+  function par(v){return v<0?"("+fmtNum(v)+")":fmtNum(v);}
+  function renderR(){
+    var out=$("w11-rout");
+    try{
+      var raw=$("w11-r").value,ex=raw.replace(/a\s*\(\s*n\s*-\s*1\s*\)/g,"P").replace(/a\s*\(\s*n\s*-\s*2\s*\)/g,"Q");
+      if(/a\s*\(/.test(ex))throw new Error("Use only a(n-1) and a(n-2).");
+      var order=/Q/.test(ex)?2:1,f=new Function("n","P","Q","return ("+cleanExpr(ex,["P","Q","n"])+");");
+      var init={},lo=Infinity;
+      $("w11-i").value.split(/[,;]/).forEach(function(p){var m=/a\s*_?\s*(\d+)\s*=\s*(-?[\d.]+)/.exec(p);if(m){init[+m[1]]=+m[2];lo=Math.min(lo,+m[1]);}});
+      if(lo===Infinity)throw new Error("Give the initial terms like a0 = 2 (and a1 = 5 for a(n-2)).");
+      for(var k=lo;k<lo+order;k++)if(init[k]===undefined)throw new Error("This relation needs a"+k+" as an initial term too.");
+      var N=Math.min(30,Math.max(order+1,parseInt($("w11-n").value,10)||8)),a={},rows=[];
+      for(var n=lo;n<lo+N;n++){
+        if(n<lo+order){a[n]=init[n];rows.push("a<sub>"+n+"</sub> = "+fmtNum(a[n])+" (initial condition)");continue;}
+        a[n]=f(n,a[n-1],a[n-2]);
+        var sym=raw.replace(/a\s*\(\s*n\s*-\s*1\s*\)/g,"a<sub>"+(n-1)+"</sub>").replace(/a\s*\(\s*n\s*-\s*2\s*\)/g,"a<sub>"+(n-2)+"</sub>").replace(/\bn\b/g,n);
+        var num=raw.replace(/a\s*\(\s*n\s*-\s*1\s*\)/g,par(a[n-1])).replace(/a\s*\(\s*n\s*-\s*2\s*\)/g,par(a[n-2])).replace(/\bn\b/g,n);
+        rows.push("a<sub>"+n+"</sub> = "+sym+" = "+num+" = <b>"+fmtNum(a[n])+"</b>");
+      }
+      var vals=[];for(n=lo;n<lo+N;n++)vals.push(a[n]);
+      var h="<p>Terms: "+vals.map(fmtNum).join(", ")+", …</p><ol class=\"steps\" start=\""+lo+"\" style=\"list-style:none;padding-left:0\">"+rows.map(function(r){return "<li>"+r+"</li>";}).join("")+"</ol>";
+      var d=vals[1]-vals[0],arith=vals.every(function(v,i){return !i||Math.abs(v-vals[i-1]-d)<1e-9;});
+      var r=vals[0]?vals[1]/vals[0]:NaN,geo=!arith&&isFinite(r)&&vals.every(function(v,i){return !i||Math.abs(v-vals[i-1]*r)<1e-9*Math.max(1,Math.abs(v));});
+      var a0=fmtNum(vals[0]),idx=lo?"(n − "+lo+")":"n";
+      if(arith)h+='<div class="verdict-box" style="background:var(--soft)">Arithmetic progression with common difference d = '+fmtNum(d)+". Closed formula: a<sub>n</sub> = "+a0+" + "+par(d)+idx+". Check: a<sub>"+(lo+N-1)+"</sub> = "+a0+" + "+par(d)+"·"+(N-1)+" = "+fmtNum(vals[0]+d*(N-1))+".</div>";
+      else if(geo)h+='<div class="verdict-box" style="background:var(--soft)">Geometric progression with common ratio r = '+fmtNum(r)+". Closed formula: a<sub>n</sub> = "+a0+" · "+par(r)+"<sup>"+idx+"</sup>.</div>";
+      else h+='<p class="small">This sequence is neither arithmetic nor geometric, so there is no simple closed formula from this week (Fibonacci-type relations are solved later in the course).</p>';
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  ["w11-r","w11-i","w11-n"].forEach(function(id){$(id).addEventListener("input",renderR);});
+  qsa("[data-w11r]").forEach(function(b){b.addEventListener("click",function(){var p=b.getAttribute("data-w11r").split("|");$("w11-r").value=p[0];$("w11-i").value=p[1];renderR();});});
+
+  /* summation */
+  function renderS(){
+    var out=$("w11-sout");
+    try{
+      var src=$("w11-sf").value,m=parseInt($("w11-sm").value,10),n=parseInt($("w11-sn").value,10);
+      if(isNaN(m)||isNaN(n))throw new Error("Type whole-number limits.");
+      if(n<m)throw new Error("The upper limit must be at least the lower limit.");
+      if(n-m>100000)throw new Error("Please keep the sum under 100,000 terms.");
+      var f=new Function("k","return ("+cleanExpr(src,["k"])+");"),sum=0,terms=[];
+      for(var k=m;k<=n;k++){var v=f(k);if(!isFinite(v))throw new Error("The term is undefined at k = "+k+".");sum+=v;if(k-m<4||k===n)terms.push(fmtNum(v));}
+      var cnt=n-m+1,h="<p>Σ<sub>k="+m+"</sub><sup>"+n+"</sup> "+esc(src)+" = "+(cnt<=5?terms.join(" + "):terms.slice(0,4).join(" + ")+" + … + "+terms[terms.length-1])+" = <b>"+fmtNum(sum)+"</b> ("+cnt+" terms)</p>";
+      var key=src.replace(/\s+/g,"").replace(/\*\*/g,"^"),F={"k":function(x){return x*(x+1)/2;},"k^2":function(x){return x*(x+1)*(2*x+1)/6;},"k^3":function(x){return x*x*(x+1)*(x+1)/4;}},
+        T={"k":"n(n + 1)/2","k^2":"n(n + 1)(2n + 1)/6","k^3":"n²(n + 1)²/4"};
+      if(F[key]&&m>=1){
+        h+="<p>With the table formula "+T[key]+": ";
+        if(m===1)h+="Σ<sub>k=1</sub><sup>"+n+"</sup> = "+fmtNum(F[key](n))+".</p>";
+        else h+="Σ<sub>k="+m+"</sub><sup>"+n+"</sup> = Σ<sub>k=1</sub><sup>"+n+"</sup> − Σ<sub>k=1</sub><sup>"+(m-1)+"</sup> = "+F[key](n).toLocaleString("en")+" − "+F[key](m-1).toLocaleString("en")+" = <b>"+(F[key](n)-F[key](m-1)).toLocaleString("en")+"</b>.</p>";
+      }
+      var g=/^(\d*\.?\d*)\*?(\d+\.?\d*)\^k$/.exec(key);
+      if(g){var A=g[1]===""?1:+g[1],R=+g[2];if(R!==1)h+="<p>Geometric sum: Σ<sub>k="+m+"</sub><sup>"+n+"</sup> "+fmtNum(A)+"·"+fmtNum(R)+"<sup>k</sup> = ("+fmtNum(A)+"·"+fmtNum(R)+"<sup>"+(n+1)+"</sup> − "+fmtNum(A)+"·"+fmtNum(R)+"<sup>"+m+"</sup>)/("+fmtNum(R)+" − 1) = <b>"+fmtNum((A*Math.pow(R,n+1)-A*Math.pow(R,m))/(R-1))+"</b>.</p>";}
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  ["w11-sf","w11-sm","w11-sn"].forEach(function(id){$(id).addEventListener("input",renderS);});
+
+  /* matrices */
+  function parseM(s,name){
+    var rows=String(s).trim().split(/\s*[;\n]\s*/).filter(function(r){return r.trim();}).map(function(r){return r.trim().split(/[\s,]+/).map(function(x){if(x===""||isNaN(+x))throw new Error(name+' has "'+x+'", which is not a number.');return +x;});});
+    if(!rows.length)throw new Error("Type matrix "+name+".");
+    rows.forEach(function(r){if(r.length!==rows[0].length)throw new Error("Every row of "+name+" needs the same number of entries.");});
+    return rows;
+  }
+  function sz(M){return M.length+" × "+M[0].length;}
+  function zo(M,name){M.forEach(function(r){r.forEach(function(v){if(v!==0&&v!==1)throw new Error(name+" must be a zero-one matrix (only 0 and 1).");});});}
+  function mx(M){return '<table class="mx">'+M.map(function(r){return "<tr>"+r.map(function(v){return "<td>"+fmtNum(v)+"</td>";}).join("")+"</tr>";}).join("")+"</table>";}
+  function mul(A,B,bool){return A.map(function(r){return B[0].map(function(_,j){var s=0;for(var k=0;k<B.length;k++)s=bool?(s||(r[k]&&B[k][j])?1:0):s+r[k]*B[k][j];return s;});});}
+  function ident(n){var I=[];for(var i=0;i<n;i++){I.push([]);for(var j=0;j<n;j++)I[i].push(i===j?1:0);}return I;}
+  function renderMx(){
+    var out=$("w11-mout");
+    try{
+      var op=$("w11-mo").value,A=parseM($("w11-ma").value,"A"),needB=["mul","bmul","add","meet","join"].indexOf(op)>=0,B=needB?parseM($("w11-mb").value,"B"):null,h="";
+      var rr=parseInt($("w11-mr").value,10);
+      if(op==="add"||op==="meet"||op==="join"){
+        if(sz(A)!==sz(B))throw new Error("A is "+sz(A)+" and B is "+sz(B)+". They must be the same size.");
+        if(op!=="add"){zo(A,"A");zo(B,"B");}
+        var C=A.map(function(r,i){return r.map(function(v,j){return op==="add"?v+B[i][j]:op==="meet"?(v&&B[i][j]?1:0):(v||B[i][j]?1:0);});});
+        h='<div class="mxrow">'+mx(A)+"<span>"+(op==="add"?"+":op==="meet"?"∧":"∨")+"</span>"+mx(B)+"<span>=</span>"+mx(C)+"</div><p>Entry by entry: c<sub>ij</sub> = a<sub>ij</sub> "+(op==="add"?"+":op==="meet"?"∧":"∨")+" b<sub>ij</sub>.</p>";
+      }else if(op==="mul"||op==="bmul"){
+        if(A[0].length!==B.length)throw new Error("A is "+sz(A)+" and B is "+sz(B)+". The columns of A ("+A[0].length+") must equal the rows of B ("+B.length+"), so the product is undefined.");
+        if(op==="bmul"){zo(A,"A");zo(B,"B");}
+        var P=mul(A,B,op==="bmul"),lines=[];
+        P.forEach(function(r,i){r.forEach(function(v,j){
+          var parts=[];for(var k=0;k<B.length;k++)parts.push(op==="bmul"?"("+A[i][k]+" ∧ "+B[k][j]+")":par(A[i][k])+"·"+par(B[k][j]));
+          lines.push("c<sub>"+(i+1)+(j+1)+"</sub> = "+parts.join(op==="bmul"?" ∨ ":" + ")+" = <b>"+fmtNum(v)+"</b>");
+        });});
+        h='<div class="mxrow">'+mx(A)+"<span>"+(op==="bmul"?"⊙":"×")+"</span>"+mx(B)+"<span>=</span>"+mx(P)+"</div><p>"+sz(A)+" times "+sz(B)+" gives "+sz(P)+". Row i of A with column j of B:</p><ul class=\"small\">"+lines.slice(0,24).map(function(l){return "<li>"+l+"</li>";}).join("")+"</ul>";
+        if(op==="mul"&&B[0].length===A.length){var Q=mul(B,A,false),same=JSON.stringify(P)===JSON.stringify(Q);h+="<p>For comparison, BA = </p>"+mx(Q)+"<p>"+(same?"Here AB = BA, which is not true in general.":"AB ≠ BA: matrix multiplication is not commutative.")+"</p>";}
+      }else if(op==="t"){
+        var T=A[0].map(function(_,j){return A.map(function(r){return r[j];});}),sym="";
+        if(A.length===A[0].length){var bad=null;A.forEach(function(r,i){r.forEach(function(v,j){if(!bad&&v!==A[j][i])bad=[i+1,j+1];});});
+          sym=bad?"Not symmetric: a<sub>"+bad[0]+bad[1]+"</sub> = "+fmtNum(A[bad[0]-1][bad[1]-1])+" but a<sub>"+bad[1]+bad[0]+"</sub> = "+fmtNum(A[bad[1]-1][bad[0]-1])+".":"Symmetric: A = A<sup>t</sup>.";}
+        else sym="Not square, so it cannot be symmetric.";
+        h='<div class="mxrow">'+mx(A)+"<span>transpose →</span>"+mx(T)+"</div><p>A is "+sz(A)+", so A<sup>t</sup> is "+sz(T)+". "+sym+"</p>";
+      }else{
+        if(A.length!==A[0].length)throw new Error("Powers need a square matrix; A is "+sz(A)+".");
+        if(isNaN(rr)||rr<0||rr>10)throw new Error("Type r from 0 to 10.");
+        var bool=op==="bpow";if(bool)zo(A,"A");
+        var M=ident(A.length);h='<div class="mxrow mxwrap">';
+        if(rr===0)h+="<span>A"+(bool?"<sup>[0]</sup>":"<sup>0</sup>")+" = I<sub>"+A.length+"</sub> =</span>"+mx(M);
+        for(var p=1;p<=rr;p++){M=mul(M,A,bool);h+="<span>A<sup>"+(bool?"["+p+"]":p)+"</sup> =</span>"+mx(M);}
+        h+="</div>";
+      }
+      out.innerHTML=h;
+    }catch(err){out.innerHTML='<div class="err">'+esc(err.message)+"</div>";}
+  }
+  ["w11-ma","w11-mb","w11-mo","w11-mr"].forEach(function(id){$(id).addEventListener("input",renderMx);$(id).addEventListener("change",renderMx);});
+  qsa("[data-w11m]").forEach(function(b){b.addEventListener("click",function(){var p=b.getAttribute("data-w11m").split("|");$("w11-ma").value=p[0];if(p[1])$("w11-mb").value=p[1];$("w11-mo").value=p[2];if(p[2]==="bpow")$("w11-mr").value="5";renderMx();});});
+  renderR();renderS();renderMx();
+}
+
+/* ===================== WEEK 9 AND 10 CONTENT ===================== */
+var W10={
+ key:"ckc111-week9",
+ objectives:["Describing sets by roster, set-builder and interval notation","Using ∈, ⊆, ⊂, power sets and Cartesian products","Computing ∪, ∩, −, complement and |A ∪ B|","Proving set identities (subset method, membership table, identities)","Finding domain, codomain, range, images and preimages","Deciding one-to-one, onto and bijection; inverses and compositions","Using floor, ceiling and factorial"],
+ recall:[
+  ["What is the difference between a ∈ A and A ⊆ B?","∈ says one object is an element of a set; ⊆ says every element of one set is in another set."],
+  ["Write the set of odd positive integers less than 10 in set-builder notation.","{x ∈ Z⁺ | x is odd and x &lt; 10} = {1, 3, 5, 7, 9}."],
+  ["If |S| = n, how many elements are in P(S)? In A × B?","|P(S)| = 2ⁿ. |A × B| = |A| · |B|."],
+  ["Give the inclusion–exclusion rule for two sets.","|A ∪ B| = |A| + |B| − |A ∩ B|."],
+  ["State both De Morgan laws for sets.","(A ∪ B)‾ = Ā ∩ B̄ and (A ∩ B)‾ = Ā ∪ B̄."],
+  ["Name the three methods to prove a set identity.","Subset method (each side ⊆ the other), membership table, and applying known identities step by step."],
+  ["Range vs codomain?","The codomain is the set B in f : A → B; the range is the set of values actually taken, f(A) ⊆ B."],
+  ["Define one-to-one and onto.","One-to-one: f(a) = f(b) implies a = b. Onto: every b in the codomain has some a with f(a) = b."],
+  ["When does f have an inverse, and what is (f ∘ g)(x)?","Only when f is a bijection. (f ∘ g)(x) = f(g(x)): g first, then f."],
+  ["⌊−1.5⌋ and ⌈−1.5⌉?","⌊−1.5⌋ = −2 and ⌈−1.5⌉ = −1."]
+ ],
+ practice:[
+  {l:"Easy",q:'Slide review. For S = {1, {2, 3}, 4}: how many elements does S have? Then true or false: (a) 1 ∈ S (b) {2, 3} ∈ S (c) 2 ∉ S (d) {4} ∈ S (e) {1} ⊆ S (f) ∅ ∈ S (g) ∅ ⊆ S.',
+   h:["{2, 3} counts as one element.","∈ needs an element; ⊆ needs a set whose elements are all in S.","∅ is a subset of every set, but it is not listed as an element of S."],
+   s:'S has <b>3</b> elements: 1, {2, 3} and 4. (a) T (b) T (c) T, 2 is inside {2, 3} but is not itself an element (d) F, the element is 4, not {4} (e) T (f) F (g) T.'},
+  {l:"Easy",q:'List all subsets of A = {1, 2, 3}. Which of them are proper subsets? How many elements does P({a, b, c}) have?',
+   h:["Start with ∅, then the one-element subsets.","A proper subset is any subset except A itself.","|P(S)| = 2ⁿ."],
+   s:'Subsets: ∅, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3} (8 of them). Proper subsets: all of these except {1, 2, 3} (7). |P({a, b, c})| = 2³ = <b>8</b>.'},
+  {l:"Easy",q:'Slide review. U = {0, 1, …, 10}, A = {1, 2, 3, 4, 5}, B = {4, 5, 6, 7, 8}. Find A ∪ B, A ∩ B, Ā, B̄, A − B and B − A.',
+   h:["Union: in either set. Intersection: in both.","The complement is everything in U that is not in the set.","A − B keeps what is in A but not in B."],
+   s:'A ∪ B = {1, 2, 3, 4, 5, 6, 7, 8}; A ∩ B = {4, 5}; Ā = {0, 6, 7, 8, 9, 10}; B̄ = {0, 1, 2, 3, 9, 10}; A − B = {1, 2, 3}; B − A = {6, 7, 8}. Check with the set calculator at the top of the page.'},
+  {l:"Medium",q:'A = {1, 2}, B = {a, b, c}. Find A × B and B × A. Are they equal? What is |A × B|?',
+   h:["A × B pairs an element of A first with an element of B second.","Ordered pairs: (1, a) ≠ (a, 1).","|A × B| = |A| · |B|."],
+   s:'A × B = {(1, a), (1, b), (1, c), (2, a), (2, b), (2, c)}. B × A = {(a, 1), (a, 2), (b, 1), (b, 2), (c, 1), (c, 2)}. They are <b>not equal</b>, because the pairs are ordered. |A × B| = 2 · 3 = <b>6</b>.'},
+  {l:"Medium",q:'(a) D = {2, 4, 6}, E = {1, 2, 3, 4, 5, 6}: find |D ∩ E| and |D ∪ E|. (b) In a class, 25 students take Maths, 13 take CS and 8 take both. How many take Maths or CS?',
+   h:["D ⊆ E here.","Use |A ∪ B| = |A| + |B| − |A ∩ B|.","The 8 students in both were counted twice."],
+   s:'(a) D ∩ E = {2, 4, 6}, so |D ∩ E| = 3; |D ∪ E| = 3 + 6 − 3 = <b>6</b>. (b) 25 + 13 − 8 = <b>30</b> students.'},
+  {l:"Medium",q:'Slide question. f : {a, b, c, d} → {x, y, z} with a→z, b→y, c→z, d→z. Find f(a), the image of d, the domain, the codomain, the preimage of y, f(A), and the preimages of z. Is f one-to-one? Onto?',
+   h:["Image = where an element goes. Preimage = where it comes from.","f(A) is the range.","Three elements share z."],
+   s:'f(a) = z; the image of d is z; domain {a, b, c, d}; codomain {x, y, z}; the preimage of y is b; f(A) = {y, z}; the preimages of z are a, c and d. <b>Not one-to-one</b> (a and c both map to z) and <b>not onto</b> (nothing maps to x). Try it in the function checker.'},
+  {l:"Medium",q:'Decide whether each function is invertible and give the inverse if it exists: (a) f : Z → Z, f(x) = x² (b) f : Z → Z, f(x) = x + 1 (c) f : R → R, f(x) = 5x + 2 (d) f : {a, b, c} → {1, 2, 3}, f(a) = 2, f(b) = 3, f(c) = 1.',
+   h:["Only bijections have inverses.","For a formula, write y = f(x) and solve for x.","x² gives the same value for x and −x."],
+   s:'(a) <b>Not invertible</b>: f(−1) = f(1), and nothing maps to −1. (b) Bijection: f⁻¹(y) = <b>y − 1</b>. (c) y = 5x + 2 gives x = (y − 2)/5, so f⁻¹(y) = <b>(y − 2)/5</b>. (d) Bijection: f⁻¹(1) = c, f⁻¹(2) = a, f⁻¹(3) = b.'},
+  {l:"Challenging",q:'(a) f(x) = 2x + 3 and g(x) = 3x + 2 from Z to Z. Find f ∘ g and g ∘ f. (b) f(x) = x² and g(x) = 2x + 1. Find f(g(x)) and g(f(x)). (c) Evaluate ⌊1/2⌋, ⌈1/2⌉, ⌊−1/2⌋, ⌈−1/2⌉, ⌊3.1⌋, ⌈3.1⌉, ⌊7⌋, ⌈7⌉.',
+   h:["(f ∘ g)(x) = f(g(x)): put g(x) inside f.","Expand the brackets.","Floor rounds down, ceiling rounds up; integers stay the same."],
+   s:'(a) (f ∘ g)(x) = 2(3x + 2) + 3 = <b>6x + 7</b>; (g ∘ f)(x) = 3(2x + 3) + 2 = <b>6x + 11</b>. Different, so the order matters. (b) f(g(x)) = (2x + 1)²; g(f(x)) = 2x² + 1. (c) 0, 1, −1, 0, 3, 4, 7, 7.'},
+  {l:"Challenging",q:'Use a membership table to show A − (B ∪ C) = (A − B) ∩ (A − C).',
+   h:["Make 8 rows for A, B, C.","A − X is 1 only when A is 1 and X is 0.","Compare the last two columns in every row."],
+   s:'The columns B ∪ C, A − (B ∪ C), A − B, A − C and (A − B) ∩ (A − C) give equal final columns in all 8 rows: both sides are 1 only in the row A = 1, B = 0, C = 0. So the identity holds. Click "A − (B ∪ C)" in the membership-table checker to see every row.'},
+  {l:"Challenging",q:'Slide example. Show that (A ∪ (B ∩ C))‾ = (C̄ ∪ B̄) ∩ Ā by applying set identities, naming the law at each step.',
+   h:["Start with the left side and apply De Morgan to the outer complement.","Then apply De Morgan again to (B ∩ C)‾.","Finish with the commutative laws."],
+   s:'(A ∪ (B ∩ C))‾ = Ā ∩ (B ∩ C)‾ (first De Morgan law) = Ā ∩ (B̄ ∪ C̄) (second De Morgan law) = (B̄ ∪ C̄) ∩ Ā (commutative law for intersections) = (C̄ ∪ B̄) ∩ Ā (commutative law for unions).'}
+ ]
+};
+var W11={
+ key:"ckc111-week10",
+ objectives:["Listing terms of arithmetic and geometric progressions","Computing terms of a recurrence relation","Finding a closed formula by forward or backward substitution","Reading summation notation and using the summation table","Deciding finite, countably infinite or uncountable","Matrix sum, product, transpose and symmetric matrices","Meet, join, Boolean product and Boolean powers"],
+ recall:[
+  ["What is a sequence?","A function from a subset of the integers (usually {0, 1, 2, …} or {1, 2, 3, …}) to a set S."],
+  ["General form of a geometric and an arithmetic progression?","Geometric: a, ar, ar², …, arⁿ. Arithmetic: a, a + d, a + 2d, …, a + nd."],
+  ["What are a recurrence relation and initial conditions?","An equation giving aₙ from earlier terms; the initial conditions give the first terms before the relation applies."],
+  ["Define the Fibonacci sequence.","f₀ = 0, f₁ = 1, fₙ = fₙ₋₁ + fₙ₋₂."],
+  ["Forward vs backward substitution?","Forward: build up from the initial condition. Backward: start from aₙ and substitute down to the initial term."],
+  ["Closed forms of Σk, Σk², Σk³ from 1 to n?","n(n + 1)/2, n(n + 1)(2n + 1)/6, n²(n + 1)²/4."],
+  ["When is a set countable? What is ℵ₀?","When it is finite or has a bijection with Z⁺. ℵ₀ is the cardinality of a countably infinite set."],
+  ["When is AB defined, and what size is it?","When A is m × k and B is k × n; AB is m × n."],
+  ["What makes a matrix symmetric?","It is square and A = Aᵗ, so aᵢⱼ = aⱼᵢ."],
+  ["How does the Boolean product differ from the ordinary product?","Multiply becomes ∧ and add becomes ∨, so every entry is 0 or 1."]
+ ],
+ practice:[
+  {l:"Easy",q:'(a) List s₀ to s₄ for the arithmetic progression a = −1, d = 4. (b) List the first five terms of the geometric progression a = 2, r = 5. (c) With sₙ = −1 + 4n and tₙ = 7 − 3n, find s₃₀ and t₃₀.',
+   h:["Arithmetic: add d each time.","Geometric: multiply by r each time.","Substitute n = 30."],
+   s:'(a) −1, 3, 7, 11, 15. (b) 2, 10, 50, 250, 1250. (c) s₃₀ = −1 + 120 = <b>119</b>; t₃₀ = 7 − 90 = <b>−83</b>.'},
+  {l:"Easy",q:'(a) aₙ = aₙ₋₁ + 3 with a₀ = 2: find a₁, a₂, a₃. (b) aₙ = aₙ₋₁ − aₙ₋₂ with a₀ = 3 and a₁ = 5: find a₂ and a₃.',
+   h:["Substitute the previous term each time.","For (b) you need the two previous terms.","Watch the signs in (b)."],
+   s:'(a) a₁ = 5, a₂ = 8, a₃ = <b>11</b>. (b) a₂ = 5 − 3 = <b>2</b>; a₃ = 2 − 5 = <b>−3</b>. The recurrence explorer shows each substitution.'},
+  {l:"Easy",q:'Find the Fibonacci numbers f₂, f₃, f₄, f₅ and f₆.',
+   h:["f₀ = 0 and f₁ = 1.","Each term is the sum of the two before it.","f₂ = 1 + 0."],
+   s:'f₂ = 1, f₃ = 2, f₄ = 3, f₅ = 5, f₆ = <b>8</b>.'},
+  {l:"Medium",q:'Slide question. {aₙ} satisfies aₙ = aₙ₋₁ + 3 for n ≥ 2 with a₁ = 2. Find a closed formula, then a₂, a₁₂ and a₅₀.',
+   h:["Backward substitution: aₙ = aₙ₋₁ + 3 = aₙ₋₂ + 2·3 = …","You stop at a₁ after n − 1 steps.","Then substitute n."],
+   s:'aₙ = a₁ + 3(n − 1) = <b>2 + 3(n − 1)</b>. a₂ = 5, a₁₂ = 2 + 33 = <b>35</b>, a₅₀ = 2 + 147 = <b>149</b>.'},
+  {l:"Medium",q:'(a) Evaluate Σ_{j=1}^{5} j². (b) Write the sum of the first 100 terms of aⱼ = 1/j in summation notation. (c) For S = {2, 5, 7, 10}, find Σ_{s∈S} s.',
+   h:["Write out the five squares.","Lower limit 1, upper limit 100.","Add the elements of S."],
+   s:'(a) 1 + 4 + 9 + 16 + 25 = <b>55</b>. (b) Σ_{j=1}^{100} 1/j. (c) 2 + 5 + 7 + 10 = <b>24</b>.'},
+  {l:"Medium",q:'Slide example. Use the summation table to find Σ_{k=50}^{100} k². Then find Σ_{j=0}^{8} 3·2ʲ.',
+   h:["The table starts at k = 1, so subtract Σ_{k=1}^{49} k².","n(n + 1)(2n + 1)/6 with n = 100 and n = 49.","Geometric: (arⁿ⁺¹ − a)/(r − 1) with a = 3, r = 2, n = 8."],
+   s:'Σ_{k=50}^{100} k² = 100·101·201/6 − 49·50·99/6 = 338,350 − 40,425 = <b>297,925</b>. Σ_{j=0}^{8} 3·2ʲ = (3·2⁹ − 3)/(2 − 1) = <b>1533</b>. Check both with the summation calculator.'},
+  {l:"Medium",q:'Slide question. Is each set finite, countably infinite or uncountable? For countably infinite ones, list the start of a sequence. (a) the negative integers (b) the even integers (c) the integers less than 100 (d) the real numbers between 0 and 1/2 (e) the integers that are multiples of 7. Also find |A| for A = {x² | x &lt; 6, x ∈ Z⁺}.',
+   h:["Countably infinite: you can list them a₁, a₂, …","Alternate positive and negative to list a set that goes both ways.","An interval of real numbers is uncountable."],
+   s:'(a) Countably infinite: −1, −2, −3, … (b) Countably infinite: 0, 2, −2, 4, −4, … (c) Countably infinite: 99, 98, 97, … (d) <b>Uncountable</b>. (e) Countably infinite: 0, 7, −7, 14, −14, … A = {1, 4, 9, 16, 25}, so |A| = <b>5</b>.'},
+  {l:"Challenging",q:'Slide examples. (a) Multiply A = [1 0 4; 2 1 1; 3 1 0; 0 2 2] by B = [2 4; 1 1; 3 0]. (b) With A = [1 1; 2 1] and B = [2 1; 1 1], show AB ≠ BA. (c) Give the transpose of [1 2 3; 4 5 6]. Is [1 1 0; 1 0 1; 0 1 0] symmetric?',
+   h:["A is 4 × 3 and B is 3 × 2, so AB is 4 × 2.","c₁₁ = 1·2 + 0·1 + 4·3.","Symmetric means aᵢⱼ = aⱼᵢ."],
+   s:'(a) AB = [14 4; 8 9; 7 13; 8 2]. (b) AB = [3 2; 5 3], BA = [4 3; 3 2], so <b>AB ≠ BA</b>. (c) The transpose is [1 4; 2 5; 3 6]. The second matrix is <b>symmetric</b>: it equals its transpose.'},
+  {l:"Challenging",q:'Slide example. A = [1 0 1; 0 1 0] and B = [0 1 0; 1 1 0]. Find the meet A ∧ B and the join A ∨ B. Then find the Boolean product [1 0; 0 1; 1 0] ⊙ [1 1 0; 0 1 1].',
+   h:["Meet and join go entry by entry.","Boolean product: row i with column j, using ∧ then ∨.","A 3 × 2 times a 2 × 3 gives 3 × 3."],
+   s:'A ∧ B = [0 0 0; 0 1 0]. A ∨ B = [1 1 1; 1 1 0]. The Boolean product is <b>[1 1 0; 0 1 1; 1 1 0]</b>.'},
+  {l:"Challenging",q:'Slide example. A = [0 0 1; 1 0 0; 1 1 0]. Find A^[n] for all positive integers n.',
+   h:["A^[2] = A ⊙ A.","Keep multiplying by A.","Once you reach the all-ones matrix it stays there."],
+   s:'A^[2] = [1 1 0; 0 0 1; 1 0 1], A^[3] = [1 0 1; 1 1 0; 1 1 1], A^[4] = [1 1 1; 1 0 1; 1 1 1], A^[5] = [1 1 1; 1 1 1; 1 1 1], and <b>A^[n] = A^[5]</b> for all n ≥ 5. Click "Boolean powers" in the matrix lab to see each step.'}
+ ]
+};
+
+initWeek2();initWeek4();initWeek5();initWeek6G();initWeek7T();initWeek9S();initWeek10Q();initExamLab();initMock1();
+buildKit(2,W2);buildKit(4,W4);buildKit(5,W5);buildKit(8,W8);buildKit(9,W9);buildKit(10,W10);buildKit(11,W11);
 if(typeof module!=="undefined"&&module.exports){module.exports.data={W4:W4,W5:W5};}
 })();
 
@@ -3059,10 +3477,10 @@ if(typeof module!=="undefined"&&module.exports){module.exports.data={W4:W4,W5:W5
 if(typeof document==="undefined"||!document.getElementById){return;}
 var AKEY="ckc111-active-week";
 /* Week 6 (Graphs) is panel 8, so the Exam Lab (6) and Test 1 (7) keep their ids; ORDER is the order of the tabs */
-var ORDER=[0,1,2,3,4,5,8,9,6];   /* Test 1 (7) is archived: it has no tab, and is opened from the Home archive card */
-var NAMES={0:"Home",1:"Week 1",2:"Week 2",3:"Week 3",4:"Week 4",5:"Week 5",8:"Week 6",9:"Week 7",6:"Exam Lab",7:"Test 1 archive"};
-var SUBS={0:"Overview",1:"Logic I",2:"Equivalences",3:"Algorithms",4:"Relations I",5:"Relations II",8:"Graphs",9:"Trees",6:"Practice",7:"Mock paper"};
-var TITLES={0:"CKC111 Discrete Structures: Study Guide",1:"Week 1: Propositional Logic",2:"Week 2: Logical Equivalences",3:"Week 3: Basic Algorithms",4:"Week 4: Relations I",5:"Week 5: Relations II",8:"Week 6: Graphs",9:"Week 7: Trees",6:"Exam Lab: Practice",7:"Test 1 archive: Mock Paper"};
+var ORDER=[0,1,2,3,4,5,8,9,10,11,6];   /* Test 1 (7) is archived: it has no tab, and is opened from the Home archive card */
+var NAMES={0:"Home",1:"Week 1",2:"Week 2",3:"Week 3",4:"Week 4",5:"Week 5",8:"Week 6",9:"Week 7",10:"Week 9",11:"Week 10",6:"Exam Lab",7:"Test 1 archive"};
+var SUBS={0:"Overview",1:"Logic I",2:"Equivalences",3:"Algorithms",4:"Relations I",5:"Relations II",8:"Graphs",9:"Trees",10:"Sets, functions",11:"Sequences, matrices",6:"Practice",7:"Mock paper"};
+var TITLES={0:"CKC111 Discrete Structures: Study Guide",1:"Week 1: Propositional Logic",2:"Week 2: Logical Equivalences",3:"Week 3: Basic Algorithms",4:"Week 4: Relations I",5:"Week 5: Relations II",8:"Week 6: Graphs",9:"Week 7: Trees",10:"Week 9: Sets and Functions",11:"Week 10: Sequences, Sums and Matrices",6:"Exam Lab: Practice",7:"Test 1 archive: Mock Paper"};
 function qa(s){return Array.prototype.slice.call(document.querySelectorAll(s));}
 function $(id){return document.getElementById(id);}
 var panels=qa(".week"),groups=qa(".navgroup"),tabs=qa("[data-weekbtn]"),rail=$("nav"),fab=$("fab"),backdrop=$("backdrop");
@@ -3070,8 +3488,8 @@ var panels=qa(".week"),groups=qa(".navgroup"),tabs=qa("[data-weekbtn]"),rail=$("
 /* ---- progress read from the saved answers ---- */
 function readJSON(k){try{var s=localStorage.getItem(k);return s?JSON.parse(s):null;}catch(e){return null;}}
 function progress(n){
-  if((n>=1&&n<=5)||n===8||n===9){
-    var s=readJSON("ckc111-week"+(n===8?6:n===9?7:n)),c=0,i;
+  if((n>=1&&n<=5)||(n>=8&&n<=11)){
+    var s=readJSON("ckc111-week"+({8:6,9:7,10:9,11:10}[n]||n)),c=0,i;
     if(s&&s.attempts){for(i=0;i<10;i++){if(String(s.attempts["p"+i]||"").trim().length>=4)c++;}}
     return {frac:c/10,text:c+" of 10 practice questions tried"};
   }
@@ -3098,7 +3516,7 @@ function paint(){
   var last=lastWeek(),btn=$("w0-continue");
   if(btn)btn.textContent=last?("Continue: "+NAMES[last]+" · "+SUBS[last]):"Start Week 1";
 }
-function lastWeek(){try{var s=parseInt(localStorage.getItem(AKEY),10);return s>=1&&s<=9?s:0;}catch(e){return 0;}}
+function lastWeek(){try{var s=parseInt(localStorage.getItem(AKEY),10);return s>=1&&s<=11?s:0;}catch(e){return 0;}}
 
 /* ---- tabs ---- */
 function show(n,keepScroll,focus){
@@ -3192,8 +3610,8 @@ function later(){clearTimeout(timer);timer=setTimeout(paint,300);}
 ["input","change","click"].forEach(function(t){document.addEventListener(t,later);});
 
 /* ---- start: URL hash, then the last week you visited, then Home ---- */
-var start=lastWeek()||0,hash=(location.hash||"").slice(1),hm=/^w([0-7])-/.exec(hash);
-if(hm)start=+hm[1];
+var start=lastWeek()||0,hash=(location.hash||"").slice(1),hm=/^w(\d+)-/.exec(hash);
+if(hm&&$("week"+hm[1]))start=+hm[1];
 show(start,true);
 if(hash&&$(hash))goTo(hash);
 })();

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&family=Noto+Sans+Math&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261106a">
+<link rel="stylesheet" href="styles.css?v=20261122a">
 <link rel="stylesheet" href="../shared/ui.css?v=20261118a">
 </head>
 <body>
@@ -25,6 +25,8 @@
       <button type="button" role="tab" class="wtab" id="tab5" data-weekbtn="5" aria-selected="false" tabindex="-1"><b>Week 5</b><span>Relations II</span><i></i></button>
       <button type="button" role="tab" class="wtab" id="tab8" data-weekbtn="8" aria-selected="false" tabindex="-1"><b>Week 6</b><span>Graphs</span><i></i></button>
       <button type="button" role="tab" class="wtab" id="tab9" data-weekbtn="9" aria-selected="false" tabindex="-1"><b>Week 7</b><span>Trees</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab10" data-weekbtn="10" aria-selected="false" tabindex="-1"><b>Week 9</b><span>Sets, functions</span><i></i></button>
+      <button type="button" role="tab" class="wtab" id="tab11" data-weekbtn="11" aria-selected="false" tabindex="-1"><b>Week 10</b><span>Sequences, matrices</span><i></i></button>
       <button type="button" role="tab" class="wtab exam" id="tab6" data-weekbtn="6" aria-selected="false" tabindex="-1"><b>Exam Lab</b><span>Practice</span><i></i></button>
     </nav>
     <a class="coursesbtn" href="../" title="Back to all CS courses"><span aria-hidden="true">&larr;</span> CS courses</a>
@@ -133,6 +135,32 @@
     <a href="#w9-checkpoint">Weekly checkpoint</a>
     <div class="prog"><span id="w9-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w9-prog-bar"></i></div></div>
   </div>
+  <div class="navgroup" data-week="10" hidden>
+    <a href="#w10-top">Start here</a>
+    <a href="#w10-sets">Sets and notation</a>
+    <a href="#w10-ops">Set operations</a>
+    <a href="#w10-ids">Set identities</a>
+    <a href="#w10-fun">Functions</a>
+    <a href="#w10-floor">Floor, ceiling, factorial</a>
+    <a href="#w10-mistakes">Common mistakes</a>
+    <a href="#w10-recall">Active recall</a>
+    <a href="#w10-practice">Practice set</a>
+    <a href="#w10-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w10-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w10-prog-bar"></i></div></div>
+  </div>
+  <div class="navgroup" data-week="11" hidden>
+    <a href="#w11-top">Start here</a>
+    <a href="#w11-seq">Sequences</a>
+    <a href="#w11-rec">Recurrence relations</a>
+    <a href="#w11-sum">Summations</a>
+    <a href="#w11-card">Cardinality</a>
+    <a href="#w11-mat">Matrices</a>
+    <a href="#w11-mistakes">Common mistakes</a>
+    <a href="#w11-recall">Active recall</a>
+    <a href="#w11-practice">Practice set</a>
+    <a href="#w11-checkpoint">Weekly checkpoint</a>
+    <div class="prog"><span id="w11-prog-txt">Practice: 0 of 10 attempted</span><div class="bar"><i id="w11-prog-bar"></i></div></div>
+  </div>
   <div class="navgroup" data-week="6" hidden>
     <a href="#w6-top">Start here</a>
     <a href="#w6-patterns">Question methods</a>
@@ -174,6 +202,8 @@
     <button type="button" class="wcard" data-open-week="5"><span class="wnum">Week 5</span><b>Relations II</b><span class="wdesc">Matrices, digraphs, equivalence relations, classes and partitions.</span><span class="wtools">Try: one relation in three pictures</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard" data-open-week="8"><span class="wnum">Week 6</span><b>Graphs</b><span class="wdesc">Graph terms, degrees, special graphs, adjacency lists and matrices, paths and Dijkstra's shortest paths.</span><span class="wtools">Try: the graph lab and the Dijkstra table</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard" data-open-week="9"><span class="wnum">Week 7</span><b>Trees</b><span class="wdesc">Trees and forests, rooted-tree words, m-ary trees, level and height, traversals, and DFS / BFS spanning trees.</span><span class="wtools">Try: the rooted-tree explorer and the spanning-tree builder</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="10"><span class="wnum">Week 9</span><b>Sets and Functions</b><span class="wdesc">Set notation, subsets, power sets, Cartesian products, set operations and identities; functions, one-to-one, onto, inverse, composition, floor and ceiling.</span><span class="wtools">Try: the set calculator with Venn diagrams and the function checker</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
+    <button type="button" class="wcard" data-open-week="11"><span class="wnum">Week 10</span><b>Sequences, Sums and Matrices</b><span class="wdesc">Arithmetic and geometric progressions, recurrence relations, summations, countable sets, matrix arithmetic and zero-one matrices.</span><span class="wtools">Try: the recurrence explorer and the matrix lab</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
     <button type="button" class="wcard exam" data-open-week="6"><span class="wnum">Exam Lab</span><b>Practice for the exam</b><span class="wdesc">Fresh exam-style questions with instant checking, a mock exam, graph tools and a cheat sheet.</span><span class="wtools">Try: a mock exam on all four topics</span><span class="wprog"><i></i></span><span class="wptxt"></span></button>
   </div>
 </section>
@@ -1492,6 +1522,393 @@ j := n {j is the right endpoint of the interval}
 </section>
 
 </div>
+<!-- Week 9 (Sets and Functions) uses the internal number 10. Week 8 is the mid-semester break. -->
+<div class="week w10" data-week="10" id="week10" role="tabpanel" hidden>
+<section class="hero" id="w10-top">
+  <h1>Week 9: Sets and functions</h1>
+  <p class="lead">This week covers the first half of the Basic Structures slides: sets, set operations, set identities and functions (one-to-one, onto, inverse, composition, floor and ceiling).</p>
+  <p>Type sets and an expression. The calculator works out the result, draws the Venn diagram, and lists the power set and Cartesian product when they are small.</p>
+  <div class="card lab">
+    <label for="w10-u">Universal set U</label>
+    <input type="text" id="w10-u" value="0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10" autocomplete="off" spellcheck="false">
+    <label for="w10-a">A</label>
+    <input type="text" id="w10-a" value="1, 2, 3, 4, 5" autocomplete="off" spellcheck="false">
+    <label for="w10-b">B</label>
+    <input type="text" id="w10-b" value="4, 5, 6, 7, 8" autocomplete="off" spellcheck="false">
+    <label for="w10-c">C (leave empty for two sets)</label>
+    <input type="text" id="w10-c" value="" autocomplete="off" spellcheck="false">
+    <label for="w10-x">Expression</label>
+    <input type="text" id="w10-x" value="A ∩ B'" autocomplete="off" spellcheck="false">
+    <div class="togrow" role="group" aria-label="Insert a symbol">
+      <button class="btn" type="button" data-w10ins="∪">∪ union</button>
+      <button class="btn" type="button" data-w10ins="∩">∩ intersection</button>
+      <button class="btn" type="button" data-w10ins="−">− difference</button>
+      <button class="btn" type="button" data-w10ins="'">' complement</button>
+    </div>
+    <p class="small">You can also type <span class="e">u</span> or <span class="e">|</span> for ∪, <span class="e">n</span> or <span class="e">&amp;</span> for ∩, <span class="e">-</span> for −, and <span class="e">A'</span> or <span class="e">~A</span> for the complement.</p>
+    <div id="w10-out" aria-live="polite"></div>
+  </div>
+  <p><b>Objectives.</b> By the end you can: describe a set by listing, set-builder and interval notation; use ∈, ⊆, ⊂, power sets and Cartesian products; compute union, intersection, difference and complement; prove set identities three ways; find domain, codomain, range, images and preimages; decide whether a function is one-to-one, onto or a bijection; find inverses and compositions; and use floor, ceiling and factorial.</p>
+</section>
+
+<section id="w10-sets">
+  <h2>1. Sets and how to write them</h2>
+  <div class="idea"><b>Definition.</b> A <b>set</b> is an unordered collection of distinct objects, called its <b>elements</b> or <b>members</b>. We write <span class="e">a ∈ A</span> when a is an element of A, and <span class="e">a ∉ A</span> when it is not.</div>
+  <div class="scroll"><table>
+    <tr><th class="l">Way to write it</th><th class="l">Example</th></tr>
+    <tr><td class="l"><b>Roster</b> (list the elements)</td><td class="l">V = {a, e, i, o, u}. Order and repeats do not matter: {1, 3, 5} = {3, 5, 1} = {1, 5, 5, 3}. Use … when the pattern is clear: {1, 2, 3, …, 99}.</td></tr>
+    <tr><td class="l"><b>Set-builder</b> (give the property)</td><td class="l">O = {x ∈ Z<sup>+</sup> | x is odd and x &lt; 10} = {1, 3, 5, 7, 9}. Q<sup>+</sup> = {x ∈ R | x = p/q for some positive integers p, q}.</td></tr>
+    <tr><td class="l"><b>Interval</b> (real numbers)</td><td class="l">[a, b] = {x | a ≤ x ≤ b} is <b>closed</b>; (a, b) = {x | a &lt; x &lt; b} is <b>open</b>; [a, b) and (a, b] are half-open.</td></tr>
+    <tr><td class="l"><b>Venn diagram</b></td><td class="l">A rectangle for the universal set U and circles for the sets inside it.</td></tr>
+  </table></div>
+  <p><b>Important sets:</b> N = {0, 1, 2, …}, Z = {…, −2, −1, 0, 1, 2, …}, Z<sup>+</sup> = {1, 2, 3, …}, Q (rational), R (real), R<sup>+</sup> (positive real), C (complex). The <b>universal set</b> U holds everything under consideration. The <b>empty set</b> ∅ = { } has no elements.</p>
+  <div class="tip"><b>Careful.</b> Sets can be elements of sets: {{1, 2, 3}, a, {b, c}} has 3 elements. And ∅ ≠ {∅}: the first has no elements, the second has one element (the empty set).</div>
+  <h3>Equality, subsets and the power set</h3>
+  <ul>
+    <li><b>Equal:</b> A = B when they have the same elements: ∀x (x ∈ A ↔ x ∈ B). Equivalently A ⊆ B and B ⊆ A.</li>
+    <li><b>Subset:</b> A ⊆ B when every element of A is in B: ∀x (x ∈ A → x ∈ B). To show A ⊈ B, find one x ∈ A with x ∉ B (a counterexample).</li>
+    <li><b>Theorem 1:</b> for every set S, ∅ ⊆ S and S ⊆ S. (∅ ⊆ S is a vacuous proof: x ∈ ∅ is always false, so x ∈ ∅ → x ∈ S is always true.)</li>
+    <li><b>Proper subset:</b> A ⊂ B when A ⊆ B and A ≠ B, so B has at least one element not in A.</li>
+    <li><b>Cardinality:</b> |S| is the number of distinct elements of a finite set S. |∅| = 0.</li>
+    <li><b>Power set:</b> P(S) is the set of all subsets of S. If |S| = n then |P(S)| = 2<sup>n</sup>. P({a, b, c}) = {∅, {a}, {b}, {c}, {a, b}, {a, c}, {b, c}, {a, b, c}}.</li>
+    <li><b>Cartesian product:</b> A × B = {(a, b) | a ∈ A and b ∈ B}, the set of ordered pairs. |A × B| = |A| · |B|, and usually A × B ≠ B × A. A<sub>1</sub> × … × A<sub>n</sub> is the set of ordered n-tuples.</li>
+  </ul>
+</section>
+
+<section id="w10-ops">
+  <h2>2. Set operations</h2>
+  <div class="scroll"><table>
+    <tr><th class="l">Operation</th><th class="l">Definition</th><th class="l">U = {0,…,10}, A = {1,…,5}, B = {4,…,8}</th></tr>
+    <tr><td class="l">Union A ∪ B</td><td class="l">{x | x ∈ A ∨ x ∈ B}</td><td class="l">{1, 2, 3, 4, 5, 6, 7, 8}</td></tr>
+    <tr><td class="l">Intersection A ∩ B</td><td class="l">{x | x ∈ A ∧ x ∈ B}</td><td class="l">{4, 5}</td></tr>
+    <tr><td class="l">Complement Ā (or A<sup>c</sup>)</td><td class="l">{x ∈ U | x ∉ A} = U − A</td><td class="l">{0, 6, 7, 8, 9, 10}</td></tr>
+    <tr><td class="l">Difference A − B</td><td class="l">{x | x ∈ A ∧ x ∉ B} = A ∩ B̄</td><td class="l">{1, 2, 3}; and B − A = {6, 7, 8}</td></tr>
+  </table></div>
+  <p>A and B are <b>disjoint</b> when A ∩ B = ∅.</p>
+  <div class="idea"><b>Inclusion–exclusion.</b> |A ∪ B| = |A| + |B| − |A ∩ B|. The elements in both sets are counted twice, so subtract them once. Example: D = {2, 4, 6}, E = {1, …, 6}: |D ∪ E| = 3 + 6 − 3 = 6.</div>
+  <div class="beyond">Note on the slides: the Intersection slide writes {x | x ∈ A ∨ x ∈ B}. That is a typo; intersection uses ∧ (and). The ∨ version is the union.</div>
+</section>
+
+<section id="w10-ids">
+  <h2>3. Set identities and three ways to prove them</h2>
+  <div class="scroll"><table>
+    <tr><th class="l">Law</th><th class="l">Identities</th></tr>
+    <tr><td class="l">Identity</td><td class="l">A ∪ ∅ = A, A ∩ U = A</td></tr>
+    <tr><td class="l">Domination</td><td class="l">A ∪ U = U, A ∩ ∅ = ∅</td></tr>
+    <tr><td class="l">Idempotent</td><td class="l">A ∪ A = A, A ∩ A = A</td></tr>
+    <tr><td class="l">Complementation</td><td class="l">(Ā)‾ = A</td></tr>
+    <tr><td class="l">Commutative</td><td class="l">A ∪ B = B ∪ A, A ∩ B = B ∩ A</td></tr>
+    <tr><td class="l">Associative</td><td class="l">A ∪ (B ∪ C) = (A ∪ B) ∪ C, A ∩ (B ∩ C) = (A ∩ B) ∩ C</td></tr>
+    <tr><td class="l">Distributive</td><td class="l">A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C), A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)</td></tr>
+    <tr><td class="l">De Morgan's</td><td class="l">(A ∪ B)‾ = Ā ∩ B̄, (A ∩ B)‾ = Ā ∪ B̄</td></tr>
+    <tr><td class="l">Absorption</td><td class="l">A ∪ (A ∩ B) = A, A ∩ (A ∪ B) = A</td></tr>
+    <tr><td class="l">Complement</td><td class="l">A ∪ Ā = U, A ∩ Ā = ∅</td></tr>
+  </table></div>
+  <p>These are the logic laws from Week 2 with ∨ → ∪, ∧ → ∩, ¬ → complement, T → U and F → ∅.</p>
+  <ol>
+    <li><b>Subset method.</b> Show each side is a subset of the other: take x in the left side and show x is in the right side, then the reverse.</li>
+    <li><b>Membership table.</b> Like a truth table: 1 means "x is in the set", 0 means "x is not". Each row is one combination of A, B, C. The identity holds when the two final columns are equal in every row.</li>
+    <li><b>Apply existing identities.</b> Start from one side and change it step by step, naming the law for each step.</li>
+  </ol>
+  <p><b>Worked example (method 3).</b> Show that (A ∪ (B ∩ C))‾ = (C̄ ∪ B̄) ∩ Ā.</p>
+  <div class="scroll"><table>
+    <tr><td class="l">(A ∪ (B ∩ C))‾</td><td class="l">= Ā ∩ (B ∩ C)‾</td><td class="l">first De Morgan law</td></tr>
+    <tr><td class="l"></td><td class="l">= Ā ∩ (B̄ ∪ C̄)</td><td class="l">second De Morgan law</td></tr>
+    <tr><td class="l"></td><td class="l">= (B̄ ∪ C̄) ∩ Ā</td><td class="l">commutative law for intersections</td></tr>
+    <tr><td class="l"></td><td class="l">= (C̄ ∪ B̄) ∩ Ā</td><td class="l">commutative law for unions</td></tr>
+  </table></div>
+  <p><b>Worked example (set-builder).</b> (A ∩ B)‾ = {x | x ∉ A ∩ B} = {x | ¬(x ∈ A ∧ x ∈ B)} = {x | x ∉ A ∨ x ∉ B} = {x | x ∈ Ā ∨ x ∈ B̄} = Ā ∪ B̄, using De Morgan's law for propositions in the middle step.</p>
+  <p>Check any identity with a membership table. Type the two sides with A, B and C:</p>
+  <div class="card lab">
+    <label for="w10-ml">Left side</label>
+    <input type="text" id="w10-ml" value="A ∩ (B ∪ C)" autocomplete="off" spellcheck="false">
+    <label for="w10-mr">Right side</label>
+    <input type="text" id="w10-mr" value="(A ∩ B) ∪ (A ∩ C)" autocomplete="off" spellcheck="false">
+    <div class="togrow" role="group" aria-label="Example identities">
+      <button class="btn" type="button" data-w10id="A ∩ (B ∪ C)|(A ∩ B) ∪ (A ∩ C)">Distributive</button>
+      <button class="btn" type="button" data-w10id="(A ∪ B)'|A' ∩ B'">De Morgan</button>
+      <button class="btn" type="button" data-w10id="A − (B ∪ C)|(A − B) ∩ (A − C)">A − (B ∪ C)</button>
+      <button class="btn" type="button" data-w10id="A ∪ (B ∩ C)|(A ∪ B) ∩ C">Not an identity</button>
+    </div>
+    <div id="w10-mout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="w10-fun">
+  <h2>4. Functions</h2>
+  <div class="idea"><b>Definition.</b> Let A and B be nonempty sets. A <b>function</b> f from A to B, written <span class="e">f : A → B</span>, assigns to each element of A <b>exactly one</b> element of B. We write f(a) = b. Functions are also called <b>mappings</b> or <b>transformations</b>.</div>
+  <ul>
+    <li><b>Domain</b> = A, <b>codomain</b> = B. If f(a) = b, then b is the <b>image</b> of a and a is a <b>preimage</b> of b.</li>
+    <li>The <b>range</b> f(A) is the set of all images. It is part of the codomain and can be smaller. Grades example: codomain {A, B, C, D, F}, range {A, B, C, F} because nobody got D.</li>
+    <li>Two functions are <b>equal</b> when they have the same domain, the same codomain, and map each element to the same image.</li>
+    <li>A function can be given by listing the assignments, by a formula (f(x) = 2x), by a program, or as a relation from A to B that has exactly one pair (a, b) for each a ∈ A.</li>
+    <li>The <b>graph</b> of f is the set of pairs {(a, b) | a ∈ A and f(a) = b}.</li>
+  </ul>
+  <h3>One-to-one, onto, bijection</h3>
+  <div class="scroll"><table>
+    <tr><th class="l">Name</th><th class="l">Meaning</th><th class="l">How to show it fails</th></tr>
+    <tr><td class="l"><b>One-to-one</b> (injective)</td><td class="l">f(a) = f(b) implies a = b: no two elements share an image</td><td class="l">find a ≠ b with f(a) = f(b)</td></tr>
+    <tr><td class="l"><b>Onto</b> (surjective)</td><td class="l">every b ∈ B has some a with f(a) = b: range = codomain</td><td class="l">find b in the codomain that nothing maps to</td></tr>
+    <tr><td class="l"><b>Bijection</b> (one-to-one correspondence)</td><td class="l">both one-to-one and onto</td><td class="l">show either property fails</td></tr>
+  </table></div>
+  <p>f(x) = x² from Z to Z is <b>not onto</b> (no integer has x² = −1) and <b>not one-to-one</b> (f(−1) = f(1) = 1).</p>
+  <h3>Inverse and composition</h3>
+  <ul>
+    <li>If f is a bijection, its <b>inverse</b> f<sup>−1</sup> : B → A reverses it: f<sup>−1</sup>(b) = a when f(a) = b. A function that is not a bijection has no inverse, because some b would get no answer (not onto) or two answers (not one-to-one).</li>
+    <li>To find a formula: write y = f(x) and solve for x. f(x) = 5x + 2 gives x = (y − 2)/5, so f<sup>−1</sup>(y) = (y − 2)/5.</li>
+    <li>The <b>composition</b> (f ∘ g)(x) = f(g(x)): apply g first, then f. With f(x) = 2x + 3 and g(x) = 3x + 2: f ∘ g = 6x + 7 but g ∘ f = 6x + 11, so the order matters.</li>
+  </ul>
+  <p>Type a function as arrows. The checker tests every property and draws the arrow diagram.</p>
+  <div class="card lab">
+    <label for="w10-fd">Domain A</label>
+    <input type="text" id="w10-fd" value="a, b, c, d" autocomplete="off" spellcheck="false">
+    <label for="w10-fc">Codomain B</label>
+    <input type="text" id="w10-fc" value="x, y, z" autocomplete="off" spellcheck="false">
+    <label for="w10-fm">Mapping (a→x, …) or a rule in x, like 2x+1</label>
+    <input type="text" id="w10-fm" value="a→z, b→y, c→z, d→z" autocomplete="off" spellcheck="false">
+    <div class="togrow" role="group" aria-label="Example functions">
+      <button class="btn" type="button" data-w10f="a, b, c, d|x, y, z|a→z, b→y, c→z, d→z">Slide example</button>
+      <button class="btn" type="button" data-w10f="a, b, c|1, 2, 3|a→2, b→3, c→1">Bijection</button>
+      <button class="btn" type="button" data-w10f="1, 2, 3, 4|3, 5, 7, 9, 11|2x+1">Rule 2x + 1</button>
+      <button class="btn" type="button" data-w10f="-2, -1, 0, 1, 2|0, 1, 2, 3, 4|x^2">Rule x²</button>
+    </div>
+    <div id="w10-fout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="w10-floor">
+  <h2>5. Floor, ceiling and factorial</h2>
+  <ul>
+    <li><b>Floor</b> ⌊x⌋ is the largest integer ≤ x. <b>Ceiling</b> ⌈x⌉ is the smallest integer ≥ x. ⌊3.5⌋ = 3, ⌈3.5⌉ = 4, ⌊−1.5⌋ = −2, ⌈−1.5⌉ = −1, ⌊7⌋ = ⌈7⌉ = 7.</li>
+    <li>Useful facts (n an integer): ⌊x⌋ = n ⇔ n ≤ x &lt; n + 1; ⌈x⌉ = n ⇔ n − 1 &lt; x ≤ n; x − 1 &lt; ⌊x⌋ ≤ x ≤ ⌈x⌉ &lt; x + 1; ⌊−x⌋ = −⌈x⌉; ⌈−x⌉ = −⌊x⌋; ⌊x + n⌋ = ⌊x⌋ + n; ⌈x + n⌉ = ⌈x⌉ + n.</li>
+    <li><b>Factorial</b> f : N → Z<sup>+</sup>, f(n) = n! = 1 · 2 · … · n, with 0! = 1. 6! = 720.</li>
+  </ul>
+  <div class="card lab">
+    <label for="w10-fl">x (a number or a fraction like -1/2)</label>
+    <input type="text" id="w10-fl" value="-1/2" autocomplete="off" spellcheck="false" style="max-width:14ch">
+    <div id="w10-flout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="w10-mistakes">
+  <h2>6. Common mistakes</h2>
+  <ul>
+    <li>Mixing ∈ and ⊆: 1 ∈ {1, 2} but {1} ⊆ {1, 2}. In {1, {2, 3}, 4}, {2, 3} is an element, so {2, 3} ∈ the set, but 2 is not.</li>
+    <li>Thinking ∅ = {∅}. The first is empty; the second has one element.</li>
+    <li>Counting elements twice in A ∪ B. Use |A| + |B| − |A ∩ B|.</li>
+    <li>Taking the complement without U. Ā depends on the universal set.</li>
+    <li>Treating A × B as equal to B × A. The pairs are ordered.</li>
+    <li>Calling the codomain the range. The range is only the values that are actually hit.</li>
+    <li>Reading f ∘ g as "f first". It means g first, then f.</li>
+    <li>Giving an inverse for a function that is not a bijection.</li>
+  </ul>
+</section>
+
+<section id="w10-recall">
+  <h2>7. Active recall</h2>
+  <p>Answer from memory, then check.</p>
+  <div id="w10-recall-list"></div>
+</section>
+
+<section id="w10-practice">
+  <h2>8. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Several come from the slide review questions. Write your attempt first; hints come in three levels and the solution unlocks only after you have written an attempt.</p>
+  <div id="w10-practice-list"></div>
+</section>
+
+<section id="w10-checkpoint">
+  <h2>9. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w10-objs"></div>
+    <button class="btn primary" type="button" id="w10-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w10-cp-reset">Clear all my work</button>
+    <div id="w10-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+</div>
+
+<!-- Week 10 (Sequences, Summations, Cardinality, Matrices) uses the internal number 11. -->
+<div class="week w11" data-week="11" id="week11" role="tabpanel" hidden>
+<section class="hero" id="w11-top">
+  <h1>Week 10: Sequences, sums and matrices</h1>
+  <p class="lead">This week covers the second half of the Basic Structures slides: sequences and recurrence relations, summations, the cardinality of infinite sets, and matrices including zero-one matrices.</p>
+  <p>Type a recurrence relation and its initial terms. The explorer lists the terms with the substitution shown, and finds the closed formula when the sequence is arithmetic or geometric.</p>
+  <div class="card lab">
+    <label for="w11-r">Recurrence: a(n) = … (use a(n-1), a(n-2) and n)</label>
+    <input type="text" id="w11-r" value="a(n-1) + 3" autocomplete="off" spellcheck="false">
+    <label for="w11-i">Initial terms</label>
+    <input type="text" id="w11-i" value="a0 = 2" autocomplete="off" spellcheck="false">
+    <label for="w11-n">How many terms</label>
+    <input type="text" id="w11-n" value="8" autocomplete="off" spellcheck="false" style="max-width:8ch">
+    <div class="togrow" role="group" aria-label="Example recurrences">
+      <button class="btn" type="button" data-w11r="a(n-1) + 3|a0 = 2">a(n) = a(n−1) + 3</button>
+      <button class="btn" type="button" data-w11r="a(n-1) - a(n-2)|a0 = 3, a1 = 5">a(n−1) − a(n−2)</button>
+      <button class="btn" type="button" data-w11r="a(n-1) + a(n-2)|a0 = 0, a1 = 1">Fibonacci</button>
+      <button class="btn" type="button" data-w11r="5*a(n-1)|a0 = 2">Geometric, r = 5</button>
+    </div>
+    <div id="w11-rout" aria-live="polite"></div>
+  </div>
+  <p><b>Objectives.</b> By the end you can: list terms of arithmetic and geometric progressions; compute terms of a recurrence relation and find a closed formula; read and evaluate summation notation and use the summation table; decide whether a set is finite, countably infinite or uncountable; add and multiply matrices, transpose them and test symmetry; and compute the meet, join, Boolean product and Boolean powers of zero-one matrices.</p>
+</section>
+
+<section id="w11-seq">
+  <h2>1. Sequences</h2>
+  <div class="idea"><b>Definition.</b> A <b>sequence</b> is a function from a subset of the integers (usually {0, 1, 2, …} or {1, 2, 3, …}) to a set S. We write a<sub>n</sub> for the image of n and call it a <b>term</b>. The whole sequence is written {a<sub>n</sub>}.</div>
+  <div class="scroll"><table>
+    <tr><th class="l">Type</th><th class="l">Form</th><th class="l">Examples</th></tr>
+    <tr><td class="l"><b>Geometric progression</b></td><td class="l">a, ar, ar², …, ar<sup>n</sup>: initial term a, common ratio r</td><td class="l">a = 1, r = −1: 1, −1, 1, −1, …<br>a = 2, r = 5: 2, 10, 50, 250, 1250, …<br>a = 6, r = 1/3: 6, 2, 2/3, 2/9, …</td></tr>
+    <tr><td class="l"><b>Arithmetic progression</b></td><td class="l">a, a + d, a + 2d, …, a + nd: initial term a, common difference d</td><td class="l">a = −1, d = 4: −1, 3, 7, 11, …<br>a = 7, d = −3: 7, 4, 1, −2, −5, …<br>a = 1, d = 2: 1, 3, 5, 7, 9, …</td></tr>
+  </table></div>
+  <p>A <b>string</b> is a finite sequence of characters from an alphabet. The <b>empty string</b> λ has length 0; the string abcde has length 5.</p>
+</section>
+
+<section id="w11-rec">
+  <h2>2. Recurrence relations</h2>
+  <div class="idea"><b>Definition.</b> A <b>recurrence relation</b> for {a<sub>n</sub>} is an equation that gives a<sub>n</sub> in terms of earlier terms. The <b>initial conditions</b> give the terms before the relation takes effect. A sequence is a <b>solution</b> if its terms satisfy the relation.</div>
+  <ul>
+    <li>a<sub>n</sub> = a<sub>n−1</sub> + 3 with a<sub>0</sub> = 2: a<sub>1</sub> = 2 + 3 = 5, a<sub>2</sub> = 8, a<sub>3</sub> = 11.</li>
+    <li>a<sub>n</sub> = a<sub>n−1</sub> − a<sub>n−2</sub> with a<sub>0</sub> = 3, a<sub>1</sub> = 5: a<sub>2</sub> = 5 − 3 = 2, a<sub>3</sub> = 2 − 5 = −3.</li>
+    <li><b>Fibonacci:</b> f<sub>0</sub> = 0, f<sub>1</sub> = 1, f<sub>n</sub> = f<sub>n−1</sub> + f<sub>n−2</sub>: 0, 1, 1, 2, 3, 5, 8, …</li>
+  </ul>
+  <p><b>Solving</b> a recurrence means finding a <b>closed formula</b> for the nth term.</p>
+  <ul>
+    <li><b>Forward substitution:</b> start from the initial condition and build up: a<sub>2</sub> = 2 + 3, a<sub>3</sub> = 2 + 3·2, a<sub>4</sub> = 2 + 3·3, …, so a<sub>n</sub> = 2 + 3(n − 1) when a<sub>1</sub> = 2.</li>
+    <li><b>Backward substitution:</b> start from a<sub>n</sub> and go down: a<sub>n</sub> = a<sub>n−1</sub> + 3 = a<sub>n−2</sub> + 3·2 = … = a<sub>1</sub> + 3(n − 1).</li>
+    <li>Then use the formula: a<sub>12</sub> = 2 + 3·11 = 35, a<sub>50</sub> = 2 + 3·49 = 149.</li>
+  </ul>
+</section>
+
+<section id="w11-sum">
+  <h2>3. Summations</h2>
+  <p>Σ<sub>j=m</sub><sup>n</sup> a<sub>j</sub> = a<sub>m</sub> + a<sub>m+1</sub> + … + a<sub>n</sub>. The variable j is the <b>index of summation</b>; m is the <b>lower limit</b> and n the <b>upper limit</b>. Over a set: if S = {2, 5, 7, 10} then Σ<sub>s∈S</sub> s = 2 + 5 + 7 + 10 = 24.</p>
+  <div class="scroll"><table>
+    <tr><th class="l">Sum</th><th class="l">Closed form</th></tr>
+    <tr><td class="l">Σ<sub>k=0</sub><sup>n</sup> ar<sup>k</sup> (r ≠ 0)</td><td class="l">(ar<sup>n+1</sup> − a)/(r − 1) if r ≠ 1; (n + 1)a if r = 1</td></tr>
+    <tr><td class="l">Σ<sub>k=1</sub><sup>n</sup> k</td><td class="l">n(n + 1)/2</td></tr>
+    <tr><td class="l">Σ<sub>k=1</sub><sup>n</sup> k²</td><td class="l">n(n + 1)(2n + 1)/6</td></tr>
+    <tr><td class="l">Σ<sub>k=1</sub><sup>n</sup> k³</td><td class="l">n²(n + 1)²/4</td></tr>
+    <tr><td class="l">Σ<sub>k=0</sub><sup>∞</sup> x<sup>k</sup>, |x| &lt; 1</td><td class="l">1/(1 − x)</td></tr>
+    <tr><td class="l">Σ<sub>k=1</sub><sup>∞</sup> kx<sup>k−1</sup>, |x| &lt; 1</td><td class="l">1/(1 − x)²</td></tr>
+  </table></div>
+  <div class="tip"><b>Split trick.</b> The table starts at k = 1. For other lower limits, subtract: Σ<sub>k=50</sub><sup>100</sup> k² = Σ<sub>k=1</sub><sup>100</sup> k² − Σ<sub>k=1</sub><sup>49</sup> k² = 338,350 − 40,425 = 297,925.</div>
+  <div class="card lab">
+    <label for="w11-sf">Term (use k): k, k^2, k^3, 1/k, 3*2^k, …</label>
+    <input type="text" id="w11-sf" value="k^2" autocomplete="off" spellcheck="false">
+    <label for="w11-sm">Lower limit m</label>
+    <input type="text" id="w11-sm" value="50" autocomplete="off" spellcheck="false" style="max-width:10ch">
+    <label for="w11-sn">Upper limit n</label>
+    <input type="text" id="w11-sn" value="100" autocomplete="off" spellcheck="false" style="max-width:10ch">
+    <div id="w11-sout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="w11-card">
+  <h2>4. Cardinality of infinite sets</h2>
+  <ul>
+    <li>|A| = |B| when there is a <b>bijection</b> from A to B. |A| ≤ |B| when there is a <b>one-to-one</b> function from A to B.</li>
+    <li>A set is <b>countable</b> if it is finite or has the same cardinality as Z<sup>+</sup>. An infinite countable set is <b>countably infinite</b>, and its cardinality is ℵ<sub>0</sub> ("aleph null"). Otherwise the set is <b>uncountable</b>.</li>
+    <li>An infinite set is countable exactly when you can list its elements in a sequence a<sub>1</sub>, a<sub>2</sub>, a<sub>3</sub>, …</li>
+    <li><b>Positive even integers:</b> f(n) = 2n is a bijection from Z<sup>+</sup>: 1↔2, 2↔4, 3↔6, … so they are countable.</li>
+    <li><b>Integers Z:</b> list them as 0, 1, −1, 2, −2, 3, −3, … (f(n) = n/2 for even n, −(n − 1)/2 for odd n), so Z is countable.</li>
+    <li>N, Z and Q are countable. R, and any interval such as [0, 1], is uncountable. A subset of a countable set is countable; a superset of an uncountable set is uncountable; if A and B are countable, so is A × B.</li>
+  </ul>
+  <div class="scroll"><table>
+    <tr><th class="l">Set</th><th class="l">Cardinality</th></tr>
+    <tr><td class="l">singleton {a}</td><td class="l">1</td></tr>
+    <tr><td class="l">empty set ∅</td><td class="l">0</td></tr>
+    <tr><td class="l">finite set with n elements</td><td class="l">n</td></tr>
+    <tr><td class="l">power set of an n-element set</td><td class="l">2<sup>n</sup></td></tr>
+    <tr><td class="l">A × B with |A| = m, |B| = n</td><td class="l">m · n</td></tr>
+    <tr><td class="l">countably infinite set</td><td class="l">ℵ<sub>0</sub></td></tr>
+    <tr><td class="l">uncountable set</td><td class="l">&gt; ℵ<sub>0</sub></td></tr>
+  </table></div>
+</section>
+
+<section id="w11-mat">
+  <h2>5. Matrices</h2>
+  <div class="idea"><b>Definition.</b> A <b>matrix</b> is a rectangular array of numbers. With m rows and n columns it is an <b>m × n</b> matrix; when m = n it is <b>square</b>. A = [a<sub>ij</sub>] means the entry in row i, column j is a<sub>ij</sub>. Two matrices are <b>equal</b> when they have the same size and equal entries in every position.</div>
+  <ul>
+    <li><b>Row matrix</b> 1 × n, <b>column matrix</b> m × 1, <b>rectangular</b> when m ≠ n.</li>
+    <li><b>Sum:</b> A + B = [a<sub>ij</sub> + b<sub>ij</sub>], only when A and B have the same size.</li>
+    <li><b>Product:</b> if A is m × k and B is k × n, AB is m × n with c<sub>ij</sub> = a<sub>i1</sub>b<sub>1j</sub> + a<sub>i2</sub>b<sub>2j</sub> + … + a<sub>ik</sub>b<sub>kj</sub> (row i of A times column j of B). It is undefined when the columns of A do not match the rows of B.</li>
+    <li>Matrix multiplication is <b>not commutative</b>: with A = [1 1; 2 1] and B = [2 1; 1 1], AB = [3 2; 5 3] but BA = [4 3; 3 2].</li>
+    <li><b>Identity</b> I<sub>n</sub> has 1 on the diagonal and 0 elsewhere; AI<sub>n</sub> = I<sub>m</sub>A = A. <b>Powers</b>: A<sup>0</sup> = I<sub>n</sub>, A<sup>r</sup> = AA⋯A (r times) for a square A.</li>
+    <li><b>Transpose</b> A<sup>t</sup> swaps rows and columns: b<sub>ij</sub> = a<sub>ji</sub>. A square matrix is <b>symmetric</b> when A = A<sup>t</sup>, that is a<sub>ij</sub> = a<sub>ji</sub> for all i, j.</li>
+  </ul>
+  <h3>Zero-one matrices</h3>
+  <ul>
+    <li>A <b>zero-one matrix</b> has only 0 and 1 entries, with Boolean ∧ (1 only if both are 1) and ∨ (1 if at least one is 1).</li>
+    <li><b>Meet</b> A ∧ B and <b>join</b> A ∨ B work entry by entry (same size).</li>
+    <li><b>Boolean product</b> A ⊙ B: like the ordinary product with × replaced by ∧ and + by ∨: c<sub>ij</sub> = (a<sub>i1</sub> ∧ b<sub>1j</sub>) ∨ … ∨ (a<sub>ik</sub> ∧ b<sub>kj</sub>).</li>
+    <li><b>Boolean power</b> A<sup>[r]</sup> = A ⊙ A ⊙ ⋯ ⊙ A (r times), with A<sup>[0]</sup> = I<sub>n</sub>.</li>
+  </ul>
+  <div class="beyond">Note on the slides: the symmetric-matrix slide ends "The matrix … is square". Its example [1 1 0; 1 0 1; 0 1 0] is meant to show a <b>symmetric</b> matrix (it is also square).</div>
+  <div class="card lab">
+    <label for="w11-ma">Matrix A (rows separated by ; or new lines)</label>
+    <textarea id="w11-ma" rows="3" spellcheck="false">1 0 4; 2 1 1; 3 1 0; 0 2 2</textarea>
+    <label for="w11-mb">Matrix B</label>
+    <textarea id="w11-mb" rows="3" spellcheck="false">2 4; 1 1; 3 0</textarea>
+    <label for="w11-mo">Operation</label>
+    <select id="w11-mo">
+      <option value="mul">A × B (product)</option>
+      <option value="bmul">A ⊙ B (Boolean product)</option>
+      <option value="add">A + B</option>
+      <option value="meet">A ∧ B (meet)</option>
+      <option value="join">A ∨ B (join)</option>
+      <option value="t">Aᵗ (transpose) and symmetric test</option>
+      <option value="pow">A^r (power, r from the box below)</option>
+      <option value="bpow">A^[r] (Boolean power)</option>
+    </select>
+    <label for="w11-mr">r (for powers)</label>
+    <input type="text" id="w11-mr" value="2" autocomplete="off" spellcheck="false" style="max-width:8ch">
+    <div class="togrow" role="group" aria-label="Example matrices">
+      <button class="btn" type="button" data-w11m="1 0 4; 2 1 1; 3 1 0; 0 2 2|2 4; 1 1; 3 0|mul">Slide product</button>
+      <button class="btn" type="button" data-w11m="1 1; 2 1|2 1; 1 1|mul">AB ≠ BA</button>
+      <button class="btn" type="button" data-w11m="1 0; 0 1; 1 0|1 1 0; 0 1 1|bmul">Boolean product</button>
+      <button class="btn" type="button" data-w11m="0 0 1; 1 0 0; 1 1 0||bpow">Boolean powers</button>
+    </div>
+    <div id="w11-mout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section id="w11-mistakes">
+  <h2>6. Common mistakes</h2>
+  <ul>
+    <li>Starting a sequence at the wrong index: check whether the first term is a<sub>0</sub> or a<sub>1</sub>.</li>
+    <li>Using a closed formula from the table with the wrong lower limit. Split the sum first.</li>
+    <li>Forgetting that a geometric sum from k = 0 to n has n + 1 terms.</li>
+    <li>Saying "infinite" means "uncountable". Z and Q are infinite but countable.</li>
+    <li>Adding matrices of different sizes, or multiplying when the inner sizes do not match.</li>
+    <li>Assuming AB = BA.</li>
+    <li>In a Boolean product, adding (1 + 1 = 2) instead of using ∨ (1 ∨ 1 = 1).</li>
+  </ul>
+</section>
+
+<section id="w11-recall">
+  <h2>7. Active recall</h2>
+  <p>Answer from memory, then check.</p>
+  <div id="w11-recall-list"></div>
+</section>
+
+<section id="w11-practice">
+  <h2>8. Practice set</h2>
+  <p>Three easy, four medium, three challenging. Several come from the slide examples. Write your attempt first; hints come in three levels and the solution unlocks only after you have written an attempt.</p>
+  <div id="w11-practice-list"></div>
+</section>
+
+<section id="w11-checkpoint">
+  <h2>9. Weekly checkpoint</h2>
+  <p>Rate how you feel about each objective, then build your checkpoint.</p>
+  <div class="card">
+    <div class="objs" id="w11-objs"></div>
+    <button class="btn primary" type="button" id="w11-cp-build">Build my checkpoint</button>
+    <button class="btn" type="button" id="w11-cp-reset">Clear all my work</button>
+    <div id="w11-cp-out" aria-live="polite"></div>
+  </div>
+</section>
+</div>
+
 
 <div class="week w6" data-week="6" id="week6" role="tabpanel" hidden>
 <section class="hero" id="w6-top">
@@ -1718,8 +2135,8 @@ j := n {j is the right endpoint of the interval}
 </main>
 </div>
 <footer class="sitefoot"><span>CKC111 Discrete Structures · unofficial study aid</span><a class="ig-credit" href="https://www.instagram.com/baswara.hm/" target="_blank" rel="noopener"><svg class="ig-ic" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg> Made by @baswara.hm</a></footer>
-<script src="script.js?v=20261111a"></script>
-<script src="../updates.js?v=20261111b" data-course="discrete-structures"></script>
+<script src="script.js?v=20261122a"></script>
+<script src="../updates.js?v=20261122a" data-course="discrete-structures"></script>
 <script src="../online.js?v=20261101a" data-course="discrete-structures"></script>
 <script src="../shared/deadlines.js?v=20261118a"></script>
 <script src="../shared/nav.js?v=20261118b"></script>

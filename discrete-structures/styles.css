@@ -537,3 +537,22 @@ th{font-family:var(--mono);font-size:.85rem}
 /* Test 1 archive */
 .archived-note{display:inline-block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border:1px dashed currentColor;padding:3px 9px;border-radius:6px;opacity:.8;margin:0 0 10px}
 .wcard.archive{border-style:dashed}
+
+/* Weeks 9–10 tools: Venn diagram, arrow diagram, matrices */
+.venn-wrap{margin:12px 0}
+.venn,.fnd{display:block;width:100%;max-width:360px;height:auto}
+.venn-on{fill:var(--brand);fill-opacity:.32}
+.venn-c{fill:none;stroke:var(--ink);stroke-width:1.6}
+.venn-u{fill:none;stroke:var(--line);stroke-width:1.5}
+.venn-l{font:600 13px var(--mono,monospace);fill:var(--ink)}
+.fnd-n{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+.fnd-t{font:12px var(--mono,monospace);fill:var(--ink)}
+.fnd-l{font:600 13px var(--mono,monospace);fill:var(--muted)}
+.fnd-e{stroke:var(--brand);stroke-width:1.5}
+.fnd-ah{fill:var(--brand)}
+.mxrow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:10px 0}
+.mxrow>span{font:500 .9rem var(--mono,monospace);color:var(--muted)}
+.mxrow table.mx{border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-collapse:separate;border-spacing:6px 2px;width:auto;margin:0}
+.mxrow table.mx td{border:0;text-align:center;padding:2px 4px;min-width:1.6rem}
+.mxwrap{row-gap:14px}
+.steps li{padding:3px 0;border-bottom:1px dashed var(--line)}
