@@ -935,4 +935,202 @@ outFile &lt;&lt; "Paycheck: $" &lt;&lt; salary * (1 + bonus / 100) * (1 - tax / 
 <div class="callout"><b>Practise:</b> all 11 Week 7 lab questions are in the <a href="#/progass">problem bank</a> (filter <b>Week 7 lab</b>), with test files and automatic checking.</div>` },
   ],
 },
+{
+  id: 'week9',
+  week: 'Week 9',
+  title: 'Functions I',
+  test: ['Test 2', 'ProgrAss 2'],
+  sections: [
+    { h: 'Modular programming', html: `
+<p><b>Modular programming</b> means breaking a program into smaller, manageable <b>functions</b> (modules). A <b>function</b> is a collection of statements that performs one task.</p>
+<p>Why: the program is <b>easier to maintain</b> (fix one function without touching the rest) and <b>easier to write</b> (solve one small task at a time, and reuse it). Instead of one long <code>main</code>, <code>main</code> calls a few well-named functions.</p>` },
+    { h: 'Defining and calling a function', html: `
+<p>A <b>function definition</b> is the statements that make up the function. A <b>function call</b> is the statement that makes it run.</p>
+<table class="tbl"><tr><th>Part</th><th>Meaning</th><th>In <code>int sum(int a, int b)</code></th></tr>
+<tr><td>return type</td><td>type of the value sent back; <code>void</code> if nothing is returned</td><td><code>int</code></td></tr>
+<tr><td>name</td><td>same rules as variable names</td><td><code>sum</code></td></tr>
+<tr><td>parameter list</td><td>variables that receive the values passed in</td><td><code>(int a, int b)</code></td></tr>
+<tr><td>body</td><td>the statements, inside <code>{ }</code></td><td><code>{ return a + b; }</code></td></tr></table>
+<p>The first line (return type, name, parameter list) is the <b>function header</b>. <code>int main()</code> is a function header too.</p>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void printHeading()            // void: returns nothing
+{
+    cout &lt;&lt; "Monthly Sales" &lt;&lt; endl;
+}
+
+int main()
+{
+    cout &lt;&lt; "Start of main" &lt;&lt; endl;
+    printHeading();             // call: name, (), ;
+    cout &lt;&lt; "Back in main" &lt;&lt; endl;
+    return 0;
+}</pre>
+<p><b>Flow of control:</b> at the call, the program jumps into the function and runs its body. When the function ends, execution <b>resumes in the caller, right after the call</b>. <code>main</code> can call any number of functions, and functions can call other functions.</p>` },
+    { h: 'Function prototypes', html: `
+<p>The compiler must know a function's <b>name, return type, number of parameters and the type of each parameter</b> before the function is called. Two ways:</p>
+<ol><li>Put the whole function definition <b>above</b> the function that calls it, or</li>
+<li>Put a <b>prototype</b> (function declaration) near the top: the header with a semicolon and no body.</li></ol>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void evenOrOdd(int);           // prototype: parameter names are optional
+
+int main()
+{
+    int val = 7;
+    evenOrOdd(val);            // call: the argument is val
+    return 0;
+}
+
+void evenOrOdd(int num)        // header: must name each parameter
+{
+    if (num % 2 == 0)
+        cout &lt;&lt; num &lt;&lt; " is even." &lt;&lt; endl;
+    else
+        cout &lt;&lt; num &lt;&lt; " is odd." &lt;&lt; endl;
+}</pre>
+<p>With prototypes, the definitions can go in any order. Without a prototype or an earlier definition, calling the function is a <b>compiler error</b>.</p>` },
+    { h: 'Arguments and parameters', html: `
+<p>Values passed in a call are <b>arguments</b> (also called <i>actual</i> parameters or arguments). The variables in the function that receive them are <b>parameters</b> (also called <i>formal</i> parameters or arguments). In <code>c = pow(a, b);</code>, a and b are arguments.</p>
+<ul><li>A parameter's <b>scope</b> is its function: it does not exist outside it.</li>
+<li>With several parameters, the number of arguments must match, and they are matched <b>by position</b>: the first argument goes to the first parameter, the second to the second, and so on.</li>
+<li>Arguments are <b>promoted or demoted</b> to the parameter type: passing <code>4.7</code> to an <code>int</code> parameter gives <code>4</code>.</li></ul>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void showSum(int num1, int num2, int num3)
+{
+    cout &lt;&lt; num1 + num2 + num3 &lt;&lt; endl;
+}
+
+int main()
+{
+    int value1 = 2, value2 = 4, value3 = 6;
+    showSum(value1, value2, value3);   // 12
+    showSum(1, 2, 3.9);                // 3.9 is demoted to 3, so 6
+    return 0;
+}</pre>` },
+    { h: 'Passing by value', html: `
+<p><b>Pass by value:</b> the argument's <b>value is copied</b> into the parameter. Changing the parameter inside the function does <b>not</b> change the argument.</p>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void changeMe(int num)
+{
+    num = 0;                       // changes the copy only
+    cout &lt;&lt; "Inside: " &lt;&lt; num &lt;&lt; endl;
+}
+
+int main()
+{
+    int val = 5;
+    changeMe(val);
+    cout &lt;&lt; "After: " &lt;&lt; val &lt;&lt; endl;   // still 5
+    return 0;
+}</pre>
+<p>Output: <code>Inside: 0</code> then <code>After: 5</code>. (Week 10 shows reference parameters, which <i>can</i> change the argument.)</p>` },
+    { h: 'Functions in menu-driven programs', html: `
+<p>In a menu program, each choice can call its own function, and those functions can call shared general-purpose functions. This keeps <code>main</code> short and avoids repeating code.</p>
+<pre class="code">#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+void showMenu()
+{
+    cout &lt;&lt; "1. Circle  2. Rectangle  3. Quit" &lt;&lt; endl;
+}
+double circleArea(double r) { return 3.14159 * r * r; }
+double rectArea(double l, double w) { return l * w; }
+
+int main()
+{
+    int choice;
+    double a, b;
+    cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+    do {
+        showMenu();
+        cin &gt;&gt; choice;
+        if (choice == 1 &amp;&amp; cin &gt;&gt; a)
+            cout &lt;&lt; "Area: " &lt;&lt; circleArea(a) &lt;&lt; endl;
+        else if (choice == 2 &amp;&amp; cin &gt;&gt; a &gt;&gt; b)
+            cout &lt;&lt; "Area: " &lt;&lt; rectArea(a, b) &lt;&lt; endl;
+    } while (choice != 3 &amp;&amp; cin);
+    return 0;
+}</pre>` },
+    { h: 'The return statement', html: `
+<p><code>return</code> ends the function straight away. It can be anywhere in the function; the statements after it do not run. A <code>void</code> function without <code>return</code> ends at its closing <code>}</code>.</p>
+<p>Use an early <code>return</code> to stop bad input, for example dividing by zero:</p>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void divide(double a, double b)
+{
+    if (b == 0) {
+        cout &lt;&lt; "Sorry, I cannot divide by zero." &lt;&lt; endl;
+        return;                    // leave now
+    }
+    cout &lt;&lt; a &lt;&lt; " / " &lt;&lt; b &lt;&lt; " = " &lt;&lt; a / b &lt;&lt; endl;
+}
+
+int main()
+{
+    divide(12, 4);
+    divide(5, 0);
+    return 0;
+}</pre>` },
+    { h: 'Returning a value', html: `
+<p>A <b>value-returning function</b> sends one value back to the point of call, like <code>pow(2.0, 10.0)</code> does. Its prototype and header give the return type (not <code>void</code>).</p>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+int sum(int num1, int num2)
+{
+    return num1 + num2;            // can return an expression
+}
+
+int main()
+{
+    int total = sum(20, 40);       // 1. assign it to a variable
+    cout &lt;&lt; total &lt;&lt; endl;
+    cout &lt;&lt; sum(1, 2) &lt;&lt; endl;     // 2. send it to cout
+    cout &lt;&lt; sum(3, 4) * 2 &lt;&lt; endl; // 3. use it in an expression
+    return 0;
+}</pre>
+<p>The caller should use the returned value; calling <code>sum(1, 2);</code> on its own line throws the result away.</p>
+<div class="callout"><b>Note on the slides:</b> the slide example declares <code>double result;</code> inside <code>int sum(...)</code>. It compiles (the double is converted back to int when returned), but the types should match: use <code>int result;</code> or just <code>return num1 + num2;</code>.</div>` },
+    { h: 'Returning a Boolean value', html: `
+<p>A function can return <code>true</code> or <code>false</code>: declare the return type as <code>bool</code> and make every path return a value. The caller can use the call directly as a condition.</p>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+bool isEven(int number)
+{
+    return number % 2 == 0;       // same as: if (...) return true; else return false;
+}
+
+int main()
+{
+    int n = 7;
+    if (isEven(n))
+        cout &lt;&lt; n &lt;&lt; " is even." &lt;&lt; endl;
+    else
+        cout &lt;&lt; n &lt;&lt; " is odd." &lt;&lt; endl;
+    return 0;
+}</pre>` },
+    { h: 'Common mistakes', html: `
+<ul>
+<li>Calling a function before its prototype or definition: compiler error.</li>
+<li>Forgetting the semicolon after a prototype, or adding one after a function header.</li>
+<li>A prototype that does not match the header (different parameter types or return type).</li>
+<li>Arguments in the wrong order: they are matched by position, not by name.</li>
+<li>Expecting a pass-by-value parameter to change the caller's variable.</li>
+<li>A value-returning function where some path has no <code>return</code>.</li>
+<li>Writing <code>return</code> in a <code>void</code> function with a value, like <code>return 0;</code>.</li>
+<li>Printing inside the function when the question asks you to <b>return</b> the value (CodeRunner checks the caller's output).</li>
+</ul>
+<div class="callout"><b>Practise:</b> 10 function-writing questions are in the <a href="#/progass/f:Week 9 functions">problem bank</a> (filter <b>Week 9 functions</b>). You write the function above <code>main</code>; the checker calls it with many values.</div>` },
+  ],
+},
 ];
