@@ -1119,6 +1119,153 @@ int main()
         cout &lt;&lt; n &lt;&lt; " is odd." &lt;&lt; endl;
     return 0;
 }</pre>` },
+    { h: 'Week 9 lab: worked answers', html: `
+<p>Try each lab question first, then open the answer. Questions 4, 6, 10, 17 and 18 are also in the <a href="#/progass/f:Week 9 functions">problem bank</a> with automatic checking.</p>
+<details class="lab"><summary>Q1–Q2. Header or call? <code>calcTotal();</code> and <code>void showResults()</code></summary>
+<p><code>calcTotal();</code> is a <b>function call</b> (name, brackets, semicolon, no return type). <code>void showResults()</code> is a <b>function header</b> (it starts with the return type and has no semicolon).</p></details>
+<details class="lab"><summary>Q3. Output when the user enters 10 (func1 prints "Able was I", func2 prints "I saw Elba")</summary>
+<p>10 &lt; 10 is false, so the <code>else</code> part runs: func2 first, then func1.</p>
+<pre class="code">Enter a number: I saw Elba
+Able was I</pre></details>
+<details class="lab"><summary>Q4. Write qualify and noQualify (credit card program)</summary>
+<pre class="code">#include &lt;iostream&gt;
+using namespace std;
+
+void qualify();        // prototypes, because the definitions come after main
+void noQualify();
+
+int main() { /* ... given in the lab ... */ }
+
+void qualify()
+{
+    cout &lt;&lt; "Congratulations! You qualify for our credit card." &lt;&lt; endl;
+    cout &lt;&lt; "The annual interest rate is 12%." &lt;&lt; endl;
+}
+
+void noQualify()
+{
+    cout &lt;&lt; "Sorry, you do not qualify for our credit card." &lt;&lt; endl;
+    cout &lt;&lt; "You need at least 2 years at your current job and a salary of at least $17,000." &lt;&lt; endl;
+}</pre></details>
+<details class="lab"><summary>Q5. Prototype, header or call? <code>void showNum(double num)</code>, <code>void showNum(double);</code>, <code>showNum(45.67);</code></summary>
+<p><code>void showNum(double num)</code> is the <b>header</b>; <code>void showNum(double);</code> is the <b>prototype</b> (semicolon, parameter name optional); <code>showNum(45.67);</code> is the <b>call</b>.</p></details>
+<details class="lab"><summary>Q6–Q7. Definition and prototype of timesTen</summary>
+<pre class="code">void timesTen(int number)      // Q6: definition
+{
+    cout &lt;&lt; number * 10 &lt;&lt; endl;
+}
+
+void timesTen(int);            // Q7: prototype</pre></details>
+<details class="lab"><summary>Q8. Output of the showDouble loop (num from 0 to 9)</summary>
+<p>Each call prints the value, a tab, and the value times 2:</p>
+<pre class="code">0	0
+1	2
+2	4
+3	6
+4	8
+5	10
+6	12
+7	14
+8	16
+9	18</pre></details>
+<details class="lab"><summary>Q9. Output of func1(y, x) with x = 0 and y = 1.5</summary>
+<pre class="code">0 1.5
+1.5 0
+0 10
+0 1.5</pre>
+<p>Line 2: a = 1.5 and b = 0 are copies of y and x. Line 3: func1 changes its copies. Line 4: x and y in main are unchanged, because they were <b>passed by value</b>.</p></details>
+<details class="lab"><summary>Q10. Definition of showDollars</summary>
+<pre class="code">void showDollars(double pay)   // needs #include &lt;iomanip&gt;
+{
+    cout &lt;&lt; fixed &lt;&lt; showpoint &lt;&lt; setprecision(2);
+    cout &lt;&lt; "Your wages are RM" &lt;&lt; pay &lt;&lt; endl;
+}</pre></details>
+<details class="lab"><summary>Q11. How many return values may a function have?</summary>
+<p><b>One.</b> A function can have several <code>return</code> statements, but each call sends back at most one value (a <code>void</code> function sends back none).</p></details>
+<details class="lab"><summary>Q12–Q15. Headers for distance, days, getKey and lightYears</summary>
+<pre class="code">double distance(double rate, double time)
+int days(int years, int months, int weeks)
+char getKey()
+long lightYears(long miles)</pre></details>
+<details class="lab"><summary>Q16. Coin toss</summary>
+<pre class="code">#include &lt;iostream&gt;
+#include &lt;cstdlib&gt;
+#include &lt;ctime&gt;
+using namespace std;
+
+void coinToss()
+{
+    int side = rand() % 2 + 1;     // 1 or 2
+    if (side == 1)
+        cout &lt;&lt; "heads" &lt;&lt; endl;
+    else
+        cout &lt;&lt; "tails" &lt;&lt; endl;
+}
+
+int main()
+{
+    int times;
+    srand(time(0));                // seed once, in main
+    cout &lt;&lt; "How many times should the coin be tossed? ";
+    cin &gt;&gt; times;
+    for (int i = 0; i &lt; times; i++)
+        coinToss();
+    return 0;
+}</pre>
+<p>Call <code>srand</code> once in <code>main</code>, not inside <code>coinToss</code>: seeding again with the same time on every call can give the same result each time.</p></details>
+<details class="lab"><summary>Q17. celsius function</summary>
+<pre class="code">double celsius(double fahrenheit)
+{
+    return 5.0 / 9 * (fahrenheit - 32);   // 5 / 9 would be integer division = 0
+}</pre>
+<p>For the table, loop F from 0 to 20 in <code>main</code> and print <code>celsius(f)</code> next to each F.</p></details>
+<details class="lab"><summary>Q18. Rectangle area with getLength, getWidth, getArea and displayData</summary>
+<pre class="code">#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+using namespace std;
+
+double getLength();
+double getWidth();
+double getArea(double, double);
+void displayData(double, double, double);
+
+int main()
+{
+    double length = getLength();
+    double width = getWidth();
+    double area = getArea(length, width);
+    displayData(length, width, area);
+    return 0;
+}
+
+double getLength()
+{
+    double length;
+    cout &lt;&lt; "Enter the rectangle's length: ";
+    cin &gt;&gt; length;
+    return length;
+}
+
+double getWidth()
+{
+    double width;
+    cout &lt;&lt; "Enter the rectangle's width: ";
+    cin &gt;&gt; width;
+    return width;
+}
+
+double getArea(double length, double width)
+{
+    return length * width;
+}
+
+void displayData(double length, double width, double area)
+{
+    cout &lt;&lt; fixed &lt;&lt; setprecision(2);
+    cout &lt;&lt; "Length: " &lt;&lt; length &lt;&lt; endl;
+    cout &lt;&lt; "Width: " &lt;&lt; width &lt;&lt; endl;
+    cout &lt;&lt; "Area: " &lt;&lt; area &lt;&lt; endl;
+}</pre></details>` },
     { h: 'Common mistakes', html: `
 <ul>
 <li>Calling a function before its prototype or definition: compiler error.</li>
@@ -1130,7 +1277,7 @@ int main()
 <li>Writing <code>return</code> in a <code>void</code> function with a value, like <code>return 0;</code>.</li>
 <li>Printing inside the function when the question asks you to <b>return</b> the value (CodeRunner checks the caller's output).</li>
 </ul>
-<div class="callout"><b>Practise:</b> 10 function-writing questions are in the <a href="#/progass/f:Week 9 functions">problem bank</a> (filter <b>Week 9 functions</b>). You write the function above <code>main</code>; the checker calls it with many values.</div>` },
+<div class="callout"><b>Practise:</b> 15 function-writing questions (10 practice and 5 from the lab) are in the <a href="#/progass/f:Week 9 functions">problem bank</a> (filter <b>Week 9 functions</b>). You write the function above <code>main</code>; the checker calls it with many values.</div>` },
   ],
 },
 ];

@@ -3,7 +3,7 @@
 const app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const LETTERS = 'ABCD';
-const TOPIC_NAMES = { 1: 'Introduction', 2: 'Number systems', 3: 'Arithmetic', 4: 'Digital logic', 5: 'Memory & instructions', 6: 'Addressing modes' };
+const TOPIC_NAMES = { 1: 'Introduction', 2: 'Number systems', 3: 'Arithmetic', 4: 'Digital logic', 5: 'Memory & instructions', 6: 'Addressing modes', 7: 'CPU' };
 
 /* ---------- storage (safe) ---------- */
 const store = {
@@ -79,14 +79,14 @@ function viewHome() {
   app.innerHTML = `
   <section class="cover">
     <div class="cover-main">
-      <div class="doc-id"><span>CCA102 / CST131 · Sem 1 2026/27</span><span>Topics 1–6 done · mid-semester break</span></div>
+      <div class="doc-id"><span>CCA102 / CST131 · Sem 1 2026/27</span><span>Topics 1–7 · now Topic 7 (CPU)</span></div>
       <h1>Computer Organisation<br><em>revision</em></h1>
-      <p class="lede">Notes for Topics 1–6 (up to addressing modes), Tutorial 1–6 answers, question banks, drills and solvers that show the working. Next after the break: the CPU (Week 9).</p>
-      <div class="hero-cta"><a class="btn primary" href="#learn/t6">Read Topic 6</a><a class="btn" href="#test/bank6">Topic 6 question bank</a><a class="btn" href="#archive">Test 1 archive</a></div>
+      <p class="lede">Notes for Topics 1–7 (up to the CPU and pipelining), Tutorial 1–6 answers, question banks, drills and solvers that show the working, including a pipeline timing solver.</p>
+      <div class="hero-cta"><a class="btn primary" href="#learn/t7">Read Topic 7</a><a class="btn" href="#test/bank7">Topic 7 question bank</a><a class="btn" href="#archive">Test 1 archive</a></div>
     </div>
     <dl class="spec">
       <div><dt>Test 1</dt><dd>Done · archived</dd></div>
-      <div><dt>Next</dt><dd>Week 9 · CPU · Assignment 2 in Week 10</dd></div>
+      <div><dt>Now</dt><dd>Topic 7 · CPU · Assignment 2 in Week 10</dd></div>
       <div><dt>Topics</dt><dd>${TOPICS.length} with notes</dd></div>
       <div><dt>Question bank</dt><dd>${BANK.length + 150} + endless calculations</dd></div>
     </dl>

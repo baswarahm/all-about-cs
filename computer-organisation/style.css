@@ -595,3 +595,10 @@ p.tip { border-left: 3px solid var(--warn); padding: 4px 12px; font-size: .9rem;
   .sv-pick select { padding: 10px; min-height: 44px; border: 1.5px solid var(--ink); background: var(--bg); color: var(--ink); font: 500 .95rem var(--sans); text-transform: none; letter-spacing: 0; }
   .sv-main { padding: 16px; }
 }
+
+/* pipeline timing diagram (Topic 7 solver) */
+.tbl.pipe th, .tbl.pipe td { text-align: center; padding: 4px 6px; font: .75rem var(--mono); white-space: nowrap; }
+.tbl.pipe td:first-child { text-align: left; }
+.tbl.pipe td.on { background: var(--sig-tint); color: var(--ink); font-weight: 600; }
+.tbl.pipe tr.flush td.on { background: transparent; color: var(--ink-3); text-decoration: line-through; }
+.tbl.pipe tr.flush td:first-child { color: var(--ink-3); }

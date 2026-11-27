@@ -556,3 +556,7 @@ th{font-family:var(--mono);font-size:.85rem}
 .mxrow table.mx td{border:0;text-align:center;padding:2px 4px;min-width:1.6rem}
 .mxwrap{row-gap:14px}
 .steps li{padding:3px 0;border-bottom:1px dashed var(--line)}
+details.tut{border:1px solid var(--line);margin:10px 0;background:var(--surface)}
+details.tut>summary{cursor:pointer;padding:10px 14px;font-weight:600;line-height:1.45}
+details.tut[open]>summary{border-bottom:1px solid var(--line)}
+details.tut>.sol{margin:0;padding:12px 14px;overflow-wrap:anywhere}

@@ -4,9 +4,9 @@
 // Wide screens: small text in the navbar, after the "CS courses" button. Phones: a thin line right under the navbar.
 (function () {
   var UPDATES = {
-    'computer-organisation': { at: '2026-11-11T12:09+08:00', text: 'New: Topic 4 Part 2, Topics 5 and 6 notes, Tutorial 4–6 answers and 6 new solvers (K-map, flip-flops, endianness, 0–3 address, addressing modes).' },
-    'discrete-structures': { at: '2026-11-22T12:00+08:00', text: 'New Weeks 9 and 10 (Basic Structures): sets and functions, sequences, sums, countable sets and matrices, with a set calculator, function checker, recurrence explorer and matrix lab.' },
-    'principles-of-programming': { at: '2026-11-23T12:00+08:00', text: 'New Week 9: Functions I notes and 10 write-a-function practice questions checked by g++. The timetable now shows Test 2 and ProgrAss 2.' },
+    'computer-organisation': { at: '2026-11-27T16:00+08:00', text: 'New Topic 7: Central Processing Unit notes (registers, instruction cycle, interrupts, pipelining, branches), a pipeline timing solver and a Topic 7 question bank.' },
+    'discrete-structures': { at: '2026-11-27T16:00+08:00', text: 'New: Tutorial W9 and W10 worked answers on the Week 9 and Week 10 pages, plus Weeks 9 and 10 (Basic Structures) with a set calculator, function checker, recurrence explorer and matrix lab.' },
+    'principles-of-programming': { at: '2026-11-27T16:00+08:00', text: 'New: the Week 9 lab (Functions I) with worked answers, and 5 lab questions checked by g++, on top of the Functions I notes and practice.' },
   };
 
   var me = document.currentScript;

@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&family=Noto+Sans+Math&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=20261122a">
+<link rel="stylesheet" href="styles.css?v=20261127a">
 <link rel="stylesheet" href="../shared/ui.css?v=20261118a">
 </head>
 <body>
@@ -142,6 +142,7 @@
     <a href="#w10-ids">Set identities</a>
     <a href="#w10-fun">Functions</a>
     <a href="#w10-floor">Floor, ceiling, factorial</a>
+    <a href="#w10-tut">Tutorial W9</a>
     <a href="#w10-mistakes">Common mistakes</a>
     <a href="#w10-recall">Active recall</a>
     <a href="#w10-practice">Practice set</a>
@@ -155,6 +156,7 @@
     <a href="#w11-sum">Summations</a>
     <a href="#w11-card">Cardinality</a>
     <a href="#w11-mat">Matrices</a>
+    <a href="#w11-tut">Tutorial W10</a>
     <a href="#w11-mistakes">Common mistakes</a>
     <a href="#w11-recall">Active recall</a>
     <a href="#w11-practice">Practice set</a>
@@ -1690,8 +1692,21 @@ j := n {j is the right endpoint of the interval}
   </div>
 </section>
 
+<section id="w10-tut">
+  <h2>6. Tutorial W9 (worked answers)</h2>
+  <p>Try each question on paper first, then open it to compare. The tools on this page can check most of them.</p>
+<details class="tut"><summary>1. Write an example of equal sets where each set contains six letters.</summary><div class="sol">Two sets are equal when they have the same elements; order and repeats do not matter. Example: {a, b, c, d, e, f} = {f, e, d, c, b, a}. Another: {s, t, u, d, e, n} = {n, e, d, u, t, s}.</div></details>
+<details class="tut"><summary>2. Fifty students: 10 English only, 13 Cultural only, 8 Chess only, 2 English and Cultural, 3 Cultural and Chess, 7 English and Chess, 4 all three, 3 none. Draw the Venn diagram.</summary><div class="sol">Put each number in its own region (the "both" counts are for exactly those two clubs, because the eight numbers add up to 50):<svg viewBox="0 0 300 220" class="venn" role="img" aria-label="Venn diagram of the club survey"><rect x="1" y="1" width="298" height="218" class="venn-u"/><text x="10" y="18" class="venn-l">U = 50</text>
+<circle cx="120" cy="90" r="58" class="venn-c"/><circle cx="180" cy="90" r="58" class="venn-c"/><circle cx="150" cy="142" r="58" class="venn-c"/>
+<text x="62" y="52" class="venn-l" text-anchor="middle">English</text><text x="238" y="52" class="venn-l" text-anchor="middle">Cultural</text><text x="150" y="214" class="venn-l" text-anchor="middle">Chess</text>
+<g class="venn-l" text-anchor="middle"><text x="98" y="80">10</text><text x="202" y="80">13</text><text x="150" y="172">8</text><text x="150" y="68">2</text><text x="112" y="130">7</text><text x="188" y="130">3</text><text x="150" y="112">4</text><text x="272" y="200">3</text></g></svg><p>Check: 10 + 13 + 8 + 2 + 3 + 7 + 4 + 3 = 50. Club totals: English 10 + 2 + 7 + 4 = <b>23</b>, Cultural 13 + 2 + 3 + 4 = <b>22</b>, Chess 8 + 3 + 7 + 4 = <b>22</b>.</p></div></details>
+<details class="tut"><summary>3. Illustrate, with a Venn diagram, the set of the first eight months whose names do not contain the letter A, inside the set of the first eight months.</summary><div class="sol">U = {January, February, March, April, May, June, July, August}. Check each name for the letter a (capital or small): only <b>June</b> and <b>July</b> have none. So the set is {June, July}: draw one circle inside U containing June and July, and write the other six months in U outside the circle.</div></details>
+<details class="tut"><summary>4. P = {j, k, l, m}, Q = {J, K, L}, R = {7, 8}. Find |P|, |Q|, |R|, P × Q, Q × P, P × Q × R, P × R × P, Q³ and Q² × R.</summary><div class="sol"><p>(a) |P| = 4 (b) |Q| = 3 (capital letters are different elements from small ones) (c) |R| = 2.</p><p>(d) P × Q has 4 · 3 = 12 pairs: {(j, J), (j, K), (j, L), (k, J), (k, K), (k, L), (l, J), (l, K), (l, L), (m, J), (m, K), (m, L)}</p><p>(e) Q × P has 12 pairs, in the other order: {(J, j), (J, k), (J, l), (J, m), (K, j), (K, k), (K, l), (K, m), (L, j), (L, k), (L, l), (L, m)}</p><p>(f) P × Q × R has 4 · 3 · 2 = 24 triples: {(j, J, 7), (j, J, 8), (j, K, 7), (j, K, 8), (j, L, 7), (j, L, 8), (k, J, 7), (k, J, 8), (k, K, 7), (k, K, 8), (k, L, 7), (k, L, 8), (l, J, 7), (l, J, 8), (l, K, 7), (l, K, 8), (l, L, 7), (l, L, 8), (m, J, 7), (m, J, 8), (m, K, 7), (m, K, 8), (m, L, 7), (m, L, 8)}</p><p>(g) P × R × P has 4 · 2 · 4 = 32 triples: {(j, 7, j), (j, 7, k), (j, 7, l), (j, 7, m), (j, 8, j), (j, 8, k), (j, 8, l), (j, 8, m), (k, 7, j), (k, 7, k), (k, 7, l), (k, 7, m), (k, 8, j), (k, 8, k), (k, 8, l), (k, 8, m), (l, 7, j), (l, 7, k), (l, 7, l), (l, 7, m), (l, 8, j), (l, 8, k), (l, 8, l), (l, 8, m), (m, 7, j), (m, 7, k), (m, 7, l), (m, 7, m), (m, 8, j), (m, 8, k), (m, 8, l), (m, 8, m)}</p><p>(h) Q³ = Q × Q × Q has 3³ = 27 triples: {(J, J, J), (J, J, K), (J, J, L), (J, K, J), (J, K, K), (J, K, L), (J, L, J), (J, L, K), (J, L, L), (K, J, J), (K, J, K), (K, J, L), (K, K, J), (K, K, K), (K, K, L), (K, L, J), (K, L, K), (K, L, L), (L, J, J), (L, J, K), (L, J, L), (L, K, J), (L, K, K), (L, K, L), (L, L, J), (L, L, K), (L, L, L)}</p><p>(i) Q² × R = Q × Q × R has 9 · 2 = 18 triples: {(J, J, 7), (J, J, 8), (J, K, 7), (J, K, 8), (J, L, 7), (J, L, 8), (K, J, 7), (K, J, 8), (K, K, 7), (K, K, 8), (K, L, 7), (K, L, 8), (L, J, 7), (L, J, 8), (L, K, 7), (L, K, 8), (L, L, 7), (L, L, 8)}</p></div></details>
+<details class="tut"><summary>5. f : [2, ∞) → [1, ∞), f(x) = 1 + √(x − 2), a one-to-one correspondence. (a) Is f invertible? Find the inverse. (b) Find f ∘ f ∘ f.</summary><div class="sol"><p>(a) Yes: a one-to-one correspondence (bijection) always has an inverse. Let y = 1 + √(x − 2). Then √(x − 2) = y − 1, so x − 2 = (y − 1)², so <b>f⁻¹(y) = (y − 1)² + 2</b> for y ≥ 1. Check: f⁻¹(f(6)) = f⁻¹(3) = 4 + 2 = 6.</p><p>(b) f(f(x)) = 1 + √(f(x) − 2) = 1 + √(√(x − 2) − 1), and f(f(f(x))) = <b>1 + √(√(√(x − 2) − 1) − 1)</b>.</p><p>Domain note: f only accepts inputs ≥ 2, so f ∘ f needs f(x) ≥ 2, that is x ≥ 3, and f ∘ f ∘ f needs f(f(x)) ≥ 2, that is x ≥ 6. Example: f(f(f(6))) = f(f(3)) = f(2) = 1.</p></div></details>
+</section>
+
 <section id="w10-mistakes">
-  <h2>6. Common mistakes</h2>
+  <h2>7. Common mistakes</h2>
   <ul>
     <li>Mixing ∈ and ⊆: 1 ∈ {1, 2} but {1} ⊆ {1, 2}. In {1, {2, 3}, 4}, {2, 3} is an element, so {2, 3} ∈ the set, but 2 is not.</li>
     <li>Thinking ∅ = {∅}. The first is empty; the second has one element.</li>
@@ -1705,19 +1720,19 @@ j := n {j is the right endpoint of the interval}
 </section>
 
 <section id="w10-recall">
-  <h2>7. Active recall</h2>
+  <h2>8. Active recall</h2>
   <p>Answer from memory, then check.</p>
   <div id="w10-recall-list"></div>
 </section>
 
 <section id="w10-practice">
-  <h2>8. Practice set</h2>
+  <h2>9. Practice set</h2>
   <p>Three easy, four medium, three challenging. Several come from the slide review questions. Write your attempt first; hints come in three levels and the solution unlocks only after you have written an attempt.</p>
   <div id="w10-practice-list"></div>
 </section>
 
 <section id="w10-checkpoint">
-  <h2>9. Weekly checkpoint</h2>
+  <h2>10. Weekly checkpoint</h2>
   <p>Rate how you feel about each objective, then build your checkpoint.</p>
   <div class="card">
     <div class="objs" id="w10-objs"></div>
@@ -1872,8 +1887,18 @@ j := n {j is the right endpoint of the interval}
   </div>
 </section>
 
+<section id="w11-tut">
+  <h2>6. Tutorial W10 (worked answers)</h2>
+  <p>Try each question first, then open it. The recurrence explorer, the summation calculator and the matrix lab can check them.</p>
+<details class="tut"><summary>1. $10,000 at 11% interest compounded yearly: Pₙ = 1.11 Pₙ₋₁ with P₀ = 10,000. How much after n years?</summary><div class="sol"><p>Forward substitution: P₁ = 1.11 · 10,000 = 11,100; P₂ = 1.11² · 10,000 = 12,321; P₃ = 1.11³ · 10,000 = 13,676.31. The pattern gives the closed formula <b>Pₙ = 10,000 · (1.11)ⁿ</b> (a geometric progression with ratio 1.11).</p><p>For example, after 30 years: P₃₀ = 10,000 · 1.11³⁰ ≈ <b>$228,922.97</b>.</p></div></details>
+<details class="tut"><summary>2. (a) Σ_{x=1}^{5} (3²ˣ + 2ˣ) (b) Σ_{j∈S} 5j for S = {1, 2, 4} (c) Σ_{x=3}^{8} 5 · 3ˣ (d) Σ_{x=3}^{8} Σ_{y=0}^{3} (x²y + y²x + 2xy)</summary><div class="sol"><p>(a) 3²ˣ = 9ˣ: (9 + 81 + 729 + 6,561 + 59,049) + (2 + 4 + 8 + 16 + 32) = 66,429 + 62 = <b>66,491</b>.</p><p>(b) 5 · 1 + 5 · 2 + 5 · 4 = <b>35</b>.</p><p>(c) Geometric: 5(3⁹ − 3³)/(3 − 1) = 5(19,683 − 27)/2 = <b>49,140</b>.</p><p>(d) Do the inner sum first. For y = 0 to 3: Σy = 6 and Σy² = 14, so the inner sum is 6x² + 14x + 12x = 6x² + 26x. Then for x = 3 to 8: Σx² = 199 and Σx = 33, so the total is 6 · 199 + 26 · 33 = 1,194 + 858 = <b>2,052</b>.</p></div></details>
+<details class="tut"><summary>3. A = [1 0 4; −1 2 2; 0 −2 −3], B = [−1 3 5; 2 2 −3; 2 −3 0]. Find A + B.</summary><div class="sol">Add entry by entry: A + B = <b>[0 3 9; 1 4 −1; 2 −5 −3]</b>.</div></details>
+<details class="tut"><summary>4. A = [4 −3; 3 −1; 0 −2; −1 5], B = [−1 3 2 −2; 0 −1 4 −3]. Find AB.</summary><div class="sol">A is 4 × 2 and B is 2 × 4, so AB is 4 × 4. Row i of A times column j of B, e.g. c₁₂ = 4 · 3 + (−3)(−1) = 15:<br>AB = <b>[−4 15 −4 1; −3 10 2 −3; 0 2 −8 6; 1 −8 18 −13]</b>. Check it in the matrix lab.</div></details>
+<details class="tut"><summary>5. Using linear equations, find A such that [1 3 2; 2 1 1; 4 0 3] A = [7 1 3; 1 0 3; −1 −3 7].</summary><div class="sol"><p>A is 3 × 3. Solve one column at a time: if the first column of A is (a, b, c), then a + 3b + 2c = 7, 2a + b + c = 1, 4a + 3c = −1. Elimination gives a = −1, b = 2, c = 1. The other two columns give (0, 1, −1) and (1, 0, 1).</p><p><b>A = [−1 0 1; 2 1 0; 1 −1 1]</b>. Check by multiplying back: row 1 of the left matrix times the columns of A gives 7, 1, 3. (The left matrix has determinant −11 ≠ 0, so this A is the only answer.)</p></div></details>
+</section>
+
 <section id="w11-mistakes">
-  <h2>6. Common mistakes</h2>
+  <h2>7. Common mistakes</h2>
   <ul>
     <li>Starting a sequence at the wrong index: check whether the first term is a<sub>0</sub> or a<sub>1</sub>.</li>
     <li>Using a closed formula from the table with the wrong lower limit. Split the sum first.</li>
@@ -1886,19 +1911,19 @@ j := n {j is the right endpoint of the interval}
 </section>
 
 <section id="w11-recall">
-  <h2>7. Active recall</h2>
+  <h2>8. Active recall</h2>
   <p>Answer from memory, then check.</p>
   <div id="w11-recall-list"></div>
 </section>
 
 <section id="w11-practice">
-  <h2>8. Practice set</h2>
+  <h2>9. Practice set</h2>
   <p>Three easy, four medium, three challenging. Several come from the slide examples. Write your attempt first; hints come in three levels and the solution unlocks only after you have written an attempt.</p>
   <div id="w11-practice-list"></div>
 </section>
 
 <section id="w11-checkpoint">
-  <h2>9. Weekly checkpoint</h2>
+  <h2>10. Weekly checkpoint</h2>
   <p>Rate how you feel about each objective, then build your checkpoint.</p>
   <div class="card">
     <div class="objs" id="w11-objs"></div>
@@ -2136,7 +2161,7 @@ j := n {j is the right endpoint of the interval}
 </div>
 <footer class="sitefoot"><span>CKC111 Discrete Structures · unofficial study aid</span><a class="ig-credit" href="https://www.instagram.com/baswara.hm/" target="_blank" rel="noopener"><svg class="ig-ic" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/></svg> Made by @baswara.hm</a></footer>
 <script src="script.js?v=20261122a"></script>
-<script src="../updates.js?v=20261123a" data-course="discrete-structures"></script>
+<script src="../updates.js?v=20261127a" data-course="discrete-structures"></script>
 <script src="../online.js?v=20261101a" data-course="discrete-structures"></script>
 <script src="../shared/deadlines.js?v=20261118a"></script>
 <script src="../shared/nav.js?v=20261118b"></script>

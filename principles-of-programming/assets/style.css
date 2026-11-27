@@ -398,3 +398,7 @@ table.types td { vertical-align: middle; }
   .toc-dots { display: none; }
   .card { padding: 16px; }
 }
+
+details.lab { border: 1px solid var(--rule); margin: 10px 0; padding: 0 14px; background: var(--sheet); }
+details.lab > summary { padding: 10px 0; font: 600 .92rem var(--sans); color: var(--ink); }
+details.lab[open] > summary { border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
